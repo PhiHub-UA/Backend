@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

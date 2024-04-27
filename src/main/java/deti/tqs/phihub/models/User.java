@@ -5,14 +5,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import lombok.Getter;
@@ -37,6 +36,7 @@ public class User implements UserDetails {
     private Integer age;
     // Login Info
     private String username;
+    @JsonIgnore
     private String password;
     private String role;
 
@@ -49,11 +49,10 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.bills = new ArrayList<>();
-        this.oldAppointments = new ArrayList<>();
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role.equals("admin")) {
             return List.of(new SimpleGrantedAuthority("admin"), new SimpleGrantedAuthority("user"));
@@ -61,28 +60,27 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("user"));
     }
 
-    @OneToMany
-    private List<Bill> bills;
-
-    @OneToMany
-    private List<Appointment> oldAppointments;
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

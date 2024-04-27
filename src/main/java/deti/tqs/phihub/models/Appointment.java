@@ -10,8 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.FetchType;
 
-import java.sql.Date;
+import java.util.Date;
 
 
 @Getter
@@ -26,6 +27,7 @@ public class Appointment {
     private Long id;
 
     private Date date;
+
     private Double price;
 
     @ManyToOne
@@ -33,7 +35,7 @@ public class Appointment {
 
     private Speciality speciality;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Bill bill;
     
 
