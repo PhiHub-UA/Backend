@@ -1,5 +1,6 @@
 package deti.tqs.phihub.services;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.User;
@@ -28,6 +29,10 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public User getUserFromContext() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
     
 }
