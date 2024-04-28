@@ -1,5 +1,6 @@
 package deti.tqs.phihub.services;
 
+import deti.tqs.phihub.dtos.RegisterSchema;
 import deti.tqs.phihub.models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import deti.tqs.phihub.DTOs.registerSchema;
 import deti.tqs.phihub.repositories.UserRepository;
 
 
@@ -33,7 +33,7 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
-    public UserDetails registerUser(registerSchema user) throws AuthenticationException {
+    public UserDetails registerUser(RegisterSchema user) throws AuthenticationException {
         if (userRepository.findByUsername(user.username()) != null) {
             throw new IllegalArgumentException("Username already exists");
         }

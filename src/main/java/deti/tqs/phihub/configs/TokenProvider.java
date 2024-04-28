@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class TokenProvider {
 
     @Value("${security.jwt.token.secret-key}" )
-    private String JWT_SECRET;
+    private String jwtSecret;
 
     public String generateAccessToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
                     .withSubject(user.getUsername())
                     .withClaim("username", user.getUsername())
@@ -29,7 +29,7 @@ public class TokenProvider {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             //System.out.println("Token: " + token);
             return JWT.require(algorithm)
                     .build()
