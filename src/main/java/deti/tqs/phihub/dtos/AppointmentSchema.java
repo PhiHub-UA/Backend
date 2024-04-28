@@ -1,4 +1,4 @@
-package deti.tqs.phihub.DTOs;
+package deti.tqs.phihub.dtos;
 
 import java.util.Date;
 

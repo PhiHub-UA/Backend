@@ -1,9 +1,9 @@
-package deti.tqs.phihub.DTOs;
+package deti.tqs.phihub.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 
 
-public record loginSchema(
+public record LoginSchema(
         @NotBlank String username,
         @NotBlank String password
         ) {}

@@ -16,11 +16,7 @@ public class UserService {
     }
     
     public User registerUser(User user) {
-
-        User newUser = userRepository.save(user);
-
-        return newUser;
-
+        return userRepository.save(user);
     }
 
     public User getUserById(Long id) {

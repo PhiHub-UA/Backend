@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import deti.tqs.phihub.models.User;
-import deti.tqs.phihub.DTOs.loginSchema;
-import deti.tqs.phihub.DTOs.registerSchema;
 import deti.tqs.phihub.configs.TokenProvider;
+import deti.tqs.phihub.dtos.LoginSchema;
+import deti.tqs.phihub.dtos.RegisterSchema;
 import deti.tqs.phihub.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -41,13 +41,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody @Valid registerSchema user) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid RegisterSchema user) {
         authService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> loginUser(@RequestBody loginSchema user) {
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
         var authUser = authenticationManager.authenticate(authToken);
         var token = tokenService.generateAccessToken((User) authUser.getPrincipal());
