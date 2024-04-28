@@ -2,6 +2,7 @@ package deti.tqs.phihub.services;
 
 import java.util.Date;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,16 @@ public class AppointmentService {
         appointment.setBill(null);
         return appointmentRepository.save(appointment);
 
+    }
+
+    public List<Appointment> getAppointmentsByPatient(User user) {
+
+        return appointmentRepository.findByPatientUsername(user.getUsername());
+
+    }
+
+    public Appointment getAppointmentById(Long id) {
+        return appointmentRepository.findById(id).orElse(null);
     }
 
 }
