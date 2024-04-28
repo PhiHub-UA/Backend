@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
 
-import java.util.Queue;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +27,6 @@ public class QueueLine {
     private Integer maxSize;
 
     @OneToMany
-    private Queue<Ticket> tickets;
+    private List<Ticket> tickets;
 
 }

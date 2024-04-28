@@ -37,7 +37,7 @@ class AppointmentRepositoryTests {
         appointmentRepository.saveAndFlush(app0);
 
         app1.setId(2L);
-        app1.setPrice(25.);
+        app1.setPrice(25.7);
     }
 
     @Test
