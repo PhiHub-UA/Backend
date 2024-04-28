@@ -81,6 +81,7 @@ class AppointmentControllerTests {
         when(userService.getUserFromContext()).thenReturn(user0);
         
         when(specialityService.getSpecialityById(1)).thenReturn(Speciality.PULMONOLOGY);
+        when(specialityService.getSpecialityById(2)).thenReturn(null);
     }
 
     @Test
@@ -134,23 +135,37 @@ class AppointmentControllerTests {
     }
 
     //  Tests for bad conditions
-/*     @Test
-    void givenNullValue_whenAdd_thenReturnError() throws Exception {
-        //  Check null firstname
+    @Test
+    void givenBadValue_whenAdd_thenReturnError() throws Exception {
+        //  Check bad speciality ID
         mvc.perform(
-                post("/appointments/buy").contentType(MediaType.APPLICATION_JSON)
-                .param("firstname", "")
-                .param("lastname", appointment0.getLastname())
-                .param("phone", appointment0.getPhone())
-                .param("email", appointment0.getEmail())
-                .param("creditCard", appointment0.getCreditCard())
-                .param("numberOfPeople", appointment0.getNumberOfPeople().toString())
-                .param("seatNumber", appointment0.getSeatNumber().toString())
-                .param("trip", appointment0.getTrip().getId().toString())
-                .param("currency", appointment0.getCurrency()))
-                .andExpect(status().isUnprocessableEntity());
+                post("/appointments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"date\": \"2024-04-26T18:32:09\"" +
+                         ",\"price\":" + app0.getPrice().toString() +
+                         ",\"specialityId\": 2}"))
+                .andExpect(status().isBadRequest());
+
+        //  Check bad logged in user
+        when(userService.getUserFromContext()).thenReturn(null);
+        mvc.perform(
+                post("/appointments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"date\": \"2024-04-26T18:32:09\"" +
+                         ",\"price\":" + app0.getPrice().toString() +
+                         ",\"specialityId\": 1}"))
+                .andExpect(status().isUnauthorized());
 
         verify(service, times(0)).save(Mockito.any());
+    }
 
-    } */
+    @Test
+    void givenBadUser_whenGetByID_thenReturnError() throws Exception {
+        //  Check wrong appointment user
+        User user1 = new User();
+        user1.setId(2L);
+        when(userService.getUserFromContext()).thenReturn(user1);
+
+        mvc.perform(
+                get("/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    }
 }
