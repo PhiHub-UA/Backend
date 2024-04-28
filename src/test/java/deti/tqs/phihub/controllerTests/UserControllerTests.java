@@ -11,24 +11,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.AppointmentController;
 import deti.tqs.phihub.controllers.UserController;
-import deti.tqs.phihub.models.Appointment;
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
