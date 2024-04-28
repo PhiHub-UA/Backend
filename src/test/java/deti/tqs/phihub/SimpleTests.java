@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Order;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CachingTests {
+class SimpleTests {
 
     @Test
     @Order(1)
-    void testThatCachIsEmpty() {
+    void testThatMafsIsMafing() {
         //  Quick mafs
         assertThat(2 + 2 == 4).isSameAs(4 - 1 == 3);
 	}
