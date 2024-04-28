@@ -42,5 +42,4 @@ public class AuthService implements UserDetailsService {
         userRepository.save(newUser);
         return newUser;
     }
-    
 }

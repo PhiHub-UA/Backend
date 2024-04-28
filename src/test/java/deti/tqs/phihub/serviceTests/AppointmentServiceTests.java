@@ -11,17 +11,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Speciality;
+import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.services.AppointmentService;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.HashSet;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentServiceTests {
@@ -34,14 +32,21 @@ class AppointmentServiceTests {
 
     private Appointment app0 = new Appointment();
     private Appointment app1 = new Appointment();
+    private User user0 = new User();
 
     @BeforeEach
     public void setUp() {
 
-        //  Create two cities
+        user0.setId(1L);
+        user0.setUsername("Josefino Calças");
+        user0.setEmail("jose@fino.com");
+        user0.setPhone("929838747");
+
+        //  Create two appointments
         app0.setId(1L);
         app0.setPrice(12.3);
         app0.setSpeciality(Speciality.NEUROLOGY);
+        app0.setPatient(user0);
         app1.setId(2L);
         app1.setPrice(25.7);
 
@@ -53,6 +58,7 @@ class AppointmentServiceTests {
         Mockito.when(appointmentRepository.findById(app0.getId())).thenReturn(Optional.of(app0));
         Mockito.when(appointmentRepository.findById(app1.getId())).thenReturn(Optional.of(app1));
         Mockito.when(appointmentRepository.findById(-99L)).thenReturn(Optional.empty());
+        Mockito.when(appointmentRepository.findByPatientUsername(user0.getUsername())).thenReturn(Arrays.asList(app0));
     }
 
     @Test
@@ -93,5 +99,17 @@ class AppointmentServiceTests {
         Mockito.verify(appointmentRepository, 
                 VerificationModeFactory.times(1))
                     .findAll();
+    }
+
+    @Test
+     void givenAUserName_whenGetByUser_thenReturn1Record() {
+
+        List<Appointment> userAppointments = appointmentService.getAppointmentsByPatient(user0);
+
+        assertThat(userAppointments).hasSize(1).extracting(Appointment::getPrice).contains(app0.getPrice());
+
+        Mockito.verify(appointmentRepository, 
+                VerificationModeFactory.times(1))
+                    .findByPatientUsername(user0.getUsername());
     }
 }
