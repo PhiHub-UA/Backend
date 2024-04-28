@@ -11,6 +11,6 @@ class CachingTests {
     @Order(1)
     void testThatCachIsEmpty() {
         //  Quick mafs
-        assertThat(2 + 2 == 4).isTrue();
+        assertThat(2 + 2 == 4).isSameAs(4 - 1 == 3);
 	}
 }
