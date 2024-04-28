@@ -15,7 +15,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
     
-    public User registerUser(User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 
@@ -23,7 +23,7 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User getUserByUsername(String username) {
+    public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 

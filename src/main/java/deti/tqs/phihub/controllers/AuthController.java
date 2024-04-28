@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import deti.tqs.phihub.models.User;
@@ -32,7 +31,6 @@ public class AuthController {
 
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     public AuthController(AuthService authService, TokenProvider tokenService,
             AuthenticationManager authenticationManager) {
         this.authService = authService;

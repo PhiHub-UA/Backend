@@ -3,7 +3,6 @@ package deti.tqs.phihub.services;
 import deti.tqs.phihub.dtos.RegisterSchema;
 import deti.tqs.phihub.models.User;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +18,6 @@ public class AuthService implements UserDetailsService {
 
     private UserRepository userRepository;
 
-    @Autowired
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

@@ -9,7 +9,6 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.UserRepository;
 import deti.tqs.phihub.services.AuthService;
@@ -17,10 +16,6 @@ import deti.tqs.phihub.dtos.RegisterSchema;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

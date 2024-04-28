@@ -2,7 +2,6 @@ package deti.tqs.phihub.services;
 
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.User;
@@ -14,7 +13,6 @@ public class AppointmentService {
 
     private AppointmentRepository appointmentRepository;
 
-    @Autowired
     public AppointmentService(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
     }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import deti.tqs.phihub.models.Ticket;
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.repositories.TicketRepository;
 
 import java.util.List;
