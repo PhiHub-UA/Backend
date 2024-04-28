@@ -13,14 +13,11 @@ import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
-
-
 @RestController
-@RequestMapping("user")
+@RequestMapping("/users")
 public class UserController {
 
     private UserService userService;
-
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -28,9 +25,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id, HttpServletRequest request) {
-
         var loggedInUser = userService.getUserFromContext();
-
         User user = userService.getUserById(id);
 
         if (user == null) {

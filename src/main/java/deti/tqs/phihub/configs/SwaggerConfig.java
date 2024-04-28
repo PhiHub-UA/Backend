@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.info.License;
 
 import io.swagger.v3.oas.models.OpenAPI;
 
+@Generated
 @Configuration
 public class SwaggerConfig {
 

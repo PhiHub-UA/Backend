@@ -15,9 +15,7 @@ import deti.tqs.phihub.controllers.AppointmentController;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
-import deti.tqs.phihub.repositories.UserRepository;
 import deti.tqs.phihub.services.AppointmentService;
-import deti.tqs.phihub.services.AuthService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 
