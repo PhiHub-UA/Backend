@@ -1,12 +1,10 @@
 package deti.tqs.phihub.services;
 
-import java.util.Date;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.models.Appointment;
@@ -21,25 +19,19 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
-    public Appointment createAppointment(User user, Speciality speciality, Date date, Double price) {
-        var appointment = new Appointment();
-        appointment.setPatient(user);
-        appointment.setSpeciality(speciality);
-        appointment.setDate(date);
-        appointment.setPrice(price);
-        appointment.setBill(null);
+    public Appointment save(Appointment appointment) {
         return appointmentRepository.save(appointment);
-
     }
 
     public List<Appointment> getAppointmentsByPatient(User user) {
-
         return appointmentRepository.findByPatientUsername(user.getUsername());
-
     }
 
     public Appointment getAppointmentById(Long id) {
         return appointmentRepository.findById(id).orElse(null);
     }
 
+    public List<Appointment> findAll() {
+        return appointmentRepository.findAll();
+    }
 }

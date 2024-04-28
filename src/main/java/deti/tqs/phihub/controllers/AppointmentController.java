@@ -48,9 +48,16 @@ public class AppointmentController {
         if (speciality == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        var appointment = appointmentService.createAppointment(user, speciality, appointmentSchema.date(),
-                appointmentSchema.price());
-        return ResponseEntity.ok(appointment);
+
+        Appointment app = new Appointment();
+        app.setPatient(user);
+        app.setSpeciality(speciality);
+        app.setDate(appointmentSchema.date());
+        app.setPrice(appointmentSchema.price());
+        app.setBill(null);
+        
+        Appointment savedApp = appointmentService.save(app);
+        return ResponseEntity.ok(savedApp);
     }
 
 
