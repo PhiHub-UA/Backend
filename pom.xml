@@ -22,7 +22,7 @@
 		<cucumber.version>7.15.0</cucumber.version>
 		<junit-platform-suite.version>1.10.1</junit-platform-suite.version>
 		<surefire-plugin-version>3.0.0-M6</surefire-plugin-version>
-		<sonar.organization>PhiHub</sonar.organization>
+		<sonar.organization>phihub-ua</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	
