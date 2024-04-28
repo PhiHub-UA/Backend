@@ -15,7 +15,7 @@ import deti.tqs.phihub.services.AppointmentService;
 
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
-import deti.tqs.phihub.DTOs.AppointmentSchema;
+import deti.tqs.phihub.dtos.AppointmentSchema;
 
 
 @RestController
@@ -28,18 +28,13 @@ public class AppointmentController {
 
     private SpecialityService specialityService;
 
-    // private BillService billService;
 
     @Autowired
     public AppointmentController(AppointmentService appointmentService, UserService userService,
-            SpecialityService specialityService
-    // BillService billService
-    ) {
+            SpecialityService specialityService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
         this.specialityService = specialityService;
-        // this.billService = billService;
-
     }
 
     @PostMapping
@@ -86,9 +81,7 @@ public class AppointmentController {
      * appointmentService.deleteAppointment(appointment);
      * return ResponseEntity.ok().build();
      * }
-     */
-
-    /*
+     * 
      * @PostMapping("/appointments/{id}/pay")
      * public ResponseEntity<Bill> payAppointment(@PathVariable Long id) {
      * var user = userService.getUserFromContext();

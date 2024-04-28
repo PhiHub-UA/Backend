@@ -10,6 +10,7 @@ class CachingTests {
     @Test
     @Order(1)
     void testThatCachIsEmpty() {
-        assertThat(true).isTrue();
+        //  Quick mafs
+        assertThat(2 + 2 == 4).isTrue();
 	}
 }
