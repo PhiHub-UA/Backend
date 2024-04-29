@@ -9,10 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.User;
-import deti.tqs.phihub.services.SpecialityService;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import io.cucumber.java.BeforeAll;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
@@ -26,8 +23,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Arrays;
-import java.util.List;
 
 
 import org.junit.jupiter.api.TestInstance;
@@ -44,22 +39,14 @@ class AppointmentIntegrationTests {
     @LocalServerPort
     private int port;
 
-    private static int currPort;
-
-    private static String loginToken;
-    private static Appointment app0 = new Appointment();
-    private static User user0 = new User();
+    private String loginToken;
+    private Appointment app0 = new Appointment();
+    private User user0 = new User();
 
     @BeforeEach
-    public void setUpPort() throws Exception {
-        System.out.println("1--------------------------------------------\n" + loginToken);
+    public void setUp() throws Exception {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
-        currPort = port;
-    }
-
-    @BeforeAll
-    public static void setUp() throws Exception {
 
         //  Create a user
         user0.setId(1L);
@@ -78,9 +65,7 @@ class AppointmentIntegrationTests {
         app0.setPrice(12.3);
         app0.setPatient(user0);
 
-
-        System.out.println("1--------------------------------------------\n" + loginToken);
-        given().port(currPort)
+        given().port(port)
             .contentType("application/json")
             .body("{\"name\":\"" + user0.getName() + "\"," +
                     "\"phone\":\"" + user0.getPhone() + "\"," +
@@ -94,8 +79,7 @@ class AppointmentIntegrationTests {
             .then()
             .statusCode(201);
 
-            System.out.println("1--------------------------------------------\n" + loginToken);
-        HashMap<String, String> response = given().port(currPort)
+        HashMap<String, String> response = given().port(port)
             .contentType("application/json")
             .body("{\"username\":\"" + user0.getUsername() + "\"," +
                    "\"password\":\"" + user0.getPassword() + "\"}")
@@ -107,15 +91,20 @@ class AppointmentIntegrationTests {
             .as(HashMap.class);
 
         loginToken = response.get("token");
-        System.out.println("1--------------------------------------------\n" + loginToken);
-
     }
 
     @Test
     @DisplayName("When post a Appointment return a Appointment")
     void whenPostValidAppointment_thenCreateAppointment() throws Exception {
 
-        given().port(port)
+        Appointment app1 = new Appointment();
+
+        app1.setId(2L);
+        app1.setDate(new Date());
+        app1.setPrice(24.7);
+        app1.setPatient(user0);
+
+        HashMap<String, Object> app0Saved = given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .body("{\"date\": \"2024-04-26T18:32:09\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\"}")
@@ -124,33 +113,9 @@ class AppointmentIntegrationTests {
             .then()
             .statusCode(201)
             .assertThat()
-            .body("date", is("2024-04-26T18:32:09.000+00:00"));
-        System.out.println("2--------------------------------------------\n" + loginToken);
-    }
-
-    @Test
-    @DisplayName("When list Appointments get Appointments")
-    void whenGetAppointments_thenGetAppointments() throws Exception {
-
-        Appointment app1 = new Appointment();
-
-        app1.setId(2L);
-        app1.setDate(new Date());
-        app1.setPrice(24.7);
-        app1.setPatient(user0);
-        System.out.println("3--------------------------------------------\n" + loginToken);
-
-
-        given().port(port)
-            .contentType("application/json")
-            .header(new Header("Authorization", "Bearer " + loginToken))
-            .body("{\"date\": \"2024-04-26T18:32:09\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\"}")
-            .when()
-            .post("/appointments")
-            .then()
-            .statusCode(201);
-
-            System.out.println("4--------------------------------------------\n" + loginToken);
+            .body("date", is("2024-04-26T18:32:09.000+00:00"))
+            .extract()
+            .as(HashMap.class);
 
         given().port(port)
             .contentType("application/json")
@@ -161,7 +126,6 @@ class AppointmentIntegrationTests {
             .then()
             .statusCode(201);
 
-            System.out.println("5--------------------------------------------\n" + loginToken);
         given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
@@ -176,5 +140,17 @@ class AppointmentIntegrationTests {
                 body("[0].date", equalTo("2024-04-26T18:32:09.000+00:00")).
                 body("[1].date", equalTo("2025-11-22T23:14:17.000+00:00")).
             extract().as(Appointment[].class);
+
+        given().port(port)
+            .contentType("application/json")
+            .header(new Header("Authorization", "Bearer " + loginToken))
+            .when()
+            .get("/appointments/" + app0Saved.get("id"))
+            .then().log().all()
+            .statusCode(200)
+            .assertThat().
+                body("price", equalTo(app0.getPrice().floatValue())).
+                body("date", equalTo("2024-04-26T18:32:09.000+00:00")).
+            extract().as(Appointment.class);
     }
 }
