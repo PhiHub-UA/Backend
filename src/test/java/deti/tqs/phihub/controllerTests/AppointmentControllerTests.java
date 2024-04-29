@@ -15,7 +15,9 @@ import deti.tqs.phihub.controllers.AppointmentController;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
+import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.services.AppointmentService;
+import deti.tqs.phihub.services.MedicService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 
@@ -47,6 +49,9 @@ class AppointmentControllerTests {
     private UserService userService;
     @MockBean
     private SpecialityService specialityService;
+    
+    @MockBean
+    private MedicService medicService;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -55,6 +60,7 @@ class AppointmentControllerTests {
 
     private Appointment app0 = new Appointment();
     private User user0 = new User();
+    private Medic medic0 = new Medic();
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -67,9 +73,10 @@ class AppointmentControllerTests {
         //  Create a appointment
         app0.setId(1L);
         app0.setSpeciality(specialityService.getSpecialityById(1));
-        app0.setDate(new Date());
+        //app0.setDate(new Date());
         app0.setPrice(12.3);
         app0.setPatient(user0);
+        app0.setMedic(medic0);
         
 
         when(service.save(Mockito.any())).thenReturn(app0);
@@ -77,6 +84,7 @@ class AppointmentControllerTests {
         when(service.getAppointmentById(app0.getId())).thenReturn(app0);
 
         when(userService.getUserFromContext()).thenReturn(user0);
+        when(medicService.getMedicById(anyLong())).thenReturn(medic0);
         
         when(specialityService.getSpecialityById(1)).thenReturn(Speciality.PULMONOLOGY);
         when(specialityService.getSpecialityById(2)).thenReturn(null);
@@ -86,9 +94,10 @@ class AppointmentControllerTests {
     void whenPostValidAppointment_thenCreateAppointment() throws Exception {
         mvc.perform(
                 post("/appointments").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"date\": \"2024-04-26T18:32:09\"" +
+                .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
-                         ",\"specialityId\": 1}"))
+                          ",\"specialityId\": 1" +
+                         ",\"medicID\": 1\":1 }"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.price", is(app0.getPrice())));
 
@@ -138,7 +147,7 @@ class AppointmentControllerTests {
         //  Check bad speciality ID
         mvc.perform(
                 post("/appointments").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"date\": \"2024-04-26T18:32:09\"" +
+                .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 2}"))
                 .andExpect(status().isBadRequest());
@@ -147,7 +156,7 @@ class AppointmentControllerTests {
         when(userService.getUserFromContext()).thenReturn(null);
         mvc.perform(
                 post("/appointments").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"date\": \"2024-04-26T18:32:09\"" +
+                .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 1}"))
                 .andExpect(status().isUnauthorized());

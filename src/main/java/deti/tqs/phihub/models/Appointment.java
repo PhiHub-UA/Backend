@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.FetchType;
 
-import java.util.Date;
 
 
 @Getter
@@ -26,17 +25,20 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date date;
+    private Long date; // date will be stored as a timestamp
 
     private Double price;
 
     @ManyToOne
     private User patient;
 
+    @ManyToOne
+    private Medic medic;
+
     private Speciality speciality;
 
     @OneToOne(fetch = FetchType.EAGER)
     private Bill bill;
-    
 
+    
 }

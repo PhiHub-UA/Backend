@@ -13,7 +13,7 @@ import java.util.List;
 import deti.tqs.phihub.models.Appointment;
 
 import deti.tqs.phihub.services.AppointmentService;
-
+import deti.tqs.phihub.services.MedicService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 import deti.tqs.phihub.dtos.AppointmentSchema;
@@ -27,13 +27,16 @@ public class AppointmentController {
     private UserService userService;
 
     private SpecialityService specialityService;
+    
+    private MedicService medicService;
 
 
     public AppointmentController(AppointmentService appointmentService, UserService userService,
-            SpecialityService specialityService) {
+            SpecialityService specialityService, MedicService medicService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
         this.specialityService = specialityService;
+        this.medicService = medicService;
     }
 
     @PostMapping
@@ -47,11 +50,17 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+        var medic = medicService.getMedicById(appointmentSchema.medicID());
+        if (medic == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         Appointment app = new Appointment();
         app.setPatient(user);
         app.setSpeciality(speciality);
         app.setDate(appointmentSchema.date());
         app.setPrice(appointmentSchema.price());
+        app.setMedic(medic);
         app.setBill(null);
         
         Appointment savedApp = appointmentService.save(app);
