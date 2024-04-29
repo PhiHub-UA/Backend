@@ -48,7 +48,7 @@ class UserIntegrationTests {
         //  Create a user
         user0.setId(1L);
         user0.setName("Josefino");
-        user0.setUsername("josefino");
+        user0.setUsername("josefino2");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
         user0.setRole("admin");
@@ -92,7 +92,7 @@ class UserIntegrationTests {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/users/" + 1)
+            .get("/users/" + 3)
             .then().log().all()
             .statusCode(200)
             .assertThat().

@@ -89,7 +89,7 @@ class AppointmentControllerTests {
                 .content("{\"date\": \"2024-04-26T18:32:09\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 1}"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.price", is(app0.getPrice())));
 
         verify(service, times(1)).save(Mockito.any());
