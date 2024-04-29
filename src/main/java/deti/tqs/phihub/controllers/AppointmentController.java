@@ -55,7 +55,7 @@ public class AppointmentController {
         app.setBill(null);
         
         Appointment savedApp = appointmentService.save(app);
-        return ResponseEntity.ok(savedApp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedApp);
     }
 
 
