@@ -10,7 +10,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import deti.tqs.phihub.models.User;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Header;
 
+import static org.hamcrest.Matchers.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
@@ -28,7 +30,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @TestInstance(Lifecycle.PER_CLASS)
-class AuthIntegrationTests {
+class UserIntegrationTests {
     
     private final static String BASE_URI = "http://localhost";
  
@@ -85,5 +87,17 @@ class AuthIntegrationTests {
             .as(HashMap.class);
 
         loginToken = response.get("token");
+
+        given().port(port)
+            .contentType("application/json")
+            .header(new Header("Authorization", "Bearer " + loginToken))
+            .when()
+            .get("/users/" + 1)
+            .then().log().all()
+            .statusCode(200)
+            .assertThat().
+                body("username", equalTo(user0.getUsername())).
+                body("phone", equalTo(user0.getPhone())).
+            extract().as(User.class);
     }
 }
