@@ -1,4 +1,7 @@
+
 package deti.tqs.phihub.models;
+import java.util.ArrayList;
+import java.util.List;
 
 public enum Speciality {
     CARDIOLOGY(0),
@@ -33,6 +36,23 @@ public enum Speciality {
             }
         }
         return null;
+    }
+
+    public static Speciality fromString(String speciality) {
+        for (Speciality s : Speciality.values()) {
+            if (s.toString().equalsIgnoreCase(speciality)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public static List<Speciality> fromStrings(List<String> specialities) {
+        List<Speciality> specialityList = new ArrayList<>();
+        for (String speciality : specialities) {    
+            specialityList.add(fromString(speciality));
+        }
+        return specialityList;
     }
 
 }

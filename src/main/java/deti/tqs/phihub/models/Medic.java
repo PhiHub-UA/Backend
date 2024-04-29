@@ -9,8 +9,8 @@ import jakarta.persistence.GenerationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
+import java.util.List;
 
 
 @Getter
@@ -24,7 +24,11 @@ public class Medic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    
     private List<Speciality> specialities;
-    
+
+    /*
+     * 
+     Going to assume a medic can only take consultations from 9am to 6pm.
+     */
+
 }

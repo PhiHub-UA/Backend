@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.User;
 
 import io.restassured.RestAssured;
@@ -42,6 +43,7 @@ class AppointmentIntegrationTests {
     private String loginToken;
     private Appointment app0 = new Appointment();
     private User user0 = new User();
+    private Medic medic0 = new Medic();
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -61,9 +63,10 @@ class AppointmentIntegrationTests {
 
         //  Create a appointment
         app0.setId(1L);
-        app0.setDate(new Date());
+        //app0.setDate(new Date());
         app0.setPrice(12.3);
         app0.setPatient(user0);
+        app0.setMedic(medic0);
 
         given().port(port)
             .contentType("application/json")
@@ -100,27 +103,29 @@ class AppointmentIntegrationTests {
         Appointment app1 = new Appointment();
 
         app1.setId(2L);
-        app1.setDate(new Date());
+        //app1.setDate(new Date());
         app1.setPrice(24.7);
         app1.setPatient(user0);
+        app1.setMedic(medic0);
 
         HashMap<String, Object> app0Saved = given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
-            .body("{\"date\": \"2024-04-26T18:32:09\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\"}")
+            .body("{\"date\": \"1714159929000\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\" "+ "\", \"medicId\": \"" + 1 + "\"}")
             .when()
             .post("/appointments")
             .then()
             .statusCode(201)
             .assertThat()
-            .body("date", is("2024-04-26T18:32:09.000+00:00"))
+            .body("date", is("1714159929000"))
             .extract()
             .as(HashMap.class);
 
         given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
-            .body("{\"date\": \"2025-11-22T23:14:17\", \"price\": \"" + app1.getPrice() + "\", \"specialityId\": \"" + 1 + "\"}")
+            .body("{\"date\": \"1714159929001\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\" "+ "\", \"medicId\": \"" + 1 + "\"}")
+            .when()
             .when()
             .post("/appointments")
             .then()
@@ -137,8 +142,8 @@ class AppointmentIntegrationTests {
                 body("$.size()", equalTo(2)).
                 body("[0].price", equalTo(app0.getPrice().floatValue())).
                 body("[1].price", equalTo(app1.getPrice().floatValue())).
-                body("[0].date", equalTo("2024-04-26T18:32:09.000+00:00")).
-                body("[1].date", equalTo("2025-11-22T23:14:17.000+00:00")).
+                body("[0].date", equalTo("1714159929000")).
+                body("[1].date", equalTo("1714159929001")).
             extract().as(Appointment[].class);
 
         given().port(port)
@@ -150,7 +155,7 @@ class AppointmentIntegrationTests {
             .statusCode(200)
             .assertThat().
                 body("price", equalTo(app0.getPrice().floatValue())).
-                body("date", equalTo("2024-04-26T18:32:09.000+00:00")).
+                body("date", equalTo("1714159929000")).
             extract().as(Appointment.class);
     }
 }
