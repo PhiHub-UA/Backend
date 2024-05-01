@@ -4,4 +4,4 @@ WORKDIR /backend
 
 COPY . .
 
-ENTRYPOINT ["mvn", "verify", "spring-boot:run"]
+ENTRYPOINT ["mvn", "spring-boot:run"]
