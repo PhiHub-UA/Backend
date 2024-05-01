@@ -15,14 +15,17 @@ import deti.tqs.phihub.dtos.RegisterSchema;
 import deti.tqs.phihub.services.AuthService;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     private AuthService authService;
@@ -36,16 +39,18 @@ public class AuthController {
         this.authService = authService;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
+        
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody @Valid RegisterSchema user) {
-        authService.registerUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<UserDetails> createUser(@RequestBody @Valid RegisterSchema user) {
+        UserDetails newUser = authService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
+        System.out.println("BANANANANANA");
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
         var authUser = authenticationManager.authenticate(authToken);
         var token = tokenService.generateAccessToken((User) authUser.getPrincipal());
