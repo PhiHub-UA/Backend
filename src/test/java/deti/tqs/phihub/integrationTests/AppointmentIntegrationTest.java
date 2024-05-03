@@ -111,7 +111,10 @@ class AppointmentIntegrationTests {
         HashMap<String, Object> app0Saved = given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
-            .body("{\"date\": \"1714159929000\", \"price\": \"" + app0.getPrice() + "\", \"specialityId\": \"" + 1 + "\" "+ "\", \"medicId\": \"" + 1 + "\"}")
+            .body("{\"date\": \"1714159929000\"," +
+                   "\"price\": " + app0.getPrice().toString() + "," +
+                   "\"specialityId\": " + 1 + "," + 
+                   "\"medicId\": " + 1 + "}")
             .when()
             .post("/appointments")
             .then()
