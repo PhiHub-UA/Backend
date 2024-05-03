@@ -96,8 +96,8 @@ class AppointmentControllerTests {
                 post("/appointments").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
-                          ",\"specialityId\": 1" +
-                         ",\"medicID\": 1\":1 }"))
+                         ",\"specialityId\": 1" +
+                         ",\"medicID\": 1 }"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.price", is(app0.getPrice())));
 
