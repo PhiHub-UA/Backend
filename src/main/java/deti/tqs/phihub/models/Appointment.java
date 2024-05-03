@@ -13,7 +13,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.FetchType;
 
 
-
 @Getter
 @Setter
 @NoArgsConstructor

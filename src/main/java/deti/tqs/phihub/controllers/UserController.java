@@ -23,6 +23,13 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getLoggedInUser(HttpServletRequest request) {
+        var user = userService.getUserFromContext();
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id, HttpServletRequest request) {
         var loggedInUser = userService.getUserFromContext();

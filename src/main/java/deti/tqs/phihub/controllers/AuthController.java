@@ -50,11 +50,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
-        System.out.println("BANANANANANA");
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
         var authUser = authenticationManager.authenticate(authToken);
         var token = tokenService.generateAccessToken((User) authUser.getPrincipal());
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(Map.of("token", token, "username", user.username()));
     }
 
 }
