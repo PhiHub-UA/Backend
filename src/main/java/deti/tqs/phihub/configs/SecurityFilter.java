@@ -1,4 +1,5 @@
 package deti.tqs.phihub.configs;
+
 import deti.tqs.phihub.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,17 +29,24 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-              
+
         var token = this.recoverToken(request);
+
+        System.out.println("Token: " + token);
 
         if (token != null) {
             var tokenSubject = tokenService.validateToken(token);
             var user = userRepository.findByUsername(tokenSubject);
+            if (user == null) {
+                SecurityContextHolder.getContext().setAuthentication(null);
+                filterChain.doFilter(request, response);
+                return;
+            }
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             if (authentication.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(authentication); // Set authentication context
             } else {
-                // Handle invalid token (e.g., return 401 Unauthorized)
+                SecurityContextHolder.getContext().setAuthentication(null);
             }
         }
         filterChain.doFilter(request, response);

@@ -40,19 +40,21 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
         var user = userService.getUserFromContext();
+
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
+
         var speciality = specialityService.getSpecialityById(appointmentSchema.specialityId());
         if (speciality == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Speciality not found");
         }
 
         var medic = medicService.getMedicById(appointmentSchema.medicID());
         if (medic == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic not found");
         }
 
         Appointment app = new Appointment();
