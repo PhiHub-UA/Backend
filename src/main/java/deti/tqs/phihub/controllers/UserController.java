@@ -31,6 +31,7 @@ public class UserController {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return ResponseEntity.status(401).build();
         }
+        
         var user = userService.getUserFromContext();
         return ResponseEntity.ok(user);
     }

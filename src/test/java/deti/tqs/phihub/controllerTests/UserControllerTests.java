@@ -50,7 +50,6 @@ class UserControllerTests {
     public void setUp() throws Exception {
         //  Create a user
         user0.setId(1L);
-        user0.setName("Josefino");
         user0.setUsername("josefino");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");

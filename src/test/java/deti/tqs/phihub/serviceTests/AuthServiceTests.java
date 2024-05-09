@@ -36,12 +36,11 @@ class AuthServiceTests {
     public void setUp() {
 
         user0.setId(1L);
-        user0.setName("Josefino Calças");
         user0.setUsername("josecalças");
         user0.setEmail("jose@fino.com");
         user0.setPhone("929838747");
 
-        user0Schema = new RegisterSchema(user0.getName(), user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "", "");
+        user0Schema = new RegisterSchema(user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "", "");
 
         Mockito.when(userRepository.findByUsername(user0.getUsername())).thenReturn(null);
         Mockito.when(userRepository.save(user0)).thenReturn(user0);

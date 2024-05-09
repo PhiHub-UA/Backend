@@ -29,8 +29,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Personal Info
-    private String name;
+
     private String phone;
     private String email;
     private Integer age;
@@ -40,9 +39,8 @@ public class User implements UserDetails {
     private String password;
     private String role;
 
-    public User(String name, String phone, String email, Integer age, String username, String password,
+    public User(String phone, String email, Integer age, String username, String password,
             String role) {
-        this.name = name;
         this.phone = phone;
         this.email = email;
         this.age = age;

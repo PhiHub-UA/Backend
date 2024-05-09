@@ -39,11 +39,11 @@ class UserServiceTests {
     public void setUp() {
         //  Create two users
         user0.setId(1L);
-        user0.setName("Josefino");
+        user0.setUsername("Josefino");
         user0.setAge(39);
 
         user1.setId(2L);
-        user1.setName("Joana");
+        user1.setUsername("Joana");
         user1.setAge(27);
 
         List<User> allUsers = Arrays.asList(user0, user1);
@@ -60,19 +60,19 @@ class UserServiceTests {
     @Test
      void whenSaveValidUser_thenUserShouldBeReturned() {
         User returned = userService.save(user0);
-        assertThat(returned.getName()).isEqualTo(user0.getName());
+        assertThat(returned.getUsername()).isEqualTo(user0.getUsername());
 
         returned = userService.save(user1);
-        assertThat(returned.getName()).isEqualTo(user1.getName());
+        assertThat(returned.getUsername()).isEqualTo(user1.getUsername());
     }
 
     @Test
      void whenSearchValidID_thenUsershouldBeFound() {
         User found = userService.getUserById(user0.getId());
-        assertThat(found.getName()).isEqualTo(user0.getName());
+        assertThat(found.getUsername()).isEqualTo(user0.getUsername());
 
         found = userService.getUserById(user1.getId());
-        assertThat(found.getName()).isEqualTo(user1.getName());
+        assertThat(found.getUsername()).isEqualTo(user1.getUsername());
     }
 
     @Test

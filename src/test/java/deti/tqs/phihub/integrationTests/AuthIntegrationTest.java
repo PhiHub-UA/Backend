@@ -35,7 +35,6 @@ class AuthIntegrationTests {
     @LocalServerPort
     private int port;
 
-    private String loginToken;
     private User user0 = new User();
 
     @BeforeEach
@@ -45,7 +44,6 @@ class AuthIntegrationTests {
 
         //  Create a user
         user0.setId(1L);
-        user0.setName("Josefino");
         user0.setUsername("josefino1");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
@@ -61,8 +59,7 @@ class AuthIntegrationTests {
 
         given().port(port)
             .contentType("application/json")
-            .body("{\"name\":\"" + user0.getName() + "\"," +
-                    "\"phone\":\"" + user0.getPhone() + "\"," +
+            .body("{\"phone\":\"" + user0.getPhone() + "\"," +
                     "\"email\":\"" + user0.getEmail() + "\"," +
                     "\"age\":\"" + user0.getAge() + "\"," +
                     "\"username\":\"" + user0.getUsername() + "\"," +
@@ -84,6 +81,5 @@ class AuthIntegrationTests {
             .extract()
             .as(HashMap.class);
 
-        loginToken = response.get("token");
     }
 }

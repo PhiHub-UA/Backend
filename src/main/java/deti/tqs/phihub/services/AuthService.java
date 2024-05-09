@@ -36,7 +36,7 @@ public class AuthService implements UserDetailsService {
             throw new IllegalArgumentException("Username already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
-        User newUser = new User(user.name(),user.phone(),user.email(),user.age(),user.username(),encryptedPassword,"user");
+        User newUser = new User(user.phone(),user.email(),user.age(),user.username(),encryptedPassword,"user");
         userRepository.save(newUser);
         return newUser;
     }
