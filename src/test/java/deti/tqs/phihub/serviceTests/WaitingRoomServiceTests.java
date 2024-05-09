@@ -38,10 +38,12 @@ class WaitingRoomServiceTests {
         //  Create two waitingrooms
         waitingroom0.setId(1L);
         waitingroom0.setName("Room A");
+        waitingroom1.setNumberOfSeats(14);
         waitingroom0.setNumberOfFilledSeats(7);
 
         waitingroom1.setId(2L);
         waitingroom1.setName("Room R");
+        waitingroom1.setNumberOfSeats(20);
         waitingroom1.setNumberOfFilledSeats(16);
 
         List<WaitingRoom> allWaitingRooms = Arrays.asList(waitingroom0, waitingroom1);

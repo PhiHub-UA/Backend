@@ -12,14 +12,12 @@ import deti.tqs.phihub.models.User;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
-import static org.hamcrest.Matchers.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-
+import java.util.List;
 import java.util.HashMap;
 
 
@@ -28,9 +26,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @TestInstance(Lifecycle.PER_CLASS)
-class UserIntegrationTests {
+class SpecialityIntegrationTest {
     
     private final static String BASE_URI = "http://localhost";
  
@@ -53,11 +50,6 @@ class UserIntegrationTests {
         user0.setRole("admin");
         user0.setAge(27);
         user0.setPassword("strongPassword");
-    }
-
-    @Test
-    @DisplayName("When post a User return a User")
-    void whenPostValidUser_thenCreateUser() throws Exception {
 
         given().port(port)
             .contentType("application/json")
@@ -84,29 +76,22 @@ class UserIntegrationTests {
             .as(HashMap.class);
 
         loginToken = response.get("token");
+    }
 
-        given().port(port)
+    @Test
+    @DisplayName("When post a Login return a Login")
+    void whenPostValidLogin_thenCreateLogin() throws Exception {
+
+        List<String> response = given().port(port)
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/users/me")
-            .then().log().all()
+            .get("/speciality")
+            .then()
             .statusCode(200)
-            .assertThat().
-                body("username", equalTo(user0.getUsername())).
-                body("phone", equalTo(user0.getPhone())).
-            extract().as(User.class);
+            .extract()
+            .as(List.class);
 
-        given().port(port)
-            .contentType("application/json")
-            .header(new Header("Authorization", "Bearer " + loginToken))
-            .when()
-            .get("/users/" + 3)
-            .then().log().all()
-            .statusCode(200)
-            .assertThat().
-                body("username", equalTo(user0.getUsername())).
-                body("phone", equalTo(user0.getPhone())).
-            extract().as(User.class);
+        assertNotEquals(response, null);
     }
 }

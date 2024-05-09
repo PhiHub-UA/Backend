@@ -56,6 +56,7 @@ class UserControllerTests {
         user0.setRole("admin");
         
         when(service.getUserFromContext()).thenReturn(user0);
+        when(service.seeIfLoggedIn()).thenReturn(true);
         when(service.getUserById(Mockito.any())).thenReturn(user0);
     }
 
@@ -70,6 +71,17 @@ class UserControllerTests {
         verify(service, times(1)).getUserById(Mockito.any());
     }
 
+    @Test
+    void givenOneUsersLoggedIn_thenReturnIt() throws Exception {
+
+        mvc.perform(
+                get("/users/me").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.phone", is(user0.getPhone())));
+
+        verify(service, times(1)).getUserFromContext();
+    }
+
     //  Tests for bad conditions
     @Test
     void givenBadUserID_whenGet_thenReturnError() throws Exception {
@@ -79,6 +91,16 @@ class UserControllerTests {
         mvc.perform(
             get("/users/2").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void givenUserNotLoggedIn_whenGet_thenReturnError() throws Exception {
+        //  Check user bad logged in
+        when(service.seeIfLoggedIn()).thenReturn(false);
+        
+        mvc.perform(
+            get("/users/me").contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test

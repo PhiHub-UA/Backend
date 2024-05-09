@@ -30,5 +30,9 @@ public class UserService {
     public User getUserFromContext() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+    public boolean seeIfLoggedIn() {
+        return SecurityContextHolder.getContext().getAuthentication() != null;
+    }
     
 }

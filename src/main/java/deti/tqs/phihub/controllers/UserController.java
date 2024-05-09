@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import deti.tqs.phihub.models.User;
 
@@ -28,7 +27,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<User> getLoggedInUser(HttpServletRequest request) {
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (!userService.seeIfLoggedIn()) {
             return ResponseEntity.status(401).build();
         }
         

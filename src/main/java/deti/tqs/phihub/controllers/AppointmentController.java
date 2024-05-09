@@ -14,7 +14,6 @@ import deti.tqs.phihub.models.Appointment;
 
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
-import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 import deti.tqs.phihub.dtos.AppointmentSchema;
 
@@ -26,16 +25,12 @@ public class AppointmentController {
 
     private UserService userService;
 
-    private SpecialityService specialityService;
-    
     private MedicService medicService;
 
 
-    public AppointmentController(AppointmentService appointmentService, UserService userService,
-            SpecialityService specialityService, MedicService medicService) {
+    public AppointmentController(AppointmentService appointmentService, UserService userService, MedicService medicService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
-        this.specialityService = specialityService;
         this.medicService = medicService;
     }
 
