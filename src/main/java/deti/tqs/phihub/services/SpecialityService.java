@@ -9,6 +9,7 @@ import java.util.List;
 
 @Service
 public class SpecialityService {
+    
     public Speciality getSpecialityById(int id) {
         return Speciality.fromId(id);
     }
