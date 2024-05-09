@@ -6,7 +6,7 @@ public class DateVerifier {
         if (date == null) {
             return false;
         }
-        return date.matches("([0-9]{2})-([0-9]{2})-([0-9]{4})");
+        return date.matches("(\\d{2})-(\\d{2})-(\\d{4})");
     }
     
 }

@@ -57,7 +57,7 @@ public class MedicService {
         Medic medic = medicRepository.findById(id).orElse(null);
 
         if (medic == null) {
-            return null;
+            return List.of();
         }
 
         Date date = new Date(dateTimestamp);
@@ -73,7 +73,6 @@ public class MedicService {
         long startOfDayTimestamp = calendar.getTimeInMillis();
 
         List<Appointment> appointments = appointmentRepository.findByMedicId(id);
-        System.out.println("Appointments: " + appointments.size());
         List<Long> availableSlots = new ArrayList<>();
         List<Long> unavailableSlots = new ArrayList<>();
 
@@ -86,8 +85,6 @@ public class MedicService {
                 
             }
         }
-
-        System.out.println("Unavailable slots: " + unavailableSlots.size());
 
         Calendar calendar2 = Calendar.getInstance();
         calendar2.setTime(date);
@@ -107,8 +104,6 @@ public class MedicService {
                 availableSlots.add(slot);
             }
         }
-
-        System.out.println("Available slots: " + availableSlots.size());
 
         // now convert all this slots to this format : "HH:MM"
         List<String> availableSlotsString = new ArrayList<>();

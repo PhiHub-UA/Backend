@@ -32,7 +32,6 @@ public class MedicController {
         if (Speciality.fromString(speciality) != null) {
             return medicService.getMedicsBySpeciality(Speciality.fromString(speciality));
         }
-        System.out.println("Getting all medics");
         return medicService.getMedics();
     }
 
@@ -40,9 +39,7 @@ public class MedicController {
     public List<String> getMedicAvailability(@PathVariable(value = "id") Long id,
             @RequestParam(value = "day") Long dateTimestamp) {
 
-        List<String> isAvailable = medicService.getMedicAvailability(id, dateTimestamp);
-
-        return isAvailable;
+        return medicService.getMedicAvailability(id, dateTimestamp);
     }
 
     @PostMapping

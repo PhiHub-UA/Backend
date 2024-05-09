@@ -40,17 +40,17 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
+    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
 
         var user = userService.getUserFromContext();
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
         var medic = medicService.getMedicById(appointmentSchema.medicID());
         if (medic == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Medic not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         Appointment app = new Appointment();
@@ -82,29 +82,4 @@ public class AppointmentController {
         }
         return ResponseEntity.ok(appointment);
     }
-
-    /*
-     * @DeleteMapping("/{id}")
-     * public ResponseEntity<Void> deleteAppointment(@PathVariable Long id) {
-     * var user = userService.getUserFromContext();
-     * var appointment = appointmentService.getAppointmentById(id);
-     * if (appointment.getPatient().getId() != user.getId()) {
-     * return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-     * }
-     * appointmentService.deleteAppointment(appointment);
-     * return ResponseEntity.ok().build();
-     * }
-     * 
-     * @PostMapping("/appointments/{id}/pay")
-     * public ResponseEntity<Bill> payAppointment(@PathVariable Long id) {
-     * var user = userService.getUserFromContext();
-     * var appointment = appointmentService.getAppointmentById(id);
-     * if (appointment.getPatient().getId() != user.getId()) {
-     * return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-     * }
-     * var bill = billService.createBill(appointment);
-     * // ... rest of the logic for paying the appointment
-     * }
-     */
-
 }
