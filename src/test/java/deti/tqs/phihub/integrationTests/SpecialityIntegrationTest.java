@@ -92,6 +92,6 @@ class SpecialityIntegrationTest {
             .extract()
             .as(List.class);
 
-        assertNotEquals(response, null);
+        assertNotEquals(null, response);
     }
 }
