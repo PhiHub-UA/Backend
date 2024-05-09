@@ -41,25 +41,23 @@ class AppointmentIntegrationTests {
     private final static String BASE_URI = "http://localhost";
 
     @LocalServerPort
-    private static int port;
+    private int port;
 
     private static User user0 = new User();
     private static Medic medic0 = new Medic();
     private static String loginToken;
 
-    AppointmentIntegrationTests(@LocalServerPort int port) {
-        this.port = port;
-    }
-
 
     @BeforeAll
-    static void setUp() throws Exception {
+    void setUp() throws Exception {
 
         RestAssured.baseURI = BASE_URI;
+        RestAssured.port = port;
+
 
         // Create a user
         user0.setId(1L);
-        user0.setUsername("josefino123");
+        user0.setUsername("zezocas");
         user0.setEmail("josefino123@gmail.com");
         user0.setPhone("987654321");
         user0.setRole("user");
@@ -103,7 +101,7 @@ class AppointmentIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .post("/medics?name=Dr.Bananas&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
+                .post("/medic?name=Dr.Bananas&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
                 .then()
                 .statusCode(201);
     }

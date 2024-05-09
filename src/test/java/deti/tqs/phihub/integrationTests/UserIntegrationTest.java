@@ -2,7 +2,7 @@ package deti.tqs.phihub.integrationTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -40,25 +40,24 @@ class UserIntegrationTests {
     private String loginToken;
     private User user0 = new User();
 
-    @BeforeEach
+    @BeforeAll
     public void setUp() throws Exception {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
 
         //  Create a user
         user0.setId(1L);
-        user0.setUsername("josefino2");
-        user0.setEmail("jose@fino.com");
+        user0.setUsername("rodrigues");
+        user0.setEmail("joana@fino.com");
         user0.setPhone("919828737");
         user0.setRole("admin");
-        user0.setEmail("jose@gino.com");
         user0.setAge(27);
         user0.setPassword("strongPassword");
     }
 
     @Test
-    @DisplayName("When post a Appointment return a Appointment")
-    void whenPostValidAppointment_thenCreateAppointment() throws Exception {
+    @DisplayName("When post a User return a User")
+    void whenPostValidUser_thenCreateUser() throws Exception {
 
         given().port(port)
             .contentType("application/json")

@@ -12,6 +12,9 @@ import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.services.MedicService;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 @RestController
 @RequestMapping("/medic")
 public class MedicController {
@@ -43,14 +46,16 @@ public class MedicController {
     }
 
     @PostMapping
-    public Medic saveMedic(@RequestParam(value = "name") String name,
+    public ResponseEntity<Medic> saveMedic(@RequestParam(value = "name") String name,
             @RequestParam(value = "specialities") List<String> specialities) {
 
         Medic medic = new Medic();
         medic.setName(name);
         medic.setSpecialities(Speciality.fromStrings(specialities));
 
-        return medicService.save(medic);
+        Medic savedMedic = medicService.save(medic);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedMedic);
     }
 
 
