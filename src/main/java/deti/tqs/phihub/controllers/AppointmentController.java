@@ -41,15 +41,11 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<?> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
+
         var user = userService.getUserFromContext();
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-        }
-
-        var speciality = specialityService.getSpecialityById(appointmentSchema.specialityId());
-        if (speciality == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Speciality not found");
         }
 
         var medic = medicService.getMedicById(appointmentSchema.medicID());
@@ -59,7 +55,7 @@ public class AppointmentController {
 
         Appointment app = new Appointment();
         app.setPatient(user);
-        app.setSpeciality(speciality);
+        app.setSpeciality(appointmentSchema.speciality());
         app.setDate(appointmentSchema.date());
         app.setPrice(appointmentSchema.price());
         app.setMedic(medic);
