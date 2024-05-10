@@ -22,6 +22,7 @@ public class Medic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private Long id;
     private String name;
     private List<Speciality> specialities;

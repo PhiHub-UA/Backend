@@ -86,7 +86,7 @@ class SpecialityIntegrationTest {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/pacient/speciality")
+            .get("/patient/speciality")
             .then()
             .statusCode(200)
             .extract()
