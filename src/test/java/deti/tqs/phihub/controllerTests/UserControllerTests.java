@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.UserController;
+import deti.tqs.phihub.controllers.patient.UserController;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
@@ -64,7 +64,7 @@ class UserControllerTests {
     void givenOneUsers_thenReturnIt() throws Exception {
 
         mvc.perform(
-                get("/users/" + user0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                get("/patient/users/" + user0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.phone", is(user0.getPhone())));
 
@@ -75,7 +75,7 @@ class UserControllerTests {
     void givenOneUsersLoggedIn_thenReturnIt() throws Exception {
 
         mvc.perform(
-                get("/users/me").contentType(MediaType.APPLICATION_JSON))
+                get("/patient/users/me").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.phone", is(user0.getPhone())));
 
@@ -89,7 +89,7 @@ class UserControllerTests {
         when(service.getUserById(2L)).thenReturn(null);
         
         mvc.perform(
-            get("/users/2").contentType(MediaType.APPLICATION_JSON))
+            get("/patient/users/2").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
     }
 
@@ -99,7 +99,7 @@ class UserControllerTests {
         when(service.seeIfLoggedIn()).thenReturn(false);
         
         mvc.perform(
-            get("/users/me").contentType(MediaType.APPLICATION_JSON))
+            get("/patient/users/me").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
 
@@ -112,7 +112,7 @@ class UserControllerTests {
         when(service.getUserFromContext()).thenReturn(user1);
         
         mvc.perform(
-            get("/users/" + user0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+            get("/patient/users/" + user0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
 }

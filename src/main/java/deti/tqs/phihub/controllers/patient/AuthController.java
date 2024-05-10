@@ -1,4 +1,4 @@
-package deti.tqs.phihub.controllers;
+package deti.tqs.phihub.controllers.patient;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/patient/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
 

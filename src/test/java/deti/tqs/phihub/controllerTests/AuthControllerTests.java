@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.AuthController;
+import deti.tqs.phihub.controllers.patient.AuthController;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
@@ -69,7 +69,7 @@ class AuthControllerTests {
     @Test
     void whenRegisterValidUser_thenCreateUser() throws Exception {
         mvc.perform(
-                post("/auth/register").contentType(MediaType.APPLICATION_JSON)
+                post("/patient/auth/register").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"phone\":\"" + user0.getPhone() + "\"," +
                                 "\"email\":\"" + user0.getEmail() + "\"," +
                                 "\"age\":\"" + user0.getAge() + "\"," +

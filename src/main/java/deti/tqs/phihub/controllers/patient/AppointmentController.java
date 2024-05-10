@@ -1,4 +1,4 @@
-package deti.tqs.phihub.controllers;
+package deti.tqs.phihub.controllers.patient;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import deti.tqs.phihub.services.UserService;
 import deti.tqs.phihub.dtos.AppointmentSchema;
 
 @RestController
-@RequestMapping("/appointments")
+@RequestMapping("/patient/appointments")
 public class AppointmentController {
 
     private AppointmentService appointmentService;

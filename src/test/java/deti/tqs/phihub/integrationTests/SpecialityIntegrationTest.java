@@ -60,7 +60,7 @@ class SpecialityIntegrationTest {
                     "\"password\":\"" + user0.getPassword() + "\"," +
                     "\"role\":\"" + user0.getRole() + "\"}")
             .when()
-            .post("/auth/register")
+            .post("/patient/auth/register")
             .then()
             .statusCode(201);
 
@@ -69,7 +69,7 @@ class SpecialityIntegrationTest {
             .body("{\"username\":\"" + user0.getUsername() + "\"," +
                    "\"password\":\"" + user0.getPassword() + "\"}")
             .when()
-            .post("/auth/login")
+            .post("/patient/auth/login")
             .then()
             .statusCode(200)
             .extract()
@@ -86,7 +86,7 @@ class SpecialityIntegrationTest {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/speciality")
+            .get("/pacient/speciality")
             .then()
             .statusCode(200)
             .extract()
