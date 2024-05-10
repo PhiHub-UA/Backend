@@ -68,7 +68,7 @@ class UserIntegrationTests {
                     "\"password\":\"" + user0.getPassword() + "\"," +
                     "\"role\":\"" + user0.getRole() + "\"}")
             .when()
-            .post("/auth/register")
+            .post("/patient/auth/register")
             .then()
             .statusCode(201);
 
@@ -77,7 +77,7 @@ class UserIntegrationTests {
             .body("{\"username\":\"" + user0.getUsername() + "\"," +
                    "\"password\":\"" + user0.getPassword() + "\"}")
             .when()
-            .post("/auth/login")
+            .post("/patient/auth/login")
             .then()
             .statusCode(200)
             .extract()
@@ -89,7 +89,7 @@ class UserIntegrationTests {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/users/me")
+            .get("/patient/users/me")
             .then().log().all()
             .statusCode(200)
             .assertThat().
@@ -101,7 +101,7 @@ class UserIntegrationTests {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/users/" + 3)
+            .get("/patient/users/" + 3)
             .then().log().all()
             .statusCode(200)
             .assertThat().

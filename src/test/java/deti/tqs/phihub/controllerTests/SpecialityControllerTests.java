@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.SpecialityController;
+import deti.tqs.phihub.controllers.patient.SpecialityController;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
@@ -52,7 +52,7 @@ class SpecialityControllerTests {
     void givenSpecialities_thenReturnThem() throws Exception {
 
         mvc.perform(
-                get("/speciality").contentType(MediaType.APPLICATION_JSON))
+                get("/patient/speciality").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(service, times(1)).getSpecialities();

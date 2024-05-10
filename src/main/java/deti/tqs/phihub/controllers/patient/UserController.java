@@ -1,4 +1,4 @@
-package deti.tqs.phihub.controllers;
+package deti.tqs.phihub.controllers.patient;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +14,7 @@ import deti.tqs.phihub.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/patient/users")
 public class UserController {
 
     private UserService userService;

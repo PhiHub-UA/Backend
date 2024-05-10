@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.AppointmentController;
+import deti.tqs.phihub.controllers.patient.AppointmentController;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -92,7 +92,7 @@ class AppointmentControllerTests {
     @Test
     void whenPostValidAppointment_thenCreateAppointment() throws Exception {
         mvc.perform(
-                post("/appointments").contentType(MediaType.APPLICATION_JSON)
+                post("/patient/appointments").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 1" +
@@ -108,7 +108,7 @@ class AppointmentControllerTests {
     void givenOneAppointments_thenReturnIt() throws Exception {
 
         mvc.perform(
-                get("/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                get("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.price", is(app0.getPrice())));
 
@@ -130,7 +130,7 @@ class AppointmentControllerTests {
         when(service.getAppointmentsByPatient(user0)).thenReturn(allAppointments);
 
         mvc.perform(
-                get("/appointments").contentType(MediaType.APPLICATION_JSON))
+                get("/patient/appointments").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].price", is(appointment0.getPrice())))
@@ -145,7 +145,7 @@ class AppointmentControllerTests {
     void givenBadValue_whenAdd_thenReturnError() throws Exception {
         //  Check bad speciality ID
         mvc.perform(
-                post("/appointments").contentType(MediaType.APPLICATION_JSON)
+                post("/patient/appointments").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 2}"))
@@ -154,7 +154,7 @@ class AppointmentControllerTests {
         //  Check bad logged in user
         when(userService.getUserFromContext()).thenReturn(null);
         mvc.perform(
-                post("/appointments").contentType(MediaType.APPLICATION_JSON)
+                post("/patient/appointments").contentType(MediaType.APPLICATION_JSON)
                 .content("{\"date\": \"1714159929000\"" +
                          ",\"price\":" + app0.getPrice().toString() +
                          ",\"specialityId\": 1}"))
@@ -171,7 +171,7 @@ class AppointmentControllerTests {
         when(userService.getUserFromContext()).thenReturn(user1);
 
         mvc.perform(
-                get("/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                get("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
 }

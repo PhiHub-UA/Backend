@@ -1,4 +1,4 @@
-package deti.tqs.phihub.controllers;
+package deti.tqs.phihub.controllers.patient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ import java.util.List;
 import deti.tqs.phihub.services.SpecialityService;
 
 @RestController
-@RequestMapping("/speciality")
+@RequestMapping("/patient/speciality")
 public class SpecialityController {
 
 

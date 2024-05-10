@@ -78,7 +78,7 @@ class AppointmentIntegrationTests {
                         "\"password\":\"" + user0.getPassword() + "\"," +
                         "\"role\":\"" + user0.getRole() + "\"}")
                 .when()
-                .post("/auth/register")
+                .post("/patient/auth/register")
                 .then()
                 .statusCode(201);
 
@@ -87,7 +87,7 @@ class AppointmentIntegrationTests {
                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
                         "\"password\":\"" + user0.getPassword() + "\"}")
                 .when()
-                .post("/auth/login")
+                .post("/patient/auth/login")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -101,7 +101,7 @@ class AppointmentIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .post("/medic?name=Dr.Bananas&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
+                .post("/staff/medics?name=Dr.Bananas&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
                 .then()
                 .statusCode(201);
     }
@@ -121,7 +121,7 @@ class AppointmentIntegrationTests {
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .body(app0)
                 .when()
-                .post("/appointments")
+                .post("/patient/appointments")
                 .then()
                 .statusCode(201)
                 .assertThat()
