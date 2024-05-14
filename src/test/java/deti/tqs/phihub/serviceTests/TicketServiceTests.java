@@ -39,10 +39,12 @@ class TicketServiceTests {
         ticket0.setId(1L);
         ticket0.setAddedPrice(12.3);
         ticket0.setPriority(true);
+        ticket0.setRegisterDate(new Date());
 
         ticket1.setId(2L);
         ticket1.setAddedPrice(23.7);
         ticket1.setPriority(false);
+        ticket1.setRegisterDate(new Date());
 
         List<Ticket> allTickets = Arrays.asList(ticket0, ticket1);
 
@@ -58,9 +60,10 @@ class TicketServiceTests {
      void whenSaveValidTicket_thenTicketShouldBeReturned() {
         Ticket returned = ticketService.save(ticket0);
         assertThat(returned.getAddedPrice()).isEqualTo(ticket0.getAddedPrice());
+        assertThat(returned.getRegisterDate()).isEqualTo(ticket0.getRegisterDate());
 
         returned = ticketService.save(ticket1);
-        assertThat(returned.getAddedPrice()).isEqualTo(ticket1.getAddedPrice());
+        assertThat(returned.isPriority()).isEqualTo(ticket1.isPriority());
     }
 
     @Test

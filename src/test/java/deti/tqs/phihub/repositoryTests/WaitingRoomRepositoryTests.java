@@ -48,6 +48,7 @@ class WaitingRoomRepositoryTests {
         
         assertThat(found.getName()).isEqualTo(wroom0.getName());
         assertThat(found.getNumberOfFilledSeats()).isEqualTo(wroom0.getNumberOfFilledSeats());
+        assertThat(found.getNumberOfSeats()).isEqualTo(wroom0.getNumberOfSeats());
     }
 
     @Test
