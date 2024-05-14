@@ -91,7 +91,7 @@ class UserServiceTests {
 
     @Test
      void whenUserNotLoggedIn_thenUserShouldNotBeFound() {
-        assertThat(userService.seeIfLoggedIn()).isEqualTo(false);
+        assertThat(userService.seeIfLoggedIn()).isFalse();
     }
 
     @Test

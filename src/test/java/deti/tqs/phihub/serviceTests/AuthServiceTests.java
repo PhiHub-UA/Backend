@@ -80,6 +80,8 @@ class AuthServiceTests {
 
     @Test
      void whenSearchInvalidUserName_thenErrorShouldBeFound() {
-        assertThatThrownBy(() -> authService.loadUserByUsername(user0.getUsername())).isInstanceOf(UsernameNotFoundException.class);
+        String uname = user0.getUsername();
+        
+        assertThatThrownBy(() -> authService.loadUserByUsername(uname)).isInstanceOf(UsernameNotFoundException.class);
     }
 }
