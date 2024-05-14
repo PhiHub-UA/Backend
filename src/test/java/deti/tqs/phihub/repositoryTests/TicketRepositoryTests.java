@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.TicketRepository;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,12 +33,16 @@ class TicketRepositoryTests {
         tick0.setId(1L);
         tick0.setQueueLetter("A");
         tick0.setNumber(53);
+        tick0.setRegisterDate(new Date());
+        tick0.setPriority(false);
         
         ticketRepository.saveAndFlush(tick0);
 
         tick1.setId(2L);
         tick1.setQueueLetter("B");
         tick1.setNumber(89);
+        tick1.setRegisterDate(new Date());
+        tick0.setPriority(true);
     }
 
     @Test

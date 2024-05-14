@@ -32,11 +32,13 @@ class WaitingRoomRepositoryTests {
         wroom0.setId(1L);
         wroom0.setName("Room A");
         wroom0.setNumberOfFilledSeats(7);
+        wroom0.setNumberOfSeats(20);
         
         waitingroomRepository.saveAndFlush(wroom0);
 
         wroom1.setId(2L);
         wroom1.setName("Room R");
+        wroom1.setNumberOfSeats(34);
     }
 
     @Test

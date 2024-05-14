@@ -22,7 +22,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 
 import java.util.HashMap;
 
-
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 

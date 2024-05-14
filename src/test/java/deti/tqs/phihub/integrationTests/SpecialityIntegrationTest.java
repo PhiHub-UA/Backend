@@ -47,7 +47,7 @@ class SpecialityIntegrationTest {
         user0.setUsername("rodrigues");
         user0.setEmail("joana@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("admin");
+        user0.setRole("user");
         user0.setAge(27);
         user0.setPassword("strongPassword");
 
