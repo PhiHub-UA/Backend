@@ -52,9 +52,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/patient/auth/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/patient/users**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/patient/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/patient/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/patient/appointments/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/availability/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()

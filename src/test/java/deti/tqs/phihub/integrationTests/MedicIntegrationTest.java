@@ -56,7 +56,7 @@ class MedicIntegrationTests {
 
         // Create a user
         user0.setId(1L);
-        user0.setUsername("zezocas");
+        user0.setUsername("zezocas123");
         user0.setEmail("josefino123@gmail.com");
         user0.setPhone("987654321");
         user0.setRole("admin");

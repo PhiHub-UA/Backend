@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -45,7 +46,7 @@ class UserIntegrationTests {
         RestAssured.port = port;
 
         //  Create a user
-        user0.setId(1L);
+        user0.setId(10L);
         user0.setUsername("rodrigues");
         user0.setEmail("joana@fino.com");
         user0.setPhone("919828737");
@@ -100,7 +101,7 @@ class UserIntegrationTests {
             .contentType("application/json")
             .header(new Header("Authorization", "Bearer " + loginToken))
             .when()
-            .get("/patient/users/" + 3)
+            .get("/patient/users/" + 4)
             .then().log().all()
             .statusCode(200)
             .assertThat().

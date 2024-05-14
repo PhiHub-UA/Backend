@@ -22,7 +22,6 @@ import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
