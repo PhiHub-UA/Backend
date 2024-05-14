@@ -1,6 +1,5 @@
 package deti.tqs.phihub.controllers.patient;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -19,7 +18,6 @@ public class MedicController {
 
     private MedicService medicService;
 
-    @Autowired
     public MedicController(MedicService medicService) {
         this.medicService = medicService;
     }

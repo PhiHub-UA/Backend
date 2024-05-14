@@ -1,6 +1,5 @@
 package deti.tqs.phihub.controllers.patient;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +13,6 @@ public class SpecialityController {
 
     private SpecialityService specialityService;
 
-    @Autowired
     public SpecialityController(SpecialityService specialityService) {
         this.specialityService = specialityService;
     }

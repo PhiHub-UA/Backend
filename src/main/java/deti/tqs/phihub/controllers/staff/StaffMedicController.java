@@ -1,6 +1,5 @@
 package deti.tqs.phihub.controllers.staff;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +18,6 @@ public class StaffMedicController {
 
     private MedicService medicService;
 
-    @Autowired
     public StaffMedicController(MedicService medicService) {
         this.medicService = medicService;
     }
