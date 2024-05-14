@@ -78,18 +78,4 @@ class AuthControllerTests {
                                 "\"role\":\"" + user0.getRole() + "\"}"))
                 .andExpect(status().isCreated());
     }
-
-    /*
-     * @Test
-     * void wheLoginValidUser_thenCreateToken() throws Exception {
-     * when(authManager.authenticate(Mockito.any())).thenReturn((Authentication)new
-     * User());
-     * mvc.perform(
-     * post("/auth/login").contentType(MediaType.APPLICATION_JSON)
-     * .content("{\"username\":\"" + user0.getUsername() + "\"" +
-     * ",\"password\":\"" + user0.getPassword() + "\"}"))
-     * .andExpect(status().isOk())
-     * .andExpect(jsonPath("$.token", isA(Map.class)));
-     * }
-     */
 }

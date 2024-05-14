@@ -28,7 +28,7 @@ class BillRepositoryTests {
     private Bill bill1 = new Bill();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         bill0.setId(1L);
         bill0.setPrice(12.3);

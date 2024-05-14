@@ -2,13 +2,11 @@ package deti.tqs.phihub.integrationTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import deti.tqs.phihub.dtos.AppointmentSchema;
-import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.User;
 
@@ -49,7 +47,7 @@ class AppointmentIntegrationTests {
 
 
     @BeforeAll
-    void setUp() throws Exception {
+    void setUp() {
 
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
@@ -108,7 +106,7 @@ class AppointmentIntegrationTests {
 
     @Test
     @DisplayName("When post a Appointment return a Appointment")
-    void whenPostValidAppointment_thenCreateAppointment() throws Exception {
+    void whenPostValidAppointment_thenCreateAppointment() {
 
         AppointmentSchema app0 = new AppointmentSchema(
                 new Date().getTime(),
@@ -127,47 +125,6 @@ class AppointmentIntegrationTests {
                 .assertThat()
                 .body("patient.username", equalTo(user0.getUsername()))
                 .body("medic.name", equalTo(medic0.getName()));
-
-        /*
-         * 
-         * given().port(port)
-         * .contentType("application/json")
-         * .header(new Header("Authorization", "Bearer " + loginToken))
-         * .body("{\"date\": \"1714159929001\", \"price\": \"" + app0.getPrice() +
-         * "\", \"specialityId\": \"" + 1 + "\" "+ "\", \"medicId\": \"" + 1 + "\"}")
-         * .when()
-         * .when()
-         * .post("/appointments")
-         * .then()
-         * .statusCode(201);
-         * 
-         * given().port(port)
-         * .contentType("application/json")
-         * .header(new Header("Authorization", "Bearer " + loginToken))
-         * .when()
-         * .get("/appointments")
-         * .then().log().all()
-         * .statusCode(200)
-         * .assertThat().
-         * body("$.size()", equalTo(2)).
-         * body("[0].price", equalTo(app0.getPrice().floatValue())).
-         * body("[1].price", equalTo(app1.getPrice().floatValue())).
-         * body("[0].date", equalTo("1714159929000")).
-         * body("[1].date", equalTo("1714159929001")).
-         * extract().as(Appointment[].class);
-         * 
-         * given().port(port)
-         * .contentType("application/json")
-         * .header(new Header("Authorization", "Bearer " + loginToken))
-         * .when()
-         * .get("/appointments/" + app0Saved.get("id"))
-         * .then().log().all()
-         * .statusCode(200)
-         * .assertThat().
-         * body("price", equalTo(app0.getPrice().floatValue())).
-         * body("date", equalTo("1714159929000")).
-         * extract().as(Appointment.class);
-         */
     }
 
 }

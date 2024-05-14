@@ -28,7 +28,7 @@ class AppointmentRepositoryTests {
     private Appointment app1 = new Appointment();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         app0.setId(1L);
         app0.setPrice(12.3);

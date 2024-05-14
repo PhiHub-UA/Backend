@@ -27,7 +27,7 @@ class UserRepositoryTests {
     private User user1 = new User();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         user0.setId(1L);
         user0.setEmail("jose@fino.com");

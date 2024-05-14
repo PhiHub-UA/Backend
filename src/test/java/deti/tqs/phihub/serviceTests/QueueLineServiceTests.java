@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import deti.tqs.phihub.models.QueueLine;
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.QueueLineRepository;
 import deti.tqs.phihub.services.QueueLineService;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class QueueLineServiceTests {
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private QueueLineRepository queuelineRepository;
 
     @InjectMocks

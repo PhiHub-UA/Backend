@@ -38,7 +38,7 @@ class SpecialityIntegrationTest {
     private User user0 = new User();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
 
@@ -80,7 +80,7 @@ class SpecialityIntegrationTest {
 
     @Test
     @DisplayName("When post a Login return a Login")
-    void whenPostValidLogin_thenCreateLogin() throws Exception {
+    void whenPostValidLogin_thenCreateLogin() {
 
         List<String> response = given().port(port)
             .contentType("application/json")

@@ -56,7 +56,7 @@ class MedicControllerTests {
     private User user0 = new User();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         //  Create a user
         user0.setId(1L);
         user0.setUsername("josefino");

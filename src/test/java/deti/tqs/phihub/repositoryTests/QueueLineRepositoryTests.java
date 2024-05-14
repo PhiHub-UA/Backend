@@ -27,7 +27,7 @@ class QueueLineRepositoryTests {
     private QueueLine queue1 = new QueueLine();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         queue0.setId(1L);
         queue0.setMaxSize(12);

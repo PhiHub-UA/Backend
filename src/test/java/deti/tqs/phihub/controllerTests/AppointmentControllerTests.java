@@ -62,7 +62,7 @@ class AppointmentControllerTests {
     private Medic medic0 = new Medic();
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         //  Create a user
         user0.setId(1L);
         user0.setEmail("jose@fino.com");
@@ -71,7 +71,6 @@ class AppointmentControllerTests {
         //  Create a appointment
         app0.setId(1L);
         app0.setSpeciality(specialityService.getSpecialityById(1));
-        //app0.setDate(new Date());
         app0.setPrice(12.3);
         app0.setPatient(user0);
         app0.setMedic(medic0);

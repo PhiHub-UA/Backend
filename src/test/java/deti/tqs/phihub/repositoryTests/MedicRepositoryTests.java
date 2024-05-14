@@ -29,7 +29,7 @@ class MedicRepositoryTests {
     private Medic medic1 = new Medic();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         medic0.setId(1L);
         medic0.setName("Josefino");

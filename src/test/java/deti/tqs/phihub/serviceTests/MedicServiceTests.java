@@ -5,20 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.repositories.MedicRepository;
-import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class MedicServiceTests {
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private MedicRepository medicRepository;
 
     @InjectMocks
     private MedicService medicService;
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private AppointmentRepository appointmentRepository;
 
     private Medic medic0 = new Medic();

@@ -2,12 +2,10 @@ package deti.tqs.phihub.integrationTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.User;
 
@@ -22,7 +20,6 @@ import static io.restassured.RestAssured.given;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-import java.util.Date;
 import java.util.HashMap;
 import org.junit.jupiter.api.BeforeAll;
 import deti.tqs.phihub.models.Speciality;
@@ -48,7 +45,7 @@ class MedicIntegrationTests {
 
 
     @BeforeAll
-    void setUp() throws Exception {
+    void setUp() {
 
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
@@ -107,7 +104,7 @@ class MedicIntegrationTests {
 
     @Test
     @DisplayName("When post a Medic return a Medic")
-    void whenGetValidMedic_thenReturnMedic() throws Exception {
+    void whenGetValidMedic_thenReturnMedic() {
 
         //  Test with a given speciality
         given().port(port)

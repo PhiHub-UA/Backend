@@ -28,7 +28,7 @@ class TicketRepositoryTests {
     private Ticket tick1 = new Ticket();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         tick0.setId(1L);
         tick0.setQueueLetter("A");

@@ -44,7 +44,7 @@ class SpecialityControllerTests {
     private SecurityFilter securityFilter;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         when(service.getSpecialities()).thenReturn(List.of(Speciality.PULMONOLOGY.toString(), Speciality.PEDIATRICS.toString()));
     }
 

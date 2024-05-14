@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mock.Strictness;
 
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Speciality;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class AppointmentServiceTests {
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private AppointmentRepository appointmentRepository;
 
     @InjectMocks

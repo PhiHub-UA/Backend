@@ -5,17 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import deti.tqs.phihub.models.WaitingRoom;
-import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.repositories.WaitingRoomRepository;
 import deti.tqs.phihub.services.WaitingRoomService;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class WaitingRoomServiceTests {
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private WaitingRoomRepository waitingroomRepository;
 
     @InjectMocks

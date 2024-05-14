@@ -14,6 +14,7 @@ import io.restassured.RestAssured;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -38,7 +39,7 @@ class AuthIntegrationTests {
     private User user0 = new User();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
 
@@ -54,7 +55,7 @@ class AuthIntegrationTests {
 
     @Test
     @DisplayName("When post a Login return a Login")
-    void whenPostValidLogin_thenCreateLogin() throws Exception {
+    void whenPostValidLogin_thenCreateLogin() {
 
         given().port(port)
             .contentType("application/json")
@@ -80,5 +81,7 @@ class AuthIntegrationTests {
             .extract()
             .as(HashMap.class);
 
+        String loginToken = response.get("token");
+        assertNotNull(loginToken);
     }
 }

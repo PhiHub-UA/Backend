@@ -27,7 +27,7 @@ class WaitingRoomRepositoryTests {
     private WaitingRoom wroom1 = new WaitingRoom();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
 
         wroom0.setId(1L);
         wroom0.setName("Room A");

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,11 +15,8 @@ import deti.tqs.phihub.repositories.UserRepository;
 import deti.tqs.phihub.services.UserService;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import java.lang.NullPointerException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTests {
 
-    @Mock(lenient = true)
+    @Mock(strictness = Strictness.LENIENT)
     private UserRepository userRepository;
 
     @InjectMocks

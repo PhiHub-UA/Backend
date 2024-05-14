@@ -21,7 +21,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -41,7 +40,7 @@ class UserIntegrationTests {
     private User user0 = new User();
 
     @BeforeAll
-    public void setUp() throws Exception {
+    public void setUp() {
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
 
@@ -57,7 +56,7 @@ class UserIntegrationTests {
 
     @Test
     @DisplayName("When post a User return a User")
-    void whenPostValidUser_thenCreateUser() throws Exception {
+    void whenPostValidUser_thenCreateUser() {
 
         given().port(port)
             .contentType("application/json")
