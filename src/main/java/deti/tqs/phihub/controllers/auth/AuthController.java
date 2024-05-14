@@ -1,4 +1,4 @@
-package deti.tqs.phihub.controllers.patient;
+package deti.tqs.phihub.controllers.auth;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/patient/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
 
@@ -44,6 +44,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDetails> createUser(@RequestBody @Valid RegisterSchema user) {
+        System.out.println(user);
         UserDetails newUser = authService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
