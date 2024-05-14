@@ -9,9 +9,12 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
+import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.repositories.MedicRepository;
+import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
 
 import java.util.Arrays;
@@ -29,6 +32,9 @@ class MedicServiceTests {
 
     @InjectMocks
     private MedicService medicService;
+
+    @Mock(lenient = true)
+    private AppointmentRepository appointmentRepository;
 
     private Medic medic0 = new Medic();
     private Medic medic1 = new Medic();
@@ -52,6 +58,8 @@ class MedicServiceTests {
         Mockito.when(medicRepository.findById(medic0.getId())).thenReturn(Optional.of(medic0));
         Mockito.when(medicRepository.findById(medic1.getId())).thenReturn(Optional.of(medic1));
         Mockito.when(medicRepository.findById(-99L)).thenReturn(Optional.empty());
+
+        Mockito.when(appointmentRepository.findByMedicId(Mockito.any())).thenReturn(List.of());
     }
 
     @Test
@@ -92,5 +100,25 @@ class MedicServiceTests {
         Mockito.verify(medicRepository, 
                 VerificationModeFactory.times(1))
                     .findAll();
+    }
+
+    @Test
+     void whenSearchValidIDandTimeStamp_thenMedicAvailabilityShouldBeFound() {
+        List<Medic> found = medicService.getMedicsBySpeciality(Speciality.CARDIOLOGY);
+        assertThat(found.get(0)).isEqualTo(medic0);
+
+        found = medicService.getMedicsBySpeciality(Speciality.PSYCHIATRY);
+        assertThat(found.get(0)).isEqualTo(medic1);
+
+        found = medicService.getMedicsBySpeciality(Speciality.HEMATOLOGY);
+        assertThat(found.get(0)).isEqualTo(medic0);
+        assertThat(found.get(1)).isEqualTo(medic1);
+    }
+
+    @Test
+     void whenSearchValidSpeciality_thenMedicShouldBeFound() {
+        List<String> found = medicService.getMedicAvailability(medic0.getId(), 1714402800L);
+        assertThat(found.get(0)).isEqualTo("09:00");
+        assertThat(found.get(3)).isEqualTo("12:00");
     }
 }
