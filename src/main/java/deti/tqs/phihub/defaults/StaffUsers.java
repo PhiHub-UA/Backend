@@ -1,4 +1,4 @@
-package deti.tqs.phihub.defaultValues;
+package deti.tqs.phihub.defaults;
 
 import org.springframework.boot.ApplicationRunner;
 
@@ -33,7 +33,7 @@ public class StaffUsers implements ApplicationRunner {
 
         Staff aguiar = new Staff();
         aguiar.setUsername("aguiar");
-        aguiar.setPassword(bCryptPasswordEncoder.encode("aguiar"));
+        aguiar.setPassword(bCryptPasswordEncoder.encode(System.getenv("aguiar_pass")));
         aguiar.setAge(20);
         aguiar.setEmail("aguiar@gmail.com");
         aguiar.setName("Aguiar");
@@ -42,8 +42,6 @@ public class StaffUsers implements ApplicationRunner {
 
         staffRepository.save(aguiar);
 
-
-        System.out.println("Staff users created");
 
 
     }

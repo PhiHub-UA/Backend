@@ -38,12 +38,6 @@ public class AuthService implements UserDetailsService {
         Medic medic = medicRepository.findByUsername(username);
         Staff staff = staffRepository.findByUsername(username);
 
-        if (user == null && medic == null && staff == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        System.out.println(staff);
-
         if (user != null) {
             return user;
         }
@@ -56,7 +50,7 @@ public class AuthService implements UserDetailsService {
             return staff;
         }
 
-        return null;
+        throw new UsernameNotFoundException("User not found");
     }
 
     public UserDetails registerUser(RegisterSchema user) throws AuthenticationException {
