@@ -73,7 +73,7 @@ class MedicIntegrationTests {
                 + "\"username\":\"" + user0.getUsername() + "\","
                 + "\"password\":\"" + user0.getPassword() + "\","
                 + "\"name\":\"" + user0.getUsername() + "\","
-                + "\"role\":\"user\""
+                + "\"role\":\"staff\""
                 + "}")
                 .when()
                 .post("/auth/register")
@@ -84,7 +84,7 @@ class MedicIntegrationTests {
                 .contentType("application/json")
                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
                         "\"password\":\"" + user0.getPassword() + "\","+
-                        "\"role\":\"user\"}")
+                        "\"role\":\"staff\"}")
                 .when()
                 .post("/auth/login")
                 .then()
@@ -92,15 +92,12 @@ class MedicIntegrationTests {
                 .extract()
                 .as(HashMap.class);
 
-        loginToken = response.get("token");
-
-        // now, post the medic to use for medics
-
         given().port(port)
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .post("/staff/medics?name=" + medic0.getName() + "&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
+                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + medic0.getSpecialities().toString() + "}")
+                .post("/staff/medics")
                 .then()
                 .statusCode(201);
     }

@@ -92,7 +92,7 @@ class UserIntegrationTests {
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
                 .get("/patient/users/me")
-                .then().log().all()
+                .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(user0.getUsername())).body("phone", equalTo(user0.getPhone()))
                 .extract().as(User.class);
@@ -102,7 +102,7 @@ class UserIntegrationTests {
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
                 .get("/patient/users/" + 4)
-                .then().log().all()
+                .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(user0.getUsername())).body("phone", equalTo(user0.getPhone()))
                 .extract().as(User.class);

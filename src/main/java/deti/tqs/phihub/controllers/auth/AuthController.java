@@ -62,6 +62,7 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
 
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
+        
         Authentication authUser = authenticationManager.authenticate(authToken);
 
         String token = null;

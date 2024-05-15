@@ -36,98 +36,134 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 class AppointmentIntegrationTests {
 
-    private final static String BASE_URI = "http://localhost";
+        private final static String BASE_URI = "http://localhost";
 
-    @LocalServerPort
-    private int port;
+        @LocalServerPort
+        private int port;
 
-    private static User user0 = new User();
-    private static Medic medic0 = new Medic();
-    private static String loginToken;
+        private static User user0 = new User();
+        private static Medic medic0 = new Medic();
+        private static String userToken;
+        private static String staffToken;
 
+        @BeforeAll
+        void setUp() {
 
-    @BeforeAll
-    void setUp() {
+                RestAssured.baseURI = BASE_URI;
+                RestAssured.port = port;
 
-        RestAssured.baseURI = BASE_URI;
-        RestAssured.port = port;
+                // Create a user
+                user0.setId(1L);
+                user0.setUsername("zezocas");
+                user0.setEmail("josefino123@gmail.com");
+                user0.setPhone("987654321");
+                user0.setAge(27);
+                user0.setPassword("strongPassword");
 
+                // Create a medic
+                medic0.setId(1L);
+                medic0.setName("Dr.Bananas");
+                medic0.setSpecialities(
+                                List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
 
-        // Create a user
-        user0.setId(1L);
-        user0.setUsername("zezocas");
-        user0.setEmail("josefino123@gmail.com");
-        user0.setPhone("987654321");
-        user0.setAge(27);
-        user0.setPassword("strongPassword");
+                given().port(port)
+                                .contentType("application/json")
+                                .body("{"
+                                                + "\"phone\":\"" + user0.getPhone() + "\","
+                                                + "\"email\":\"" + user0.getEmail() + "\","
+                                                + "\"age\":\"" + user0.getAge() + "\","
+                                                + "\"username\":\"" + user0.getUsername() + "\","
+                                                + "\"password\":\"" + user0.getPassword() + "\","
+                                                + "\"name\":\"" + user0.getUsername() + "\","
+                                                + "\"role\":\"staff\""
+                                                + "}")
+                                .when()
+                                .post("/auth/register")
+                                .then()
+                                .statusCode(201);
 
-        // Create a medic
-        medic0.setId(1L);
-        medic0.setName("Dr.Bananas");
-        medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
+                HashMap<String, String> response = given().port(port)
+                                .contentType("application/json")
+                                .body("{\"username\":\"" + user0.getUsername() + "\"," +
+                                                "\"password\":\"" + user0.getPassword() + "\"," +
+                                                "\"role\":\"staff\"}")
+                                .when()
+                                .post("/auth/login")
+                                .then()
+                                .statusCode(200)
+                                .extract()
+                                .as(HashMap.class);
 
-        given().port(port)
-                .contentType("application/json")
-                .body("{"
-                + "\"phone\":\"" + user0.getPhone() + "\","
-                + "\"email\":\"" + user0.getEmail() + "\","
-                + "\"age\":\"" + user0.getAge() + "\","
-                + "\"username\":\"" + user0.getUsername() + "\","
-                + "\"password\":\"" + user0.getPassword() + "\","
-                + "\"name\":\"" + user0.getUsername() + "\","
-                + "\"role\":\"user\""
-                + "}")
-                .when()
-                .post("/auth/register")
-                .then()
-                .statusCode(201);
+                staffToken = response.get("token");
 
-        HashMap<String, String> response = given().port(port)
-                .contentType("application/json")
-                .body("{\"username\":\"" + user0.getUsername() + "\"," +
-                        "\"password\":\"" + user0.getPassword() + "\","+
-                        "\"role\":\"user\"}")
-                .when()
-                .post("/auth/login")
-                .then()
-                .statusCode(200)
-                .extract()
-                .as(HashMap.class);
+                // now, post the medic to use for appointments
 
-        loginToken = response.get("token");
+                given().port(port)
+                                .contentType("application/json")
+                                .header(new Header("Authorization", "Bearer " + staffToken))
+                                .when()
+                                .body("{\"name\":\"" + medic0.getName()
+                                                + "\",\"specialities\":" + medic0.getSpecialities().toString() + "}")
+                                .post("/staff/medics")
 
-        // now, post the medic to use for appointments
+                                .then()
+                                .statusCode(201);
 
-        given().port(port)
-                .contentType("application/json")
-                .header(new Header("Authorization", "Bearer " + loginToken))
-                .when()
-                .post("/staff/medics?name=Dr.Bananas&specialities=CARDIOLOGY,DERMATOLOGY,ENDOCRINOLOGY")
-                .then()
-                .statusCode(201);
-    }
+                // register and login a user to make appointments
 
-    @Test
-    @DisplayName("When post a Appointment return a Appointment")
-    void whenPostValidAppointment_thenCreateAppointment() {
+                given().port(port)
+                                .contentType("application/json")
+                                .body("{"
+                                                + "\"phone\":\"" + user0.getPhone() + "\","
+                                                + "\"email\":\"" + user0.getEmail() + "\","
+                                                + "\"age\":\"" + user0.getAge() + "\","
+                                                + "\"username\":\"" + user0.getUsername() + "\","
+                                                + "\"password\":\"" + user0.getPassword() + "\","
+                                                + "\"name\":\"" + user0.getUsername() + "\","
+                                                + "\"role\":\"user\""
+                                                + "}")
+                                .when()
+                                .post("/auth/register")
+                                .then()
+                                .statusCode(201);
 
-        AppointmentSchema app0 = new AppointmentSchema(
-                new Date().getTime(),
-                50.0,
-                Speciality.CARDIOLOGY,
-                1L);
+                HashMap<String, String> responseUser = given().port(port)
+                                .contentType("application/json")
+                                .body("{\"username\":\"" + user0.getUsername() + "\"," +
+                                                "\"password\":\"" + user0.getPassword() + "\"," +
+                                                "\"role\":\"user\"}")
+                                .when()
+                                .post("/auth/login")
+                                .then()
+                                .statusCode(200)
+                                .extract()
+                                .as(HashMap.class);
 
-        given().port(port)
-                .contentType("application/json")
-                .header(new Header("Authorization", "Bearer " + loginToken))
-                .body(app0)
-                .when()
-                .post("/patient/appointments")
-                .then()
-                .statusCode(201)
-                .assertThat()
-                .body("patient.username", equalTo(user0.getUsername()))
-                .body("medic.name", equalTo(medic0.getName()));
-    }
+                userToken = responseUser.get("token");
+
+        }
+
+        @Test
+        @DisplayName("When post a Appointment return a Appointment")
+        void whenPostValidAppointment_thenCreateAppointment() {
+
+                AppointmentSchema app0 = new AppointmentSchema(
+                                new Date().getTime(),
+                                50.0,
+                                Speciality.CARDIOLOGY,
+                                1L);
+
+                given().port(port)
+                                .contentType("application/json")
+                                .header(new Header("Authorization", "Bearer " + userToken))
+                                .body(app0)
+                                .when()
+                                .post("/patient/appointments")
+                                .then()
+                                .statusCode(201)
+                                .assertThat()
+                                .body("patient.username", equalTo(user0.getUsername()))
+                                .body("medic.name", equalTo(medic0.getName()));
+        }
 
 }
