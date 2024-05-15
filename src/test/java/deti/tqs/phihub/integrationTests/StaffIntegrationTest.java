@@ -48,7 +48,7 @@ class StaffIntegrationTests {
 
         // Create a staff
         staff0.setId(10L);
-        staff0.setUsername("rodrigues");
+        staff0.setUsername("rodrigues3");
         staff0.setEmail("joana@fino.com");
         staff0.setPhone("919828737");
         staff0.setAge(27);
