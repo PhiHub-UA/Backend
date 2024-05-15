@@ -74,7 +74,7 @@ class MedicIntegrationTests {
                         "\"password\":\"" + user0.getPassword() + "\"," +
                         "\"role\":\"" + user0.getRole() + "\"}")
                 .when()
-                .post("/patient/auth/register")
+                .post("/auth/register")
                 .then()
                 .statusCode(201);
 
@@ -83,7 +83,7 @@ class MedicIntegrationTests {
                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
                         "\"password\":\"" + user0.getPassword() + "\"}")
                 .when()
-                .post("/patient/auth/login")
+                .post("/auth/login")
                 .then()
                 .statusCode(200)
                 .extract()
