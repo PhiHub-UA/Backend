@@ -87,7 +87,7 @@ class UserIntegrationTests {
 
         loginToken = response.get("token");
 
-        given().port(port)
+        User user = given().port(port)
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
@@ -101,7 +101,7 @@ class UserIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .get("/patient/users/" + 3)
+                .get("/patient/users/" + user.getId())
                 .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(user0.getUsername())).body("phone", equalTo(user0.getPhone()))

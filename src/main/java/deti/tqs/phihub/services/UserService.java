@@ -21,12 +21,6 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
-
-        for (User u : userRepository.findAll()) {
-            System.out.println("-------------------------------------------------------------------------------");
-            System.out.println(u.getId());
-        }
-
         return userRepository.findById(id).orElse(null);
     }
 
