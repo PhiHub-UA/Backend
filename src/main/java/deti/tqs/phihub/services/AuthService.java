@@ -56,6 +56,7 @@ public class AuthService implements UserDetailsService {
     public UserDetails registerUser(RegisterSchema user) throws AuthenticationException {
 
         if (userRepository.findByUsername(user.username()) != null) {
+            System.out.println("----------------------------------------------------------------------------------same user name" + user.username());
             return null;
         }
 

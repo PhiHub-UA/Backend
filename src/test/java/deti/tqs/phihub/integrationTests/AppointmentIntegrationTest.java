@@ -69,14 +69,14 @@ class AppointmentIntegrationTests {
                 given().port(port)
                                 .contentType("application/json")
                                 .body("{"
-                                                + "\"phone\":\"" + user0.getPhone() + "\","
-                                                + "\"email\":\"" + user0.getEmail() + "\","
-                                                + "\"age\":\"" + user0.getAge() + "\","
-                                                + "\"username\":\"" + user0.getUsername() + "\","
-                                                + "\"password\":\"" + user0.getPassword() + "\","
-                                                + "\"name\":\"" + user0.getUsername() + "\","
-                                                + "\"role\":\"staff\""
-                                                + "}")
+                                        + "\"phone\":\"" + user0.getPhone() + "\","
+                                        + "\"email\":\"" + user0.getEmail() + "\","
+                                        + "\"age\":\"" + user0.getAge() + "\","
+                                        + "\"username\":\"" + user0.getUsername() + "\","
+                                        + "\"password\":\"" + user0.getPassword() + "\","
+                                        + "\"name\":\"" + user0.getUsername() + "\","
+                                        + "\"role\":\"staff\""
+                                        + "}")
                                 .when()
                                 .post("/auth/register")
                                 .then()
@@ -85,8 +85,8 @@ class AppointmentIntegrationTests {
                 HashMap<String, String> response = given().port(port)
                                 .contentType("application/json")
                                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
-                                                "\"password\":\"" + user0.getPassword() + "\"," +
-                                                "\"role\":\"staff\"}")
+                                        "\"password\":\"" + user0.getPassword() + "\"," +
+                                        "\"role\":\"staff\"}")
                                 .when()
                                 .post("/auth/login")
                                 .then()
@@ -97,31 +97,36 @@ class AppointmentIntegrationTests {
                 staffToken = response.get("token");
 
                 // now, post the medic to use for appointments
+                String specialityArrays = "[";
+                for (Speciality spec : medic0.getSpecialities()) {
+                        specialityArrays += "\"" + spec + "\",";
+                }
+                specialityArrays = specialityArrays.substring(0, specialityArrays.length() - 1);
+                specialityArrays += "]";
 
                 given().port(port)
                                 .contentType("application/json")
                                 .header(new Header("Authorization", "Bearer " + staffToken))
                                 .when()
                                 .body("{\"name\":\"" + medic0.getName()
-                                                + "\",\"specialities\":" + medic0.getSpecialities().toString() + "}")
+                                        + "\",\"specialities\":" + specialityArrays
+                                         + "}")
                                 .post("/staff/medics")
-
                                 .then()
                                 .statusCode(201);
 
                 // register and login a user to make appointments
-
                 given().port(port)
                                 .contentType("application/json")
                                 .body("{"
-                                                + "\"phone\":\"" + user0.getPhone() + "\","
-                                                + "\"email\":\"" + user0.getEmail() + "\","
-                                                + "\"age\":\"" + user0.getAge() + "\","
-                                                + "\"username\":\"" + user0.getUsername() + "\","
-                                                + "\"password\":\"" + user0.getPassword() + "\","
-                                                + "\"name\":\"" + user0.getUsername() + "\","
-                                                + "\"role\":\"user\""
-                                                + "}")
+                                        + "\"phone\":\"" + user0.getPhone() + "\","
+                                        + "\"email\":\"" + user0.getEmail() + "\","
+                                        + "\"age\":\"" + user0.getAge() + "\","
+                                        + "\"username\":\"" + user0.getUsername() + "\","
+                                        + "\"password\":\"" + user0.getPassword() + "\","
+                                        + "\"name\":\"" + user0.getUsername() + "\","
+                                        + "\"role\":\"user\""
+                                        + "}")
                                 .when()
                                 .post("/auth/register")
                                 .then()
@@ -130,8 +135,8 @@ class AppointmentIntegrationTests {
                 HashMap<String, String> responseUser = given().port(port)
                                 .contentType("application/json")
                                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
-                                                "\"password\":\"" + user0.getPassword() + "\"," +
-                                                "\"role\":\"user\"}")
+                                        "\"password\":\"" + user0.getPassword() + "\"," +
+                                        "\"role\":\"user\"}")
                                 .when()
                                 .post("/auth/login")
                                 .then()

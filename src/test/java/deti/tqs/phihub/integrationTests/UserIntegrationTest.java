@@ -101,7 +101,7 @@ class UserIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .get("/patient/users/" + 4)
+                .get("/patient/users/" + 3)
                 .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(user0.getUsername())).body("phone", equalTo(user0.getPhone()))

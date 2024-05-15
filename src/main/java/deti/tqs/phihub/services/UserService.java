@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.UserRepository;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder.ParameterBinding.Anonymous;
 
 @Service
 public class UserService {
@@ -22,6 +21,12 @@ public class UserService {
     }
 
     public User getUserById(Long id) {
+
+        for (User u : userRepository.findAll()) {
+            System.out.println("-------------------------------------------------------------------------------");
+            System.out.println(u.getId());
+        }
+
         return userRepository.findById(id).orElse(null);
     }
 

@@ -92,11 +92,20 @@ class MedicIntegrationTests {
                 .extract()
                 .as(HashMap.class);
 
+        loginToken = response.get("token");
+
+        String specialityArrays = "[";
+        for (Speciality spec : medic0.getSpecialities()) {
+                specialityArrays += "\"" + spec + "\",";
+        }
+        specialityArrays = specialityArrays.substring(0, specialityArrays.length() - 1);
+        specialityArrays += "]";
+
         given().port(port)
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + medic0.getSpecialities().toString() + "}")
+                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + "}")
                 .post("/staff/medics")
                 .then()
                 .statusCode(201);
