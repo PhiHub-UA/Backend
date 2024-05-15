@@ -11,6 +11,8 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import deti.tqs.phihub.models.User;
+import deti.tqs.phihub.repositories.MedicRepository;
+import deti.tqs.phihub.repositories.StaffRepository;
 import deti.tqs.phihub.repositories.UserRepository;
 import deti.tqs.phihub.services.AuthService;
 import deti.tqs.phihub.dtos.RegisterSchema;
@@ -27,6 +29,12 @@ class AuthServiceTests {
     @Mock(strictness = Strictness.LENIENT)
     private UserRepository userRepository;
 
+    @Mock
+    private MedicRepository medicRepository;
+
+    @Mock
+    private StaffRepository staffRepository;
+
     @InjectMocks
     private AuthService authService;
 
@@ -41,37 +49,38 @@ class AuthServiceTests {
         user0.setEmail("jose@fino.com");
         user0.setPhone("929838747");
 
-        user0Schema = new RegisterSchema(user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "", "");
+        user0Schema = new RegisterSchema(user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "noob", "user", "user");
 
         Mockito.when(userRepository.findByUsername(user0.getUsername())).thenReturn(null);
         Mockito.when(userRepository.save(user0)).thenReturn(user0);
     }
 
     @Test
-     void whenRegisterNewUser_thenReturnNewUserDetails() {
+    void whenRegisterNewUser_thenReturnNewUserDetails() {
+
         UserDetails returned = authService.registerUser(user0Schema);
         assertThat(returned.getUsername()).isEqualTo(user0.getUsername());
 
-        Mockito.verify(userRepository, 
+        Mockito.verify(userRepository,
                 VerificationModeFactory.times(1))
-                    .findByUsername(user0.getUsername());
+                .findByUsername(user0.getUsername());
     }
 
     @Test
-     void whenRegisterExistingUser_thenReturnExistsError() {
-        //  Simulate username already existing
+    void whenRegisterExistingUser_thenReturnExistsError() {
+        // Simulate username already existing
         Mockito.when(userRepository.findByUsername(user0.getUsername())).thenReturn(user0);
 
-        assertThatThrownBy(() -> authService.registerUser(user0Schema)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(authService.registerUser(user0Schema)).isNull();
 
-        Mockito.verify(userRepository, 
+        Mockito.verify(userRepository,
                 VerificationModeFactory.times(0))
-                    .save(Mockito.any());
+                .save(Mockito.any());
     }
 
     @Test
-     void whenSearchValidUserName_thenUserShouldBeFound() {
-        //  Simulate username already existing
+    void whenSearchValidUserName_thenUserShouldBeFound() {
+        // Simulate username already existing
         Mockito.when(userRepository.findByUsername(user0.getUsername())).thenReturn(user0);
 
         UserDetails found = authService.loadUserByUsername(user0.getUsername());
@@ -79,9 +88,10 @@ class AuthServiceTests {
     }
 
     @Test
-     void whenSearchInvalidUserName_thenErrorShouldBeFound() {
+    void whenSearchInvalidUserName_thenErrorShouldBeFound() {
         String uname = user0.getUsername();
-        
-        assertThatThrownBy(() -> authService.loadUserByUsername(uname)).isInstanceOf(UsernameNotFoundException.class);
+
+         assertThatThrownBy(() ->
+        authService.loadUserByUsername(uname)).isInstanceOf(UsernameNotFoundException.class);
     }
 }

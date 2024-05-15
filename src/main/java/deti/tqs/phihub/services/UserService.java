@@ -1,10 +1,12 @@
 package deti.tqs.phihub.services;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.UserRepository;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder.ParameterBinding.Anonymous;
 
 @Service
 public class UserService {
@@ -28,11 +30,16 @@ public class UserService {
     }
 
     public User getUserFromContext() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+            return null;
+        }
+
+        return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public boolean seeIfLoggedIn() {
-        return SecurityContextHolder.getContext().getAuthentication() != null;
+        return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
     
 }

@@ -47,7 +47,6 @@ class SpecialityIntegrationTest {
         user0.setUsername("rodrigues123");
         user0.setEmail("joana@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("user");
         user0.setAge(27);
         user0.setPassword("strongPassword");
 
@@ -57,8 +56,7 @@ class SpecialityIntegrationTest {
                     "\"email\":\"" + user0.getEmail() + "\"," +
                     "\"age\":\"" + user0.getAge() + "\"," +
                     "\"username\":\"" + user0.getUsername() + "\"," +
-                    "\"password\":\"" + user0.getPassword() + "\"," +
-                    "\"role\":\"" + user0.getRole() + "\"}")
+                    "\"password\":\"" + user0.getPassword() + "\"}")
             .when()
             .post("/auth/register")
             .then()

@@ -62,7 +62,6 @@ class MedicControllerTests {
         user0.setUsername("josefino");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("admin");
         
         when(userService.getUserFromContext()).thenReturn(user0);
 

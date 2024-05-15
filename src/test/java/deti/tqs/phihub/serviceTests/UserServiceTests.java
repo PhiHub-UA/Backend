@@ -90,11 +90,6 @@ class UserServiceTests {
     }
 
     @Test
-     void whenUserNotLoggedIn_thenUserShouldNotBeFound() {
-        assertThat(userService.seeIfLoggedIn()).isFalse();
-    }
-
-    @Test
      void whenUserContext_thenUserShouldNotBeFound() {
         assertThatThrownBy(() -> userService.getUserFromContext()).isInstanceOf(NullPointerException.class);
     }

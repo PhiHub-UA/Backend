@@ -53,7 +53,6 @@ class UserControllerTests {
         user0.setUsername("josefino");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("admin");
         
         when(service.getUserFromContext()).thenReturn(user0);
         when(service.seeIfLoggedIn()).thenReturn(true);
@@ -96,7 +95,7 @@ class UserControllerTests {
     @Test
     void givenUserNotLoggedIn_whenGet_thenReturnError() throws Exception {
         //  Check user bad logged in
-        when(service.seeIfLoggedIn()).thenReturn(false);
+        when(service.getUserFromContext()).thenReturn(null);
         
         mvc.perform(
             get("/patient/users/me").contentType(MediaType.APPLICATION_JSON))
@@ -107,7 +106,6 @@ class UserControllerTests {
     void givenBadUserPermissions_whenGet_thenReturnError() throws Exception {
         //  Check user permissions
         User user1 = new User();
-        user1.setRole("user");
         user1.setUsername("badActor");
         when(service.getUserFromContext()).thenReturn(user1);
         

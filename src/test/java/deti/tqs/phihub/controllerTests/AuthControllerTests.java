@@ -57,7 +57,6 @@ class AuthControllerTests {
         user0.setUsername("josefino");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("admin");
         user0.setEmail("jose@gino.com");
         user0.setAge(27);
         user0.setPassword("strongPassword");
@@ -74,8 +73,7 @@ class AuthControllerTests {
                                 "\"email\":\"" + user0.getEmail() + "\"," +
                                 "\"age\":\"" + user0.getAge() + "\"," +
                                 "\"username\":\"" + user0.getUsername() + "\"," +
-                                "\"password\":\"" + user0.getPassword() + "\"," +
-                                "\"role\":\"" + user0.getRole() + "\"}"))
+                                "\"password\":\"" + user0.getPassword() + "\"}"))
                 .andExpect(status().isCreated());
     }
 }
