@@ -62,7 +62,7 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
 
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
-        
+
         Authentication authUser = authenticationManager.authenticate(authToken);
 
         String token = null;
@@ -73,7 +73,7 @@ public class AuthController {
         } else if (user.role().equals("staff")) {
             token = tokenService.generateAccessToken((Staff) authUser.getPrincipal());
         }
-        return ResponseEntity.ok(Map.of("token", token, "username", user.username()));
+        return ResponseEntity.ok(Map.of("token", token, "username", user.username(), "role", user.role()));
     }
 
 }
