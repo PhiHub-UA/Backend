@@ -14,27 +14,20 @@ public class StaffService {
 
     private StaffRepository staffRepository;
 
-    @Autowired
     public StaffService(StaffRepository staffRepository) {
         this.staffRepository = staffRepository;
     }
 
     public Staff getStaffFromContext() {
-
-
-            if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
             return null;
         }
 
         return (Staff)SecurityContextHolder.getContext().getAuthentication().getPrincipal();  
-              
     }
 
     public Staff createStaff(StaffSchema staff) {
         Staff staffMember = new Staff(staff.name(), staff.phone(), staff.email(), staff.age(), staff.username(), staff.password());
         return staffRepository.save(staffMember);
     }
-
-
-    
 }
