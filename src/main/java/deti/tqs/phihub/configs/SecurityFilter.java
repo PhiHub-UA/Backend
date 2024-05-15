@@ -47,12 +47,14 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         UserDetails user = null;
 
-        if (request.getRequestURI().contains("/patient")) {
-            user = userRepository.findByUsername(tokenSubject);
-        } else if (request.getRequestURI().contains("/staff")) {
-            user = staffRepository.findByUsername(tokenSubject);
-        } else if (request.getRequestURI().contains("/medic")) {
+        user = staffRepository.findByUsername(tokenSubject);
+
+        if (user == null) {
             user = medicRepository.findByUsername(tokenSubject);
+        }
+
+        if (user == null) {
+            user = userRepository.findByUsername(tokenSubject);
         }
 
         if (user == null) {
