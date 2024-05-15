@@ -9,10 +9,14 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 @Generated
 public class StaffUsers implements ApplicationRunner {
+
+    @Value("${staff.aguiar.pass}")
+    private String aguiarPass;
 
     StaffRepository staffRepository;
 
@@ -33,7 +37,7 @@ public class StaffUsers implements ApplicationRunner {
 
         Staff aguiar = new Staff();
         aguiar.setUsername("aguiar");
-        aguiar.setPassword(bCryptPasswordEncoder.encode(System.getenv("aguiar_pass")));
+        aguiar.setPassword(bCryptPasswordEncoder.encode(aguiarPass));
         aguiar.setAge(20);
         aguiar.setEmail("aguiar@gmail.com");
         aguiar.setName("Aguiar");
@@ -41,8 +45,6 @@ public class StaffUsers implements ApplicationRunner {
         aguiar.setPhone("9877654321");
 
         staffRepository.save(aguiar);
-
-
 
     }
 
