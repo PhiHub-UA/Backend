@@ -22,23 +22,21 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "patients")
-public class User implements UserDetails {
+@Table(name = "staff")
+public class Staff implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String phone;
     private String email;
     private Integer age;
-    // Login Info
     private String username;
     private String name;
     @JsonIgnore
     private String password;
 
-    public User(String name, String phone, String email, Integer age, String username, String password) {
+    public Staff(String name,String phone, String email, Integer age, String username, String password) {
         this.phone = phone;
         this.email = email;
         this.age = age;
@@ -50,7 +48,7 @@ public class User implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("staff"));
     }
 
     @Override

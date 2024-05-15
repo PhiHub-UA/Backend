@@ -26,26 +26,25 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<User> getLoggedInUser(HttpServletRequest request) {
-
-        if (!userService.seeIfLoggedIn()) {
-            return ResponseEntity.status(401).build();
-        }
         
         var user = userService.getUserFromContext();
+
+        if (user == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id, HttpServletRequest request) {
+        
         var loggedInUser = userService.getUserFromContext();
         User user = userService.getUserById(id);
 
         if (user == null) {
             return ResponseEntity.notFound().build();
-        }
-
-        if (loggedInUser.getRole().equals("admin")) {
-            return ResponseEntity.ok(user);
         }
 
         // a user trying to check another user's info, aint no way

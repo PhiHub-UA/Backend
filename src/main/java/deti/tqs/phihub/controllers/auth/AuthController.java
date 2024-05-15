@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import deti.tqs.phihub.models.Medic;
+import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.dtos.LoginSchema;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
@@ -39,21 +43,35 @@ public class AuthController {
         this.authService = authService;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
-        
+
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserDetails> createUser(@RequestBody @Valid RegisterSchema user) {
-        System.out.println(user);
+
         UserDetails newUser = authService.registerUser(user);
+
+        if (newUser == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> loginUser(@RequestBody LoginSchema user) {
+
         var authToken = new UsernamePasswordAuthenticationToken(user.username(), user.password());
-        var authUser = authenticationManager.authenticate(authToken);
-        var token = tokenService.generateAccessToken((User) authUser.getPrincipal());
+        Authentication authUser = authenticationManager.authenticate(authToken);
+
+        String token = null;
+        if (user.role().equals("user")) {
+            token = tokenService.generateAccessToken((User) authUser.getPrincipal());
+        } else if (user.role().equals("medic")) {
+            token = tokenService.generateAccessToken((Medic) authUser.getPrincipal());
+        } else if (user.role().equals("staff")) {
+            token = tokenService.generateAccessToken((Staff) authUser.getPrincipal());
+        }
         return ResponseEntity.ok(Map.of("token", token, "username", user.username()));
     }
 

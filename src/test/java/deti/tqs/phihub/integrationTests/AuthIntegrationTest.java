@@ -48,7 +48,6 @@ class AuthIntegrationTests {
         user0.setUsername("algeirai");
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
-        user0.setRole("admin");
         user0.setAge(27);
         user0.setPassword("strongPassword");
     }
@@ -59,12 +58,15 @@ class AuthIntegrationTests {
 
         given().port(port)
             .contentType("application/json")
-            .body("{\"phone\":\"" + user0.getPhone() + "\"," +
-                    "\"email\":\"" + user0.getEmail() + "\"," +
-                    "\"age\":\"" + user0.getAge() + "\"," +
-                    "\"username\":\"" + user0.getUsername() + "\"," +
-                    "\"password\":\"" + user0.getPassword() + "\"," +
-                    "\"role\":\"" + user0.getRole() + "\"}")
+            .body("{"
+            + "\"phone\":\"" + user0.getPhone() + "\","
+            + "\"email\":\"" + user0.getEmail() + "\","
+            + "\"age\":\"" + user0.getAge() + "\","
+            + "\"username\":\"" + user0.getUsername() + "\","
+            + "\"password\":\"" + user0.getPassword() + "\","
+            + "\"name\":\"" + user0.getUsername() + "\","
+            + "\"role\":\"user\""
+            + "}")
             .when()
             .post("/auth/register")
             .then()
@@ -73,7 +75,8 @@ class AuthIntegrationTests {
         HashMap<String, String> response = given().port(port)
             .contentType("application/json")
             .body("{\"username\":\"" + user0.getUsername() + "\"," +
-                   "\"password\":\"" + user0.getPassword() + "\"}")
+                   "\"password\":\"" + user0.getPassword() + "\","+
+                   "\"role\":\"user\"}")
             .when()
             .post("/auth/login")
             .then()
