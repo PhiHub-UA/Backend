@@ -31,7 +31,7 @@ public class StaffService {
         }
     
         Object principal = authentication.getPrincipal();
-        if (principal instanceof Staff staff) {
+        if (principal instanceof Staff) {
             return (Staff) principal;
         }
     

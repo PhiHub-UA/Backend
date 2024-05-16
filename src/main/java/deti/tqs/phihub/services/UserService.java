@@ -38,7 +38,7 @@ public class UserService {
         }
     
         Object principal = authentication.getPrincipal();
-        if (principal instanceof User user) {
+        if (principal instanceof User) {
             return (User) principal;
         }
     
