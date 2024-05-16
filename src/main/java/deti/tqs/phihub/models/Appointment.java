@@ -39,5 +39,7 @@ public class Appointment {
     @OneToOne(fetch = FetchType.EAGER)
     private Bill bill;
 
+    private String notes;
+
     
 }

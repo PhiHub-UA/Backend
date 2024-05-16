@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/signage")
-public class StaffController {
+public class SignageController {
     
 
     private HashMap<String, Integer> ticketCalls = new HashMap<String, Integer>();
@@ -21,7 +21,7 @@ public class StaffController {
 
     private LinkedList<String> lastCalls = new LinkedList<String>();
 
-    public StaffController() {
+    public SignageController() {
         Random rand = new Random();
 
         Integer nextA = rand.nextInt(70);
