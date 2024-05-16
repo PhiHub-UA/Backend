@@ -5,7 +5,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.UserRepository;
 
@@ -39,7 +38,7 @@ public class UserService {
         }
     
         Object principal = authentication.getPrincipal();
-        if (principal instanceof User) {
+        if (principal instanceof User user) {
             return (User) principal;
         }
     

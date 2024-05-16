@@ -50,7 +50,7 @@ public class MedicService {
         }
 
         Object principal = authentication.getPrincipal();
-        if (principal instanceof Medic) {
+        if (principal instanceof Medic medic) {
             return (Medic) principal;
         }
 
