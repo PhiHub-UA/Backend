@@ -49,6 +49,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserDetails> createUser(@RequestBody @Valid RegisterSchema user) {
 
+
+        System.out.println(user);
+
         UserDetails newUser = authService.registerUser(user);
 
         if (newUser == null) {
