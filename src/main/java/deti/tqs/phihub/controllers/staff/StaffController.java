@@ -14,9 +14,11 @@ import deti.tqs.phihub.dtos.StaffSchema;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.List;
+import deti.tqs.phihub.models.StaffPermissions;
 
 @RestController
-@RequestMapping("/staff/users")
+@RequestMapping("/staff")
 public class StaffController {
 
     private StaffService staffService;
@@ -39,7 +41,6 @@ public class StaffController {
 
     @PostMapping
     public ResponseEntity<Staff> createStaff(@RequestBody StaffSchema staffSchema) {
-
         var requestUser = staffService.getStaffFromContext();
 
         Collection<? extends GrantedAuthority> authorities = requestUser.getAuthorities();
@@ -56,6 +57,16 @@ public class StaffController {
 
         return ResponseEntity.ok(staff);
 
+    }
+
+    @GetMapping("/permissions")
+    public ResponseEntity<List<String>> getPermissions() {
+        return ResponseEntity.ok(StaffPermissions.getPermissions());
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Staff>> getAllStaff() {
+        return ResponseEntity.ok(staffService.findAll());
     }
 
 }

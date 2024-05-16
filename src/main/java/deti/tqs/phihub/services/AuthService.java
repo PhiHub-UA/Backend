@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import deti.tqs.phihub.repositories.MedicRepository;
 import deti.tqs.phihub.repositories.StaffRepository;
 import deti.tqs.phihub.repositories.UserRepository;
+import deti.tqs.phihub.models.StaffPermissions;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -61,6 +62,9 @@ public class AuthService implements UserDetailsService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
 
+
+        System.out.println(encryptedPassword);
+
         UserDetails registeredUser = null;
 
         if (user.role().equals("user")) {
@@ -80,7 +84,7 @@ public class AuthService implements UserDetailsService {
 
         if (user.role().equals("staff")) {
             Staff newStaff = new Staff(user.name(), user.phone(), user.email(), user.age(), user.username(),
-                    encryptedPassword);
+                    encryptedPassword, StaffPermissions.fromStrings(user.permissions()));
             staffRepository.save(newStaff);
             registeredUser = newStaff;
         }

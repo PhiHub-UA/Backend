@@ -36,7 +36,7 @@ class StaffServiceTests {
         staff0.setUsername("Josefino");
         staff0.setAge(39);
 
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123");
+        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123",null);
 
         Mockito.when(staffRepository.save(Mockito.any())).thenReturn(staff0);
         Mockito.when(staffRepository.findByUsername(staff0.getUsername())).thenReturn(staff0);

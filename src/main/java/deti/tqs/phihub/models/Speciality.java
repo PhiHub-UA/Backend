@@ -1,7 +1,8 @@
-
 package deti.tqs.phihub.models;
-import java.util.ArrayList;
+
 import java.util.List;
+import java.util.ArrayList;
+
 
 public enum Speciality {
     CARDIOLOGY(0),

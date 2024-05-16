@@ -7,6 +7,10 @@ import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.repositories.StaffRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
+import deti.tqs.phihub.models.StaffPermissions;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +47,7 @@ public class StaffUsers implements ApplicationRunner {
         aguiar.setName("Aguiar");
         aguiar.setId(1L);
         aguiar.setPhone("9877654321");
+        aguiar.setPermissions(List.of(StaffPermissions.CREATE, StaffPermissions.MANAGE, StaffPermissions.RECEPTION));
 
         staffRepository.save(aguiar);
 
