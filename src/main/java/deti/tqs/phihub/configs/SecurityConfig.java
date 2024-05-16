@@ -51,6 +51,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/signage/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/signage/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/users/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/appointments/**").permitAll()

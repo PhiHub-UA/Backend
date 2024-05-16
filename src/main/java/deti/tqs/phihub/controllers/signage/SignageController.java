@@ -20,36 +20,43 @@ public class SignageController {
     private String[] ticketChars = {"A", "B", "C", "D"};
 
     private LinkedList<String> lastCalls = new LinkedList<String>();
+    private String nextNum = "---";
 
     public SignageController() {
         Random rand = new Random();
 
-        Integer nextA = rand.nextInt(70);
-        ticketCalls.put("A", nextA);
-        lastCalls.add("A" + nextA);
+        Integer nextA = rand.nextInt(2, 70);
+        ticketCalls.put("A", nextA + 1);
+        lastCalls.add("[\"A" + nextA + "\", 1]");
         Integer nextB = rand.nextInt(16);
         ticketCalls.put("B", nextB);
-        lastCalls.add("B" + nextB);
+        lastCalls.add("[\"B" + nextB + "\", 3]");
         Integer nextC = rand.nextInt(20);
         ticketCalls.put("C", nextC);
-        lastCalls.add("C" + nextC);
+        lastCalls.add("[\"C" + nextC + "\", 6]");
         Integer nextD = rand.nextInt(40);
         ticketCalls.put("D", nextD);
-        lastCalls.add("D" + nextD);
-        lastCalls.add("A" + (nextA - 1));
+        lastCalls.add("[\"D" + nextD + "\", 4]");
+        lastCalls.add("[\"A" + (nextA + 1) + "\", 7]");
 
+
+        int nextLineID = rand.nextInt(ticketCalls.size());
+        String nextLineChar = ticketChars[nextLineID];
+        ticketCalls.put(nextLineChar, ticketCalls.get(nextLineChar) + 1);
+
+        nextNum = nextLineChar + ticketCalls.get(nextLineChar).toString();
     }
 
     @GetMapping
     public ResponseEntity<String> getLoggedInStaff() {
 
-        String lastFiveCalled = "[\"" + lastCalls.get(lastCalls.size()-1) +
-                                "\", \"" + lastCalls.get(lastCalls.size()-2) +
-                                "\", \"" + lastCalls.get(lastCalls.size()-3) +
-                                "\", \"" + lastCalls.get(lastCalls.size()-4) +
-                                "\", \"" + lastCalls.get(lastCalls.size()-5) + "\"]";
+        String lastCalled = "\"1\":" + lastCalls.get(lastCalls.size()-1) +
+                          ", \"2\":" + lastCalls.get(lastCalls.size()-2) +
+                          ", \"3\":" + lastCalls.get(lastCalls.size()-3) +
+                          ", \"4\":" + lastCalls.get(lastCalls.size()-4) +
+                          ", \"5\":" + lastCalls.get(lastCalls.size()-5);
 
-        return ResponseEntity.ok("{\"latest\":\"" + lastCalls.getLast() + "\", \"lastFiveCalls\":" + lastFiveCalled + "}");
+        return ResponseEntity.ok("{\"nextnum\":\"" + nextNum + "\", " + lastCalled + "}");
     }
 
     @PostMapping
@@ -57,14 +64,15 @@ public class SignageController {
 
         Random rand = new Random();
 
+        lastCalls.add("[\"" + nextNum + "\", " + (rand.nextInt(7) + 1) + "]");
+
         int nextLineID = rand.nextInt(ticketCalls.size());
         String nextLineChar = ticketChars[nextLineID];
-
-        lastCalls.add(nextLineChar + ticketCalls.get(nextLineChar).toString());
-
         ticketCalls.put(nextLineChar, ticketCalls.get(nextLineChar) + 1);
 
-        return ResponseEntity.ok("{\"message\":\"Next ticket updated sucessfully\"}");
+        rand = new Random();
+        nextNum = nextLineChar + ticketCalls.get(nextLineChar).toString();
 
+        return ResponseEntity.ok("{\"message\":\"Next ticket updated sucessfully\"}");
     }
 }
