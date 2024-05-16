@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SignageController {
     
 
-    private HashMap<String, Integer> ticketCalls = new HashMap<String, Integer>();
+    private HashMap<String, Integer> ticketCalls = new HashMap<>();
     private String[] ticketChars = {"A", "B", "C", "D"};
 
-    private LinkedList<String> lastCalls = new LinkedList<String>();
+    private LinkedList<String> lastCalls = new LinkedList<>();
     private String nextNum = "---";
+
+    Random rand = new Random();
 
     public SignageController() {
         Random rand = new Random();
@@ -62,15 +64,12 @@ public class SignageController {
     @PostMapping
     public ResponseEntity<String> callTicket() {
 
-        Random rand = new Random();
-
         lastCalls.add("[\"" + nextNum + "\", " + (rand.nextInt(7) + 1) + "]");
 
         int nextLineID = rand.nextInt(ticketCalls.size());
         String nextLineChar = ticketChars[nextLineID];
         ticketCalls.put(nextLineChar, ticketCalls.get(nextLineChar) + 1);
 
-        rand = new Random();
         nextNum = nextLineChar + ticketCalls.get(nextLineChar).toString();
 
         return ResponseEntity.ok("{\"message\":\"Next ticket updated sucessfully\"}");
