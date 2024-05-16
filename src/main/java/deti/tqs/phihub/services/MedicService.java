@@ -1,10 +1,14 @@
 package deti.tqs.phihub.services;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
+import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.repositories.MedicRepository;
 
@@ -36,6 +40,22 @@ public class MedicService {
 
     public List<Medic> findAll() {
         return medicRepository.findAll();
+    }
+
+    public Medic getMedicFromContext() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return null;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Medic) {
+            return (Medic) principal;
+        }
+
+        return null;
     }
 
     public List<Medic> getMedicsBySpeciality(Speciality speciality) {
@@ -80,7 +100,7 @@ public class MedicService {
                     && appointment.getDate() < startOfDayTimestamp + 24 * 60 * 60 * 1000) {
                 long appointmentStartTime = appointment.getDate();
                 unavailableSlots.add(appointmentStartTime);
-                
+
             }
         }
 
