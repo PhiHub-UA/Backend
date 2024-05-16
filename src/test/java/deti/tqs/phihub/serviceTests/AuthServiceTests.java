@@ -22,6 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+
 import deti.tqs.phihub.models.StaffPermissions;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,21 +57,21 @@ class AuthServiceTests {
         user0.setUsername("josecalças");
         user0.setEmail("jose@fino.com");
         user0.setPhone("929838747");
-        user0Schema = new RegisterSchema(user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "jos321", "user", "jos",null);
+        user0Schema = new RegisterSchema(user0.getPhone(), user0.getEmail(), 0, user0.getUsername(), "jos321", "user", "jos", List.of());
 
         //  Medic user
         user1.setId(2L);
         user1.setUsername("tomaspires");
         user1.setEmail("tom@pir.com");
         user1.setPhone("929838747");
-        user1Schema = new RegisterSchema(user1.getPhone(), user1.getEmail(), 0, user1.getUsername(), "tom123", "medic", "tom", null);
+        user1Schema = new RegisterSchema(user1.getPhone(), user1.getEmail(), 0, user1.getUsername(), "tom123", "medic", "tom", List.of());
 
         //  Staff user
         user2.setId(3L);
         user2.setUsername("rodigosaia");
         user2.setEmail("rod@saia.com");
         user2.setPhone("929838747");
-        user2Schema = new RegisterSchema(user2.getPhone(), user2.getEmail(), 0, user2.getUsername(), "rod112233", "staff", "rod", null);
+        user2Schema = new RegisterSchema(user2.getPhone(), user2.getEmail(), 0, user2.getUsername(), "rod112233", "staff", "rod", List.of());
 
         Mockito.when(userRepository.save(user0)).thenReturn(user0);
         Mockito.when(userRepository.save(user1)).thenReturn(user1);

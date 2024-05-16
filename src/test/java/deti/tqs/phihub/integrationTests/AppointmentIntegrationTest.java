@@ -75,6 +75,7 @@ class AppointmentIntegrationTests {
                                         + "\"username\":\"" + user0.getUsername() + "\","
                                         + "\"password\":\"" + user0.getPassword() + "\","
                                         + "\"name\":\"" + user0.getUsername() + "\","
+                                        + "\"permissions\":[],"
                                         + "\"role\":\"staff\""
                                         + "}")
                                 .when()
