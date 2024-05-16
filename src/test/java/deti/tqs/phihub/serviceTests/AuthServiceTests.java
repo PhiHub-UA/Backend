@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import deti.tqs.phihub.models.StaffPermissions;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTests {

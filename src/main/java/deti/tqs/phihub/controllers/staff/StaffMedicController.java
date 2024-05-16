@@ -11,8 +11,8 @@ import deti.tqs.phihub.services.MedicService;
 import org.springframework.web.bind.annotation.RequestBody;
 import deti.tqs.phihub.dtos.MedicSchema;
 
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 public class StaffMedicController {
 
     private MedicService medicService;
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public StaffMedicController(MedicService medicService) {
         this.medicService = medicService;
@@ -34,7 +35,7 @@ public class StaffMedicController {
         medic.setEmail(medicSchema.email());
         medic.setPhone(medicSchema.phone());
         medic.setUsername(medicSchema.username());
-        medic.setPassword(medicSchema.password());
+        medic.setPassword(passwordEncoder.encode(medicSchema.password()));
         medic.setSpecialities(Speciality.fromStrings(medicSchema.specialities()));
 
         Medic savedMedic = medicService.save(medic);
@@ -47,5 +48,17 @@ public class StaffMedicController {
         return ResponseEntity.ok(medicService.findAll());
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<Medic> getLoggedInMedic() {
+
+        var medic = medicService.getMedicFromContext();
+
+        if (medic == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(medic);
+
+    }
 
 }

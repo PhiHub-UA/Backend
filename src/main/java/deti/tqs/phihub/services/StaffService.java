@@ -9,6 +9,7 @@ import deti.tqs.phihub.repositories.StaffRepository;
 import deti.tqs.phihub.dtos.StaffSchema;
 import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.models.StaffPermissions;
+import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @Service
@@ -23,11 +24,18 @@ public class StaffService {
     }
 
     public Staff getStaffFromContext() {
-        if (SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    
+        if (authentication instanceof AnonymousAuthenticationToken) {
             return null;
         }
-
-        return (Staff) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Staff) {
+            return (Staff) principal;
+        }
+    
+        return null;
     }
 
     public Staff createStaff(StaffSchema staff) {
