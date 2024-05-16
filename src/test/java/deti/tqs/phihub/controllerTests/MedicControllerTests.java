@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.patient.MedicController;
+import deti.tqs.phihub.controllers.patient.UserMedicController;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-@WebMvcTest(MedicController.class)
+@WebMvcTest(UserMedicController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class MedicControllerTests {
 
