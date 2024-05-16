@@ -14,7 +14,9 @@ import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.controllers.patient.UserController;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.AppointmentService;
+import deti.tqs.phihub.services.MedicService;
 import deti.tqs.phihub.services.SpecialityService;
+import deti.tqs.phihub.services.StaffService;
 import deti.tqs.phihub.services.UserService;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -34,6 +36,11 @@ class UserControllerTests {
 
     @MockBean
     private UserService service;
+
+    @MockBean
+    private MedicService medicService;
+    @MockBean
+    private StaffService staffService;
 
     @MockBean
     private SpecialityService specialityService;
