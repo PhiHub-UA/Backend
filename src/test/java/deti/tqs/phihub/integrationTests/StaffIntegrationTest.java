@@ -53,7 +53,7 @@ class StaffIntegrationTests {
         staff0.setPhone("919828737");
         staff0.setAge(27);
         staff0.setPassword("strongPassword");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123");
+        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", null);
 
     }
 
@@ -95,7 +95,7 @@ class StaffIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .get("/staff/users/me")
+                .get("/staff")
                 .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(staff0.getUsername())).body("phone", equalTo(staff0.getPhone()))
@@ -106,7 +106,7 @@ class StaffIntegrationTests {
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .body(staff0Schema)
                 .when()
-                .post("/staff/users")
+                .post("/staff")
                 .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(staff0.getUsername())).body("age", equalTo(staff0.getAge()))

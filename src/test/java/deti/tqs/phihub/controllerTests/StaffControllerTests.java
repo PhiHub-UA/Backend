@@ -56,7 +56,7 @@ class StaffControllerTests {
         staff0.setUsername("josefino");
         staff0.setEmail("jose@fino.com");
         staff0.setPhone("919828737");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123");
+        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", null);
         
         when(service.getStaffFromContext()).thenReturn(staff0);
         when(service.createStaff(Mockito.any())).thenReturn(staff0);
@@ -66,7 +66,7 @@ class StaffControllerTests {
     void givenOneStaffsLoggedIn_thenReturnIt() throws Exception {
 
         mvc.perform(
-                get("/staff/users/me").contentType(MediaType.APPLICATION_JSON))
+                get("/staff/me").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.phone", is(staff0.getPhone())));
 
@@ -77,7 +77,7 @@ class StaffControllerTests {
     void givenOneStaffs_thenCreateIt() throws Exception {
 
         mvc.perform(
-                post("/staff/users").contentType(MediaType.APPLICATION_JSON)
+                post("/staff").contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"phone\":\"" + staff0Schema.phone() +
                         "\",\"email\":\"" + staff0Schema.email() +
                         "\",\"age\":" + staff0Schema.age() +
@@ -96,7 +96,7 @@ class StaffControllerTests {
         when(service.getStaffFromContext()).thenReturn(null);
         
         mvc.perform(
-            get("/staff/users/me").contentType(MediaType.APPLICATION_JSON))
+            get("/staff/me").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
     }
 }

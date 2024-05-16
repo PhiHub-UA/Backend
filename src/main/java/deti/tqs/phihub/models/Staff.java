@@ -35,14 +35,17 @@ public class Staff implements UserDetails {
     private String name;
     @JsonIgnore
     private String password;
+    private List<StaffPermissions> permissions;
 
-    public Staff(String name,String phone, String email, Integer age, String username, String password) {
+    public Staff(String name, String phone, String email, Integer age, String username, String password,
+            List<StaffPermissions> permissions) {
         this.phone = phone;
         this.email = email;
         this.age = age;
         this.username = username;
         this.password = password;
         this.name = name;
+        this.permissions = permissions;
     }
 
     @Override

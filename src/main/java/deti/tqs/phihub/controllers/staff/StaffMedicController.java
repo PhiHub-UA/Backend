@@ -1,5 +1,6 @@
 package deti.tqs.phihub.controllers.staff;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +40,11 @@ public class StaffMedicController {
         Medic savedMedic = medicService.save(medic);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMedic);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Medic>> getAllMedics() {
+        return ResponseEntity.ok(medicService.findAll());
     }
 
 
