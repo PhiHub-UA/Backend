@@ -56,6 +56,7 @@ class SpecialityIntegrationTest {
                     "\"email\":\"" + user0.getEmail() + "\"," +
                     "\"age\":\"" + user0.getAge() + "\"," +
                     "\"username\":\"" + user0.getUsername() + "\"," +
+                    "\"permissions\":[]," + 
                     "\"password\":\"" + user0.getPassword() + "\"}")
             .when()
             .post("/auth/register")

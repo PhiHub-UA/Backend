@@ -22,6 +22,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -53,7 +54,7 @@ class StaffIntegrationTests {
         staff0.setPhone("919828737");
         staff0.setAge(27);
         staff0.setPassword("strongPassword");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", null);
+        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", List.of());
 
     }
 
@@ -70,6 +71,7 @@ class StaffIntegrationTests {
                         + "\"username\":\"" + staff0.getUsername() + "\","
                         + "\"password\":\"" + staff0.getPassword() + "\","
                         + "\"name\":\"" + staff0.getUsername() + "\","
+                        + "\"permissions\":[],"
                         + "\"role\":\"staff\""
                         + "}")
                 .when()
@@ -95,7 +97,7 @@ class StaffIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .get("/staff")
+                .get("/staff/me")
                 .then()
                 .statusCode(200)
                 .assertThat().body("username", equalTo(staff0.getUsername())).body("phone", equalTo(staff0.getPhone()))
