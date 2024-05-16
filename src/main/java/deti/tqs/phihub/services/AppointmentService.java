@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.Medic;
 
 @Service
 public class AppointmentService {
@@ -23,6 +24,11 @@ public class AppointmentService {
 
     public List<Appointment> getAppointmentsByPatient(User user) {
         return appointmentRepository.findByPatientUsername(user.getUsername());
+    }
+
+
+    public List<Appointment> getAppointmentsByMedic(Medic medic) {
+        return appointmentRepository.findByMedicUsername(medic.getUsername());
     }
 
     public Appointment getAppointmentById(Long id) {

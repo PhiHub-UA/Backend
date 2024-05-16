@@ -14,11 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/patient/medics")
-public class MedicController {
+public class UserMedicController {
 
     private MedicService medicService;
 
-    public MedicController(MedicService medicService) {
+    public UserMedicController(MedicService medicService) {
         this.medicService = medicService;
     }
 
