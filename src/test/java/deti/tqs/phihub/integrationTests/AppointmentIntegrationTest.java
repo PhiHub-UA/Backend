@@ -150,7 +150,7 @@ class AppointmentIntegrationTests {
 
         }
 
-        @Test
+/*         @Test
         @DisplayName("When post a Appointment return a Appointment")
         void whenPostValidAppointment_thenCreateAppointment() {
 
@@ -160,7 +160,7 @@ class AppointmentIntegrationTests {
                                 Speciality.CARDIOLOGY,
                                 1L);
 
-/*                 given().port(port)
+                given().port(port)
                                 .contentType("application/json")
                                 .header(new Header("Authorization", "Bearer " + staffToken))
                                 .body("{"
@@ -175,7 +175,6 @@ class AppointmentIntegrationTests {
                                 .statusCode(201)
                                 .assertThat()
                                 .body("patient.username", equalTo(user0.getUsername()))
-                                .body("medic.name", equalTo(medic0.getName())); */
-        }
-
+                                .body("medic.name", equalTo(medic0.getName()));
+        } */
 }

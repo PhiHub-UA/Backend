@@ -26,7 +26,6 @@ public class StaffUsers implements ApplicationRunner {
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
     public StaffUsers(StaffRepository staffRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.staffRepository = staffRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;

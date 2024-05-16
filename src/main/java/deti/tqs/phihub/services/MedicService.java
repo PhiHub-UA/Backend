@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
-import deti.tqs.phihub.models.Staff;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.repositories.MedicRepository;
 

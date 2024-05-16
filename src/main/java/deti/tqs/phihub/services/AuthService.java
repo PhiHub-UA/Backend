@@ -62,9 +62,6 @@ public class AuthService implements UserDetailsService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(user.password());
 
-
-        System.out.println(encryptedPassword);
-
         UserDetails registeredUser = null;
 
         if (user.role().equals("user")) {
