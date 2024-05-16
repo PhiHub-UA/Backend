@@ -1,19 +1,20 @@
 package deti.tqs.phihub.integrationTests;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import deti.tqs.phihub.dtos.AppointmentSchema;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.User;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
-import static org.hamcrest.Matchers.*;
+//import static org.hamcrest.Matchers.*;
+//import java.util.Date;
+//import deti.tqs.phihub.dtos.AppointmentSchema;
+//import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.DisplayName;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
@@ -21,7 +22,6 @@ import static io.restassured.RestAssured.given;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-import java.util.Date;
 import java.util.HashMap;
 import org.junit.jupiter.api.BeforeAll;
 import deti.tqs.phihub.models.Speciality;
