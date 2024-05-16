@@ -63,8 +63,8 @@ class AppointmentIntegrationTests {
                 // Create a medic
                 medic0.setId(1L);
                 medic0.setName("Dr.Bananas");
-                medic0.setSpecialities(
-                                List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
+                medic0.setPassword("banan");
+                medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
 
                 given().port(port)
                                 .contentType("application/json")
@@ -111,7 +111,8 @@ class AppointmentIntegrationTests {
                                 .when()
                                 .body("{\"name\":\"" + medic0.getName()
                                         + "\",\"specialities\":" + specialityArrays
-                                         + "}")
+                                        + ",\"password\":\"" + medic0.getPassword()
+                                        + "\"}")
                                 .post("/staff/medics")
                                 .then()
                                 .statusCode(201);

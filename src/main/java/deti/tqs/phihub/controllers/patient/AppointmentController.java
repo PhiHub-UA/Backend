@@ -46,7 +46,6 @@ public class AppointmentController {
         if (medic == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        System.out.println("MEDIC NULL-----------------------------------------------------");
 
         Appointment app = new Appointment();
         app.setPatient(user);

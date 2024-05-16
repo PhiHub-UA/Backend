@@ -62,6 +62,7 @@ class MedicIntegrationTests {
         // Create a medic
         medic0.setId(1L);
         medic0.setName("Dr.Bananas");
+        medic0.setPassword("banan");
         medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
 
         given().port(port)
@@ -106,7 +107,7 @@ class MedicIntegrationTests {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + "}")
+                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + ", \"password\":\"" + medic0.getPassword() + "\"}")
                 .post("/staff/medics")
                 .then()
                 .statusCode(201);
