@@ -2,14 +2,13 @@ package deti.tqs.phihub.integrationTests;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.BeforeAll;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
-import deti.tqs.phihub.dtos.StaffSchema;
-import deti.tqs.phihub.models.Staff;
-import deti.tqs.phihub.models.StaffPermissions;
+import deti.tqs.phihub.models.Medic;
+import deti.tqs.phihub.models.User;
+
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
@@ -22,6 +21,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;
+import org.junit.jupiter.api.BeforeAll;
+import deti.tqs.phihub.models.Speciality;
 import java.util.List;
 
 import org.junit.jupiter.api.TestInstance;
@@ -31,49 +32,51 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @TestInstance(Lifecycle.PER_CLASS)
-class StaffIntegrationTests {
+class PatientMedicIntegrationTest {
 
     private final static String BASE_URI = "http://localhost";
 
     @LocalServerPort
     private int port;
 
-    private String loginToken;
-    private Staff staff0 = new Staff();
-    StaffSchema staff0Schema;
+    private static User user0 = new User();
+    private static Medic medic0 = new Medic();
+    private static String loginToken;
+
 
     @BeforeAll
-    public void setUp() {
+    void setUp() {
+
         RestAssured.baseURI = BASE_URI;
         RestAssured.port = port;
 
-        // Create a staff
-        staff0.setId(10L);
-        staff0.setUsername("rodrigues3");
-        staff0.setEmail("joana@fino.com");
-        staff0.setPhone("919828737");
-        staff0.setAge(27);
-        staff0.setPassword("strongPassword");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", List.of());
 
-    }
+        // Create a user
+        user0.setId(1L);
+        user0.setUsername("zezocas123");
+        user0.setEmail("josefino123@gmail.com");
+        user0.setPhone("987654321");
+        user0.setAge(27);
+        user0.setPassword("strongPassword");
 
-    @Test
-    @DisplayName("When post a Staff return a Staff")
-    void whenPostValidStaff_thenCreateStaff() {
+        // Create a medic
+        medic0.setId(1L);
+        medic0.setName("Dr.Bananas");
+        medic0.setPassword("banan");
+        medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
 
         given().port(port)
                 .contentType("application/json")
                 .body("{"
-                        + "\"phone\":\"" + staff0.getPhone() + "\","
-                        + "\"email\":\"" + staff0.getEmail() + "\","
-                        + "\"age\":\"" + staff0.getAge() + "\","
-                        + "\"username\":\"" + staff0.getUsername() + "\","
-                        + "\"password\":\"" + staff0.getPassword() + "\","
-                        + "\"name\":\"" + staff0.getUsername() + "\","
-                        + "\"permissions\":[],"
-                        + "\"role\":\"staff\""
-                        + "}")
+                + "\"phone\":\"" + user0.getPhone() + "\","
+                + "\"email\":\"" + user0.getEmail() + "\","
+                + "\"age\":\"" + user0.getAge() + "\","
+                + "\"username\":\"" + user0.getUsername() + "\","
+                + "\"password\":\"" + user0.getPassword() + "\","
+                + "\"name\":\"" + user0.getUsername() + "\","
+                + "\"permissions\":[],"
+                + "\"role\":\"staff\""
+                + "}")
                 .when()
                 .post("/auth/register")
                 .then()
@@ -81,8 +84,8 @@ class StaffIntegrationTests {
 
         HashMap<String, String> response = given().port(port)
                 .contentType("application/json")
-                .body("{\"username\":\"" + staff0.getUsername() + "\"," +
-                        "\"password\":\"" + staff0.getPassword() + "\"," +
+                .body("{\"username\":\"" + user0.getUsername() + "\"," +
+                        "\"password\":\"" + user0.getPassword() + "\","+
                         "\"role\":\"staff\"}")
                 .when()
                 .post("/auth/login")
@@ -93,45 +96,58 @@ class StaffIntegrationTests {
 
         loginToken = response.get("token");
 
-        given().port(port)
-                .contentType("application/json")
-                .header(new Header("Authorization", "Bearer " + loginToken))
-                .when()
-                .get("/staff/me")
-                .then()
-                .statusCode(200)
-                .assertThat().body("username", equalTo(staff0.getUsername())).body("phone", equalTo(staff0.getPhone()))
-                .extract().as(Staff.class);
+        String specialityArrays = "[";
+        for (Speciality spec : medic0.getSpecialities()) {
+                specialityArrays += "\"" + spec + "\",";
+        }
+        specialityArrays = specialityArrays.substring(0, specialityArrays.length() - 1);
+        specialityArrays += "]";
 
         given().port(port)
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
-                .body(staff0Schema)
                 .when()
-                .get("/staff")
+                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + ", \"password\":\"" + medic0.getPassword() + "\"}")
+                .post("/staff/medics")
                 .then()
-                .statusCode(200)
-                .assertThat().body("[1].username", equalTo(staff0.getUsername())).body("[1].age", equalTo(staff0.getAge()));
-                
-        given().port(port)
-                .contentType("application/json")
-                .header(new Header("Authorization", "Bearer " + loginToken))
-                .body(staff0Schema)
-                .when()
-                .get("/staff/permissions")
-                .then()
-                .statusCode(200)
-                .assertThat().body("[0]", equalTo(StaffPermissions.getPermissions().get(0)));
+                .statusCode(201);
+    }
 
+    @Test
+    @DisplayName("When post a Medic return a Medic")
+    void whenGetValidMedic_thenReturnMedic() {
+
+        //  Test with a given speciality
         given().port(port)
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
-                .body(staff0Schema)
                 .when()
-                .post("/staff")
+                .get("/patient/medics?speciality" + medic0.getSpecialities().get(0).toString())
                 .then()
                 .statusCode(200)
-                .assertThat().body("username", equalTo(staff0.getUsername())).body("age", equalTo(staff0.getAge()))
-                .extract().as(Staff.class);
+                .assertThat()
+                .body("[0].name", equalTo(medic0.getName()));
+
+        //  Test with no given speciality
+        given().port(port)
+                .contentType("application/json")
+                .header(new Header("Authorization", "Bearer " + loginToken))
+                .when()
+                .get("/patient/medics")
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("[0].name", equalTo(medic0.getName()));
+
+        //  Test the availability
+        given().port(port)
+                .contentType("application/json")
+                .header(new Header("Authorization", "Bearer " + loginToken))
+                .when()
+                .get("/patient/medics/availability/" + medic0.getId().toString() + "?day=1714402800")
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("[0]", equalTo("09:00"));
     }
 }

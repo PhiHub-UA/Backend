@@ -14,6 +14,7 @@ import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.controllers.staff.StaffController;
 import deti.tqs.phihub.dtos.StaffSchema;
 import deti.tqs.phihub.models.Staff;
+import deti.tqs.phihub.models.StaffPermissions;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.StaffService;
@@ -24,6 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
@@ -56,8 +59,10 @@ class StaffControllerTests {
         staff0.setUsername("josefino");
         staff0.setEmail("jose@fino.com");
         staff0.setPhone("919828737");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", null);
+        staff0.setPermissions(List.of(StaffPermissions.CREATE));
+        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", List.of(staff0.getPermissions().get(0).toString()));
         
+        when(service.findAll()).thenReturn(List.of(staff0));
         when(service.getStaffFromContext()).thenReturn(staff0);
         when(service.createStaff(Mockito.any())).thenReturn(staff0);
     }
@@ -71,6 +76,25 @@ class StaffControllerTests {
                 .andExpect(jsonPath("$.phone", is(staff0.getPhone())));
 
         verify(service, times(1)).getStaffFromContext();
+    }
+
+    @Test
+    void givenOneStaffsLoggedIn_WhenReturnAll_thenReturnItInAList() throws Exception {
+
+        mvc.perform(
+                get("/staff").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].phone", is(staff0.getPhone())));
+
+        verify(service, times(1)).findAll();
+    }
+
+    @Test
+    void givenOneStaffsLoggedIn_thenReturnThePermissionsIt() throws Exception {
+        mvc.perform(
+                get("/staff/permissions").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]", is(staff0.getPermissions().get(0).toString())));
     }
 
     @Test
