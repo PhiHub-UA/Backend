@@ -11,7 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
-import deti.tqs.phihub.controllers.medic.MedicController;
+import deti.tqs.phihub.controllers.medic.MedicPatientsController;
+import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -31,9 +32,9 @@ import java.util.List;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
-@WebMvcTest(MedicController.class)
+@WebMvcTest(MedicPatientsController.class)
 @AutoConfigureMockMvc(addFilters = false)
-class PatientMedicControllerTests {
+class MedicPatientControllerTests {
 
     @Autowired
     private MockMvc mvc;
@@ -54,6 +55,7 @@ class PatientMedicControllerTests {
 
     private Medic medic0 = new Medic();
     private User user0 = new User();
+    private Appointment app0 = new Appointment();
 
     @BeforeEach
     public void setUp() {
@@ -63,22 +65,28 @@ class PatientMedicControllerTests {
         user0.setEmail("jose@fino.com");
         user0.setPhone("919828737");
         
-        when(userService.getUserFromContext()).thenReturn(user0);
-
         //  Create a medic
         medic0.setId(1L);
         medic0.setName("josefino");
         medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.HEMATOLOGY));
         
+        //  Create a appointment
+        app0.setId(1L);
+        app0.setMedic(medic0);
+        app0.setPatient(user0);
+        app0.setNotes("Standard appointment");
+
+        when(userService.getUserFromContext()).thenReturn(user0);
         when(service.getMedicFromContext()).thenReturn(medic0);
+        when(appointmentService.getAppointmentsByMedic(medic0)).thenReturn(List.of(app0));
     }
 
     @Test
     void givenOneMedics_thenReturnIt() throws Exception {
         mvc.perform(
-                get("/medic/appointments").contentType(MediaType.APPLICATION_JSON))
+                get("/medic/patients").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", is(new JSONArray())));
+                .andExpect(jsonPath("$[0].username", is(user0.getUsername())));
 
         verify(appointmentService, times(1)).getAppointmentsByMedic(Mockito.any());
     }
