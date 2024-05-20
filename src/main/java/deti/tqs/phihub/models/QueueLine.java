@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class QueueLine {
     private Long id;
 
     private Integer maxSize;
+    private String showingLetter;
 
     @OneToMany
     private List<Ticket> tickets;
