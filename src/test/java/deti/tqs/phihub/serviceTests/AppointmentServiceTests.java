@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock.Strictness;
 
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
@@ -34,6 +35,8 @@ class AppointmentServiceTests {
     private Appointment app0 = new Appointment();
     private Appointment app1 = new Appointment();
     private User user0 = new User();
+    private Medic med0 = new Medic();
+
 
     @BeforeEach
     public void setUp() {
@@ -43,11 +46,14 @@ class AppointmentServiceTests {
         user0.setEmail("jose@fino.com");
         user0.setPhone("929838747");
 
+        med0.setUsername("joaquinoes");
+
         //  Create two appointments
         app0.setId(1L);
         app0.setPrice(12.3);
         app0.setSpeciality(Speciality.NEUROLOGY);
         app0.setPatient(user0);
+        app0.setMedic(med0);
         app1.setId(2L);
         app1.setPrice(25.7);
 
@@ -60,6 +66,7 @@ class AppointmentServiceTests {
         Mockito.when(appointmentRepository.findById(app1.getId())).thenReturn(Optional.of(app1));
         Mockito.when(appointmentRepository.findById(-99L)).thenReturn(Optional.empty());
         Mockito.when(appointmentRepository.findByPatientUsername(user0.getUsername())).thenReturn(Arrays.asList(app0));
+        Mockito.when(appointmentRepository.findByMedicUsername(Mockito.any())).thenReturn(Arrays.asList(app0));
     }
 
     @Test
@@ -88,6 +95,16 @@ class AppointmentServiceTests {
         Mockito.verify(appointmentRepository, 
                 VerificationModeFactory.times(1))
                     .findById(-99L);
+    }
+
+    @Test
+     void whenSearchValidMedic_thenAppointmentShouldBeFound() {
+        List<Appointment> fromDb = appointmentService.getAppointmentsByMedic(med0);
+        assertThat(fromDb.get(0).getMedic().getUsername()).isEqualTo(med0.getUsername());
+
+        Mockito.verify(appointmentRepository, 
+                VerificationModeFactory.times(1))
+                    .findByMedicUsername(Mockito.any());
     }
 
     @Test
