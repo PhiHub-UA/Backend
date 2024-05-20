@@ -57,5 +57,38 @@ public class TicketService {
 
         return ticketSaved;
     }
+
+
+    public Ticket getNextTicket(Long queueLineId) {
+
+        QueueLine queueLine = queueLineService.getQueueLineById(queueLineId);
+        if (queueLine == null) {
+            return null;
+        }
+
+        List<Ticket> tickets = queueLine.getTickets();
+        if (tickets.isEmpty()) {
+            return null;
+        }
+
+        Ticket ticket = tickets.get(0);
+        tickets.remove(0);
+        queueLine.setTickets(tickets);
+        queueLineService.save(queueLine);
+
+        // remove 1 from waiting room
+
+        WaitingRoom waitingRoom = ticket.getWaitingRoom();
+
+        if (waitingRoom == null) {
+            return null;
+        }
+        
+        waitingRoom.setNumberOfFilledSeats(waitingRoom.getNumberOfFilledSeats() - 1);
+        waitingRoomService.save(waitingRoom);
+
+
+        return ticket;
+    }
     
 }
