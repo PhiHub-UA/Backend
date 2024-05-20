@@ -6,9 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-
-import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,16 +23,16 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Date registerDate;
-    private Integer number;
-    private String queueLetter;
+    private Long issueTimestamp;
+
+    private Long number;
+
     private boolean priority;
-    private Double addedPrice;
 
     @ManyToOne
     private WaitingRoom waitingRoom;
 
-    @OneToOne
+    @ManyToOne // its a OneToOne, ManyToOne just for easier testing
     private Appointment appointment;
 
 }

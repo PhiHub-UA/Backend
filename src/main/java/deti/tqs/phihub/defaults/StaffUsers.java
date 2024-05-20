@@ -49,6 +49,8 @@ public class StaffUsers implements ApplicationRunner {
 
         staffRepository.save(aguiar);
 
+        System.out.println("Staff Users created");
+
     }
 
 }

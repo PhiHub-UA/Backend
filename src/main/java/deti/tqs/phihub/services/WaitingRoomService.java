@@ -27,5 +27,19 @@ public class WaitingRoomService {
     public List<WaitingRoom> findAll() {
         return waitingroomRepository.findAll();
     }
+
+
+    public boolean newTicket( WaitingRoom waitingRoom) {
+
+        if (waitingRoom.getNumberOfFilledSeats() < waitingRoom.getNumberOfSeats()) {
+            waitingRoom.setNumberOfFilledSeats(waitingRoom.getNumberOfFilledSeats() + 1);
+            save(waitingRoom);
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
     
 }
