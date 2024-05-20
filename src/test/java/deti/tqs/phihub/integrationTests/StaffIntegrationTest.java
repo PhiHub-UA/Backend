@@ -111,7 +111,7 @@ class StaffIntegrationTests {
                 .get("/staff")
                 .then()
                 .statusCode(200)
-                .assertThat().body("[1].username", equalTo(staff0.getUsername())).body("[1].age", equalTo(staff0.getAge()));
+                .assertThat().body("[2].username", equalTo(staff0.getUsername())).body("[1].age", equalTo(staff0.getAge()));
                 
         given().port(port)
                 .contentType("application/json")
