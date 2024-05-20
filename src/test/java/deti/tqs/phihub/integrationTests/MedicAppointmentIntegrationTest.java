@@ -34,7 +34,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @TestInstance(Lifecycle.PER_CLASS)
-class MedicPatientIntegrationTest {
+class MedicAppointmentIntegrationTest {
 
     private final static String BASE_URI = "http://localhost";
 
@@ -45,6 +45,7 @@ class MedicPatientIntegrationTest {
     private static Medic medic0 = new Medic();
     private static Appointment app0 = new Appointment();
     private static String loginToken;
+    private static String medicLoginToken;
 
 
     @BeforeAll
@@ -65,6 +66,7 @@ class MedicPatientIntegrationTest {
         // Create a medic
         medic0.setId(1L);
         medic0.setName("Dr.Bananas");
+        medic0.setUsername("bananas");
         medic0.setPassword("banan");
         medic0.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.ENDOCRINOLOGY));
 
@@ -117,25 +119,53 @@ class MedicPatientIntegrationTest {
                 .contentType("application/json")
                 .header(new Header("Authorization", "Bearer " + loginToken))
                 .when()
-                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + ", \"password\":\"" + medic0.getPassword() + "\"}")
+                .body("{\"name\":\"" + medic0.getName() + "\",\"specialities\":" + specialityArrays + 
+                        ", \"password\":\"" + medic0.getPassword() + "\",\"username\":\"" + medic0.getUsername() + "\"}")
                 .post("/staff/medics")
                 .then()
                 .statusCode(201);
+
+
+        response = given().port(port)
+                .contentType("application/json")
+                .body("{\"username\":\"" + medic0.getUsername() + "\"," +
+                        "\"password\":\"" + medic0.getPassword() + "\","+
+                        "\"role\":\"medic\"}")
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(HashMap.class);
+
+        medicLoginToken = response.get("token");
     }
 
     @Test
-    @DisplayName("When post a Medic return a Medic")
-    void whenGetValidMedic_thenReturnMedic() {
+    @DisplayName("When post a bad appointment note return no appointment")
+    void whenGetBadNote_thenReturnNotFound() {
 
         //  Test with no given speciality
         given().port(port)
                 .contentType("application/json")
-                .header(new Header("Authorization", "Bearer " + loginToken))
+                .header(new Header("Authorization", "Bearer " + medicLoginToken))
                 .when()
-                .get("/staff/medics")
+                .get("/medic/appointments/1/notes")
                 .then()
-                .statusCode(200)
-                .assertThat()
-                .body("[0].username", isNull());
+                .statusCode(404);
+    }
+
+    @Test
+    @DisplayName("When post a Medic return a Medic")
+    void whenPostBadNote_thenReturnNotFound() {
+
+        //  Test with no given speciality
+        given().port(port)
+                .contentType("application/json")
+                .header(new Header("Authorization", "Bearer " + medicLoginToken))
+                .when()
+                .post("/medic/appointments/1/notes")
+                .then()
+                .statusCode(403);
     }
 }
