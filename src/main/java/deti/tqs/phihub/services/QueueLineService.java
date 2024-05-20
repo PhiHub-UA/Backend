@@ -3,6 +3,7 @@ package deti.tqs.phihub.services;
 import org.springframework.stereotype.Service;
 
 import deti.tqs.phihub.models.QueueLine;
+import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.QueueLineRepository;
 
 import java.util.List;
@@ -26,6 +27,18 @@ public class QueueLineService {
 
     public List<QueueLine> findAll() {
         return queuelineRepository.findAll();
+    }
+
+    public boolean newTicket(Ticket ticket, QueueLine queueLine) {
+
+        if (queueLine.getTickets().size() >= queueLine.getMaxSize()) {
+            return false;
+        }
+
+        queueLine.getTickets().add(ticket);
+        save(queueLine);
+        return true;
+
     }
     
 }
