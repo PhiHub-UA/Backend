@@ -7,7 +7,7 @@ import deti.tqs.phihub.configs.Generated;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 
-import deti.tqs.phihub.models.QueueLine;
+
 import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.repositories.WaitingRoomRepository;
 

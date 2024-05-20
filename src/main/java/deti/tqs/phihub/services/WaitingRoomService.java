@@ -41,5 +41,18 @@ public class WaitingRoomService {
         }
         
     }
+
+    public WaitingRoom getEmptiestWaitingRoom() {
+        List<WaitingRoom> waitingRooms = findAll();
+        WaitingRoom emptiest = null;
+        int min = Integer.MAX_VALUE;
+        for (WaitingRoom waitingRoom : waitingRooms) {
+            if (waitingRoom.getNumberOfFilledSeats() < min) {
+                min = waitingRoom.getNumberOfFilledSeats();
+                emptiest = waitingRoom;
+            }
+        }
+        return emptiest;
+    }
     
 }

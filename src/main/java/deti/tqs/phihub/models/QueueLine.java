@@ -28,6 +28,8 @@ public class QueueLine {
     private Integer maxSize;
     private String showingLetter;
 
+    private int ticketCounter;
+
     @OneToMany
     private List<Ticket> tickets;
 

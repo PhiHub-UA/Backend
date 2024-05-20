@@ -36,9 +36,23 @@ public class QueueLineService {
         }
 
         queueLine.getTickets().add(ticket);
+        queueLine.setTicketCounter(queueLine.getTicketCounter() + 1);
         save(queueLine);
         return true;
 
+    }
+
+    public QueueLine getEmptiestQueueLine() {
+        List<QueueLine> queueLines = findAll();
+        QueueLine emptiest = null;
+        int min = Integer.MAX_VALUE;
+        for (QueueLine queueLine : queueLines) {
+            if (queueLine.getTickets().size() < min) {
+                min = queueLine.getTickets().size();
+                emptiest = queueLine;
+            }
+        }
+        return emptiest;
     }
     
 }

@@ -4,14 +4,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.dtos.TicketSchema;
 
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.QueueLineService;
 import deti.tqs.phihub.services.TicketService;
 import deti.tqs.phihub.services.WaitingRoomService;
-import deti.tqs.phihub.models.Ticket;
 import org.springframework.http.ResponseEntity;
 
 @RestController
@@ -19,45 +20,32 @@ import org.springframework.http.ResponseEntity;
 public class TicketController {
 
     private AppointmentService appointmentService;
-    private QueueLineService queueLineService;
     private TicketService ticketService;
-    private WaitingRoomService waitingRoomService;
+
 
     public TicketController(AppointmentService appointmentService, QueueLineService queueLineService,
             TicketService ticketService, WaitingRoomService waitingRoomService) {
         this.appointmentService = appointmentService;
-        this.queueLineService = queueLineService;
         this.ticketService = ticketService;
-        this.waitingRoomService = waitingRoomService;
+
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody TicketSchema ticketSchema) {
+    public ResponseEntity<TicketReturnSchema> createTicket(@RequestBody TicketSchema ticketSchema) {
 
         var appointment = appointmentService.getAppointmentById(ticketSchema.appointmentId());
 
         if (appointment == null) {
-            return ResponseEntity.notFound().build();
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Appointment not found");
+        
         }
 
-        var queueLine = queueLineService.getQueueLineById(ticketSchema.queueLineId());
-
-        if (queueLine == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        var waitingRoom = waitingRoomService.getWaitingRoomById(ticketSchema.waitingRoomId());
-
-        if (waitingRoom == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        var ticket = ticketService.createTicket(ticketSchema, appointment, queueLine, waitingRoom);
+        var ticket = ticketService.createTicket(ticketSchema, appointment);
 
         if (ticket == null) {
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Could not create ticket");
         }
-        
+
         return ResponseEntity.ok(ticket);
 
     }

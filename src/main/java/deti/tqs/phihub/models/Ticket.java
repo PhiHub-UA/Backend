@@ -25,8 +25,6 @@ public class Ticket {
 
     private Long issueTimestamp;
 
-    private Long number;
-
     private boolean priority;
 
     @ManyToOne
