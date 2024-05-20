@@ -111,4 +111,37 @@ class MedicAppointmentControllerTests {
         verify(appointmentService, times(2)).getAppointmentById(Mockito.any());
     }
 
+    @Test
+    void givenGivvenBadLogin_thenReturnErrors() throws Exception {
+
+        when(service.getMedicFromContext()).thenReturn(null);
+
+        mvc.perform(
+                post("/medic/appointments/1/notes").contentType(MediaType.APPLICATION_JSON)                
+                .content("{\"notes\": \"The patient is all good\"}"))
+                .andExpect(status().isUnauthorized());
+
+        mvc.perform(
+                get("/medic/appointments/1/notes").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+
+        verify(appointmentService, times(0)).getAppointmentById(Mockito.any());
+    }
+
+    @Test
+    void givenGivvenBadAppointmentID_thenReturnErrors() throws Exception {
+
+        when(appointmentService.getAppointmentById(Mockito.any())).thenReturn(null);
+
+        mvc.perform(
+                post("/medic/appointments/1/notes").contentType(MediaType.APPLICATION_JSON)                
+                .content("{\"notes\": \"The patient is all good\"}"))
+                .andExpect(status().isNotFound());
+
+        mvc.perform(
+                get("/medic/appointments/1/notes").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(appointmentService, times(2)).getAppointmentById(Mockito.any());
+    }
 }
