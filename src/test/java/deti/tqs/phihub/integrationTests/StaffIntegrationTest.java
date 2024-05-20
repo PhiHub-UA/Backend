@@ -49,12 +49,12 @@ class StaffIntegrationTests {
 
         // Create a staff
         staff0.setId(10L);
-        staff0.setUsername("rodrigues3");
-        staff0.setEmail("joana@fino.com");
+        staff0.setUsername("rodrigues33");
+        staff0.setEmail("rodr@fino.com");
         staff0.setPhone("919828737");
         staff0.setAge(27);
-        staff0.setPassword("strongPassword");
-        staff0Schema = new StaffSchema("0", "josefino@staff.com", staff0.getAge(), staff0.getUsername(), "josestaff", "jos123", List.of());
+        staff0.setPassword("strongPasswordR");
+        staff0Schema = new StaffSchema("0", staff0.getEmail(), staff0.getAge(), staff0.getUsername(), "josestaff", staff0.getPassword(), List.of());
 
     }
 
