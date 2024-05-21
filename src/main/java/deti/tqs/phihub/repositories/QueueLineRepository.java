@@ -6,5 +6,6 @@ import deti.tqs.phihub.models.QueueLine;
 
 @Repository
 public interface QueueLineRepository extends JpaRepository<QueueLine, Long>{
+
     
 }
