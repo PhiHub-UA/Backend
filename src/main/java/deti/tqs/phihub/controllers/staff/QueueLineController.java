@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import deti.tqs.phihub.dtos.StaffQueueSchema;
 import deti.tqs.phihub.models.QueueLine;
 import java.util.List;
 
@@ -25,6 +27,13 @@ public class QueueLineController {
     public ResponseEntity<List<QueueLine>> getAllQueueLines() {
         return ResponseEntity.ok(queueLineService.findAll());
     }
+
+    @GetMapping("/tickets")
+    public ResponseEntity<List<StaffQueueSchema>> getQueueLinesWithTickets() {
+        return ResponseEntity.ok(queueLineService.getQueueLinesWithTickets());
+    }
+
+
 
     
 }

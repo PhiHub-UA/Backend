@@ -2,11 +2,13 @@ package deti.tqs.phihub.services;
 
 import org.springframework.stereotype.Service;
 
+import deti.tqs.phihub.dtos.StaffQueueSchema;
 import deti.tqs.phihub.models.QueueLine;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.QueueLineRepository;
 
 import java.util.List;
+import java.util.ArrayList;
 
 @Service
 public class QueueLineService {
@@ -53,6 +55,21 @@ public class QueueLineService {
             }
         }
         return emptiest;
+    }
+
+    public List<StaffQueueSchema> getQueueLinesWithTickets() {
+
+        List<QueueLine> queueLines = findAll();
+
+        List<StaffQueueSchema> staffQueueSchemas = new ArrayList<>();
+    
+        for (QueueLine queueLine : queueLines) {
+            staffQueueSchemas.add(new StaffQueueSchema(queueLine.getId(), queueLine.getMaxSize(), queueLine.getShowingLetter(), queueLine.getTicketCounter(), queueLine.getTickets().size()));
+        }
+
+
+        return staffQueueSchemas;
+        
     }
     
 }
