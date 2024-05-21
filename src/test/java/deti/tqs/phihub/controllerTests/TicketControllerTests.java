@@ -12,16 +12,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.controllers.patient.TicketController;
+import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.QueueLine;
-import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.TicketService;
 import deti.tqs.phihub.services.UserService;
 import deti.tqs.phihub.services.WaitingRoomService;
-import net.minidev.json.JSONArray;
 import deti.tqs.phihub.services.QueueLineService;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -59,7 +58,6 @@ class TicketControllerTests {
     private Appointment app0 = new Appointment();
     private QueueLine queue0 = new QueueLine();
     private WaitingRoom waitRoom0 = new WaitingRoom();
-    private Ticket ticket0 = new Ticket();
 
     @BeforeEach
     public void setUp() {
@@ -70,43 +68,27 @@ class TicketControllerTests {
         user0.setPhone("919828737");
 
         app0.setId(1L);
+
+        TicketReturnSchema tick0Schema = new TicketReturnSchema(1L,1L,"A",1,1L);
         
         when(userService.getUserFromContext()).thenReturn(user0);
         when(appointmentService.getAppointmentById(Mockito.any())).thenReturn(app0);
         when(queueLineService.getQueueLineById(Mockito.any())).thenReturn(queue0);
         when(waitingRoomService.getWaitingRoomById(Mockito.any())).thenReturn(waitRoom0);
-        when(service.createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(ticket0);
+        when(service.createTicket(Mockito.any(), Mockito.any())).thenReturn(tick0Schema);
+
     }
 
     @Test
     void givenOneTickets_thenAddIt() throws Exception {
         mvc.perform(
                 post("/patient/tickets").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"queueLineId\": 1" +
-                         ",\"issueTimestamp\": 1" +
-                         ",\"priority\": false" +
-                         ",\"waitingRoomId\": 1" +
+                .content("{\"priority\": false" +
                          ",\"appointmentId\": 1}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.priority", is(false)));
+                .andExpect(jsonPath("$.queueLineLetter", is("A")));
 
-        verify(service, times(1)).createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
-    }
-
-    @Test
-    void givenBadQueueLine_thenReturnError() throws Exception {
-        when(queueLineService.getQueueLineById(Mockito.any())).thenReturn(null);
-
-        mvc.perform(
-                post("/patient/tickets").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"queueLineId\": 1" +
-                         ",\"issueTimestamp\": 1" +
-                         ",\"priority\": false" +
-                         ",\"waitingRoomId\": 1" +
-                         ",\"appointmentId\": 1}"))
-                .andExpect(status().isNotFound());
-
-        verify(service, times(0)).createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        verify(service, times(1)).createTicket(Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -115,43 +97,21 @@ class TicketControllerTests {
 
         mvc.perform(
                 post("/patient/tickets").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"queueLineId\": 1" +
-                         ",\"issueTimestamp\": 1" +
-                         ",\"priority\": false" +
-                         ",\"waitingRoomId\": 1" +
+                .content("{\"priority\": false" +
                          ",\"appointmentId\": 1}"))
                 .andExpect(status().isNotFound());
 
-        verify(service, times(0)).createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        verify(service, times(0)).createTicket(Mockito.any(), Mockito.any());
     }
 
     @Test
     void givenBadTicket_thenReturnError() throws Exception {
-        when(service.createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(null);
+        when(service.createTicket(Mockito.any(), Mockito.any())).thenReturn(null);
 
         mvc.perform(
                 post("/patient/tickets").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"queueLineId\": 1" +
-                         ",\"issueTimestamp\": 1" +
-                         ",\"priority\": false" +
-                         ",\"waitingRoomId\": 1" +
+                .content("{\"priority\": false" +
                          ",\"appointmentId\": 1}"))
                 .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void givenBadWaitingRoom_thenReturnError() throws Exception {
-        when(waitingRoomService.getWaitingRoomById(Mockito.any())).thenReturn(null);
-
-        mvc.perform(
-                post("/patient/tickets").contentType(MediaType.APPLICATION_JSON)
-                .content("{\"queueLineId\": 1" +
-                         ",\"issueTimestamp\": 1" +
-                         ",\"priority\": false" +
-                         ",\"waitingRoomId\": 1" +
-                         ",\"appointmentId\": 1}"))
-                .andExpect(status().isNotFound());
-
-        verify(service, times(0)).createTicket(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
     }
 }

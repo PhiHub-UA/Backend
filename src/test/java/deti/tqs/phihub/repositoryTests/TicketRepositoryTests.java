@@ -31,14 +31,12 @@ class TicketRepositoryTests {
 
         tick0.setId(1L);
         tick0.setIssueTimestamp(1L);
-        tick0.setNumber(53L);
         tick0.setPriority(false);
         
         ticketRepository.saveAndFlush(tick0);
 
         tick1.setId(2L);
         tick1.setIssueTimestamp(2L);
-        tick1.setNumber(24L);
         tick1.setPriority(true);
     }
 
@@ -48,7 +46,6 @@ class TicketRepositoryTests {
         Ticket found = ticketRepository.findById(tick0.getId()).get();
         
         assertThat(found.getIssueTimestamp()).isEqualTo(tick0.getIssueTimestamp());
-        assertThat(found.getNumber()).isEqualTo(tick0.getNumber());
     }
 
     @Test

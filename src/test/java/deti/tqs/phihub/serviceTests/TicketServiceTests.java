@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.dtos.TicketSchema;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.QueueLine;
@@ -48,14 +49,12 @@ class TicketServiceTests {
     public void setUp() {
         //  Create two tickets
         ticket0.setId(1L);
-        ticket0.setNumber(12L);
         ticket0.setPriority(true);
         ticket0.setIssueTimestamp(1L);
 
         ticket1.setId(2L);
-        ticket1.setNumber(23L);
         ticket1.setPriority(false);
-        ticket0.setIssueTimestamp(2L);
+        ticket1.setIssueTimestamp(2L);
 
         List<Ticket> allTickets = Arrays.asList(ticket0, ticket1);
 
@@ -70,7 +69,7 @@ class TicketServiceTests {
     @Test
      void whenSaveValidTicket_thenTicketShouldBeReturned() {
         Ticket returned = ticketService.save(ticket0);
-        assertThat(returned.getNumber()).isEqualTo(ticket0.getNumber());
+        assertThat(returned.isPriority()).isEqualTo(ticket0.isPriority());
         assertThat(returned.getIssueTimestamp()).isEqualTo(ticket0.getIssueTimestamp());
 
         returned = ticketService.save(ticket1);
@@ -80,10 +79,10 @@ class TicketServiceTests {
     @Test
      void whenSearchValidID_thenTicketshouldBeFound() {
         Ticket found = ticketService.getTicketById(ticket0.getId());
-        assertThat(found.getNumber()).isEqualTo(ticket0.getNumber());
+        assertThat(found.isPriority()).isEqualTo(ticket0.isPriority());
 
         found = ticketService.getTicketById(ticket1.getId());
-        assertThat(found.getNumber()).isEqualTo(ticket1.getNumber());
+        assertThat(found.isPriority()).isEqualTo(ticket1.isPriority());
     }
 
     @Test
@@ -101,7 +100,7 @@ class TicketServiceTests {
 
         List<Ticket> allTickets = ticketService.findAll();
 
-        assertThat(allTickets).hasSize(2).extracting(Ticket::getNumber).contains(ticket0.getNumber(), ticket1.getNumber());
+        assertThat(allTickets).hasSize(2).extracting(Ticket::isPriority).contains(ticket0.isPriority(), ticket1.isPriority());
 
         Mockito.verify(ticketRepository, 
                 VerificationModeFactory.times(1))
@@ -109,9 +108,7 @@ class TicketServiceTests {
     }
 
     @Test
-     void whenCreateValidTicket_thenTicketShouldBeReturned() {
-        TicketSchema ticketSchema = new TicketSchema(1L, ticket0.getIssueTimestamp(), true, 1L, 1L);
-        
+     void whenCreateValidTicket_thenTicketShouldBeReturned() {        
         Appointment app0 = new Appointment();
         app0.setId(1L);
         app0.setPrice(12.3);
@@ -124,14 +121,16 @@ class TicketServiceTests {
         wroom0.setNumberOfFilledSeats(2);
         wroom0.setNumberOfSeats(12);
         
+        TicketSchema ticketSchema = new TicketSchema(true, app0.getId());
 
         Mockito.when(ticketRepository.save(Mockito.any())).thenReturn(ticket0);
         Mockito.when(queueService.newTicket(Mockito.any(), Mockito.eq(queue0))).thenReturn(true);
         Mockito.when(waitingRoomService.newTicket(wroom0)).thenReturn(true);
+        Mockito.when(queueService.getEmptiestQueueLine()).thenReturn(queue0);
+        Mockito.when(waitingRoomService.getEmptiestWaitingRoom()).thenReturn(wroom0);
 
-        Ticket returned = ticketService.createTicket(ticketSchema, app0, queue0, wroom0);
+        TicketReturnSchema returned = ticketService.createTicket(ticketSchema, app0);
 
-        assertThat(returned.getNumber()).isEqualTo(ticket0.getNumber());
-        assertThat(returned.getIssueTimestamp()).isEqualTo(ticket0.getIssueTimestamp());
+        assertThat(returned.appointmentId()).isEqualTo(ticket0.getId());
     }
 }

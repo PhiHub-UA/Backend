@@ -19,7 +19,6 @@ import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
-import net.minidev.json.JSONArray;
 import deti.tqs.phihub.services.MedicService;
 
 import static org.hamcrest.CoreMatchers.is;

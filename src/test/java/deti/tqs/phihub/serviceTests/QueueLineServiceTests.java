@@ -10,11 +10,8 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import deti.tqs.phihub.dtos.TicketSchema;
-import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.QueueLine;
 import deti.tqs.phihub.models.Ticket;
-import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.repositories.QueueLineRepository;
 import deti.tqs.phihub.services.QueueLineService;
 
@@ -42,8 +39,8 @@ class QueueLineServiceTests {
 
     @BeforeEach
     public void setUp() {
-        tick0.setNumber(12L);
-        tick1.setNumber(16L);
+        tick0.setPriority(false);
+        tick1.setPriority(true);
 
         //  Create two queuelines
         queueline0.setId(1L);
