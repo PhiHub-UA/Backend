@@ -10,9 +10,7 @@ import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.dtos.TicketSchema;
 
 import deti.tqs.phihub.services.AppointmentService;
-import deti.tqs.phihub.services.QueueLineService;
 import deti.tqs.phihub.services.TicketService;
-import deti.tqs.phihub.services.WaitingRoomService;
 import org.springframework.http.ResponseEntity;
 
 @RestController
@@ -23,8 +21,7 @@ public class TicketController {
     private TicketService ticketService;
 
 
-    public TicketController(AppointmentService appointmentService, QueueLineService queueLineService,
-            TicketService ticketService, WaitingRoomService waitingRoomService) {
+    public TicketController(AppointmentService appointmentService, TicketService ticketService) {
         this.appointmentService = appointmentService;
         this.ticketService = ticketService;
 

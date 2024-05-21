@@ -48,9 +48,5 @@ public class StaffUsers implements ApplicationRunner {
         aguiar.setPermissions(List.of(StaffPermissions.CREATE, StaffPermissions.MANAGE, StaffPermissions.RECEPTION));
 
         staffRepository.save(aguiar);
-
-        System.out.println("Staff Users created");
-
     }
-
 }

@@ -10,11 +10,6 @@ import deti.tqs.phihub.models.User;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
-//import static org.hamcrest.Matchers.*;
-//import java.util.Date;
-//import deti.tqs.phihub.dtos.AppointmentSchema;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.DisplayName;
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
@@ -43,7 +38,6 @@ class AppointmentIntegrationTests {
 
         private static User user0 = new User();
         private static Medic medic0 = new Medic();
-        private static String userToken;
         private static String staffToken;
 
         @BeforeAll
@@ -134,7 +128,7 @@ class AppointmentIntegrationTests {
                                 .then()
                                 .statusCode(201);
 
-                HashMap<String, String> responseUser = given().port(port)
+                given().port(port)
                                 .contentType("application/json")
                                 .body("{\"username\":\"" + user0.getUsername() + "\"," +
                                         "\"password\":\"" + user0.getPassword() + "\"," +
@@ -145,8 +139,6 @@ class AppointmentIntegrationTests {
                                 .statusCode(200)
                                 .extract()
                                 .as(HashMap.class);
-
-                userToken = responseUser.get("token");
 
         }
 

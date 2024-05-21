@@ -13,8 +13,6 @@ import deti.tqs.phihub.models.User;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
-import static org.mockito.ArgumentMatchers.isNull;
-
 import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;

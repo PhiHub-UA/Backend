@@ -25,8 +25,6 @@ public class SignageController {
     Random rand = new Random();
 
     public SignageController() {
-        Random rand = new Random();
-
         Integer nextA = rand.nextInt(2, 70);
         ticketCalls.put("A", nextA + 1);
         lastCalls.add("[\"A" + nextA + "\", 1]");

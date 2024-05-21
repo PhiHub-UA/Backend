@@ -40,9 +40,5 @@ public class WaitingRooms implements ApplicationRunner {
 
         waitingRoomRepository.save(waitingRoom1);
         waitingRoomRepository.save(waitingRoom2);
-
-        System.out.println("Waiting Rooms created");
-
     }
-
 }

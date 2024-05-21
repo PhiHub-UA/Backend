@@ -11,7 +11,6 @@ import deti.tqs.phihub.dtos.MedicSchema;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.Staff;
-import deti.tqs.phihub.models.StaffPermissions;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 
@@ -21,7 +20,6 @@ import org.springframework.test.context.ActiveProfiles;
 import static io.restassured.RestAssured.given;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties.Server.Spec;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;

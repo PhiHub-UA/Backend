@@ -80,10 +80,8 @@ public class TicketService {
                     "Could not register ticket in waiting room");
         }
 
-        TicketReturnSchema ticketReturnSchema = new TicketReturnSchema(ticket.getId(), ticket.getAppointment().getId(),
+        return new TicketReturnSchema(ticket.getId(), ticket.getAppointment().getId(),
                 queueLine.getShowingLetter(),queueLine.getTicketCounter(), waitingRoom.getId());
-
-        return ticketReturnSchema;
     }
 
     public Ticket getNextTicket() {
@@ -122,12 +120,10 @@ public class TicketService {
         // if queueline with letter P has any ticket, return the first one 
 
         for (QueueLine q : queueLine) {
-            if (q.getShowingLetter().equals("P")) {
-                if (q.getTickets().size() > 0) {
-                    nextTicket = q.getTickets().remove(0);
-                    queueLineService.save(q);
-                    return nextTicket;
-                }
+            if (q.getShowingLetter().equals("P") && q.getTickets().size() > 0) {
+                nextTicket = q.getTickets().remove(0);
+                queueLineService.save(q);
+                return nextTicket;
             }
         }
 

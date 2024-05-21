@@ -16,8 +16,6 @@ import io.github.bonigarcia.seljup.SeleniumJupiter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @ExtendWith(SeleniumJupiter.class)
@@ -32,13 +30,6 @@ public class RegisterTests {
 
         WebDriverManager.firefoxdriver().setup();
         driver = new FirefoxDriver();
-
-        //WebDriverManager.chromedriver().setup();
-        //ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--no-sandbox");
-        //options.addArguments("--disable-dev-shm-usage");
-        //options.addArguments("--headless");
-        //driver = new ChromeDriver(options);
 
         driver.manage().window().maximize();
 

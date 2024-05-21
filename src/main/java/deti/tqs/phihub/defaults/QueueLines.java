@@ -49,11 +49,5 @@ public class QueueLines implements ApplicationRunner {
         queueLineRepository.save(queue2);
         queueLineRepository.save(queue3);
         queueLineRepository.save(queue4);
-
-        System.out.println("Queue Lines created");
-
-
-
     }
-
 }

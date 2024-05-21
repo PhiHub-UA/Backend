@@ -7,8 +7,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import deti.tqs.phihub.configs.Generated;
+
 import java.time.Duration;
 
+@Generated
 public class HomePage {
     private WebDriver driver;
 
