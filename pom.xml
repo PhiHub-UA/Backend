@@ -24,6 +24,7 @@
 		<surefire-plugin-version>3.0.0-M6</surefire-plugin-version>
 		<sonar.organization>phihub-ua</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<cucumber.version>7.15.0</cucumber.version>
 	</properties>
 	
 	<dependencies>
@@ -176,6 +177,18 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
