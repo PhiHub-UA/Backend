@@ -86,26 +86,18 @@ public class TicketService {
         return ticketReturnSchema;
     }
 
-    public Ticket getNextTicket(Long queueLineId) {
+    public Ticket getNextTicket() {
 
-        QueueLine queueLine = queueLineService.getQueueLineById(queueLineId);
-        if (queueLine == null) {
+
+        Ticket nextTicket = chooseNextTicket();
+
+        if (nextTicket == null) {
             return null;
         }
-
-        List<Ticket> tickets = queueLine.getTickets();
-        if (tickets.isEmpty()) {
-            return null;
-        }
-
-        Ticket ticket = tickets.get(0);
-        tickets.remove(0);
-        queueLine.setTickets(tickets);
-        queueLineService.save(queueLine);
 
         // remove 1 from waiting room
 
-        WaitingRoom waitingRoom = ticket.getWaitingRoom();
+        WaitingRoom waitingRoom = nextTicket.getWaitingRoom();
 
         if (waitingRoom == null) {
             return null;
@@ -114,7 +106,53 @@ public class TicketService {
         waitingRoom.setNumberOfFilledSeats(waitingRoom.getNumberOfFilledSeats() - 1);
         waitingRoomService.save(waitingRoom);
 
-        return ticket;
+        return nextTicket;
     }
+
+
+    public Ticket chooseNextTicket() {
+
+       // find all queuelines, check if queueline P has any tickets ( since its priority ) and get the first one 
+
+        Ticket nextTicket = null;
+
+        List<QueueLine> queueLine = queueLineService.findAll();
+
+
+        // if queueline with letter P has any ticket, return the first one 
+
+        for (QueueLine q : queueLine) {
+            if (q.getShowingLetter().equals("P")) {
+                if (q.getTickets().size() > 0) {
+                    nextTicket = q.getTickets().remove(0);
+                    queueLineService.save(q);
+                    return nextTicket;
+                }
+            }
+        }
+
+        // now check all the other queuelines and give the first ticket of the one that has the most tickets
+
+        int max = 0;
+        QueueLine maxQueueLine = null;
+
+        for (QueueLine q : queueLine) {
+            if (q.getTickets().size() > max) {
+                max = q.getTickets().size();
+                maxQueueLine = q;
+            }
+        }
+
+        if (maxQueueLine == null) {
+            return null;
+        }
+
+        nextTicket = maxQueueLine.getTickets().remove(0);
+        queueLineService.save(maxQueueLine);
+
+        return nextTicket;
+
+    }
+
 
 }
