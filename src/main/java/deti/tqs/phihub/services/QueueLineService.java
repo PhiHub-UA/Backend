@@ -29,6 +29,22 @@ public class QueueLineService {
         return queuelineRepository.findAll();
     }
 
+    public void deleteTicketFromQueueByAppointmentID(Long appointmentID) {
+        
+        List<QueueLine> queueLines = findAll();
+        for (QueueLine queueLine : queueLines) {
+            List<Ticket> tickets = queueLine.getTickets();
+            for (Ticket ticket : tickets) {
+                if (ticket.getAppointment().getId() == appointmentID) {
+                    tickets.remove(ticket);
+                    queueLine.setTickets(tickets);
+                    save(queueLine);
+                    break;
+                }
+            }
+        }
+    }
+
     public boolean newTicket(Ticket ticket, QueueLine queueLine) {
 
         if (queueLine.getTickets().size() >= queueLine.getMaxSize()) {

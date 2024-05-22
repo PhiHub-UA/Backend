@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
@@ -14,7 +15,10 @@ import deti.tqs.phihub.models.Appointment;
 
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
+import deti.tqs.phihub.services.QueueLineService;
+import deti.tqs.phihub.services.ReceptionDeskService;
 import deti.tqs.phihub.services.UserService;
+import deti.tqs.phihub.services.TicketService;
 import deti.tqs.phihub.dtos.AppointmentSchema;
 
 @RestController
@@ -27,11 +31,21 @@ public class AppointmentController {
 
     private MedicService medicService;
 
+    private TicketService ticketService;
 
-    public AppointmentController(AppointmentService appointmentService, UserService userService, MedicService medicService) {
+    private ReceptionDeskService receptionDeskService;
+
+    private QueueLineService queueLineService;
+
+    public AppointmentController(AppointmentService appointmentService, UserService userService,
+            MedicService medicService, TicketService ticketService, ReceptionDeskService receptionDeskService,
+            QueueLineService queueLineService) {
         this.appointmentService = appointmentService;
         this.userService = userService;
         this.medicService = medicService;
+        this.ticketService = ticketService;
+        this.receptionDeskService = receptionDeskService;
+        this.queueLineService = queueLineService;
     }
 
     @PostMapping
@@ -54,11 +68,10 @@ public class AppointmentController {
         app.setPrice(appointmentSchema.price());
         app.setMedic(medic);
         app.setBill(null);
-        
+
         Appointment savedApp = appointmentService.save(app);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedApp);
     }
-
 
     @GetMapping
     public ResponseEntity<List<Appointment>> getAppointments() {
@@ -75,5 +88,20 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(appointment);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
+        var user = userService.getUserFromContext();
+        Appointment appointment = appointmentService.getAppointmentById(id);
+        if (appointment.getPatient().getId() != user.getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        queueLineService.deleteTicketFromQueueByAppointmentID(id);
+        receptionDeskService.deleteTicketsByAppointmentID(id);
+        ticketService.deleteTicketsByAppointmentID(id);
+        appointmentService.deleteAppointmentById(id);
+        return ResponseEntity.ok().build();
     }
 }

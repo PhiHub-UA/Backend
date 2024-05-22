@@ -41,5 +41,7 @@ public class Appointment {
 
     private String notes;
 
+    private AppointmentState state = AppointmentState.PENDING;
+
     
 }

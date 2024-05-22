@@ -1,5 +1,7 @@
 package deti.tqs.phihub.controllers.patient;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import deti.tqs.phihub.dtos.TicketSchema;
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.TicketService;
 import org.springframework.http.ResponseEntity;
+import deti.tqs.phihub.models.AppointmentState;
 
 @RestController
 @RequestMapping("/patient/tickets")
@@ -36,6 +39,8 @@ public class TicketController {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Appointment not found");
         
         }
+
+        appointmentService.updateAppointmentState(appointment, AppointmentState.CHECKED_IN);
 
         var ticket = ticketService.createTicket(ticketSchema, appointment);
 
