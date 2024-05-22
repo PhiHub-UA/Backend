@@ -1,5 +1,7 @@
 package deti.tqs.phihub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
@@ -27,10 +29,14 @@ public class Ticket {
 
     private boolean priority;
 
+    private String ticketName;
+
     @ManyToOne
+    @JsonIgnore
     private WaitingRoom waitingRoom;
 
     @ManyToOne // its a OneToOne, ManyToOne just for easier testing
+    @JsonIgnore
     private Appointment appointment;
 
 }
