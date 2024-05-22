@@ -41,6 +41,31 @@ public class TicketService {
         return ticketRepository.findAll();
     }
 
+    public boolean deleteTicket(String ticketID) {
+
+        Ticket ticket = getTicketById(Long.parseLong(ticketID));
+
+        if (ticket == null) {
+            return false;
+        }
+
+        ticketRepository.delete(ticket);
+
+        return true;
+    }
+
+    public void deleteTicketsByAppointmentID(Long appointmentID) {
+
+        List<Ticket> tickets = findAll();
+
+        for (Ticket t : tickets) {
+            if (t.getAppointment().getId() == appointmentID) {
+                ticketRepository.delete(t);
+            }
+        }
+
+    }
+
     public TicketReturnSchema createTicket(TicketSchema ticketSchema, Appointment appointment) {
 
         var ticket = new Ticket();

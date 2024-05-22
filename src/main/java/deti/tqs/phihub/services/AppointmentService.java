@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.AppointmentState;
 import deti.tqs.phihub.models.Medic;
 
 @Service
@@ -37,5 +38,21 @@ public class AppointmentService {
 
     public List<Appointment> findAll() {
         return appointmentRepository.findAll();
+    }
+    
+    public void deleteAppointmentById(Long id) {
+        appointmentRepository.deleteById(id);
+    }
+
+    public boolean updateAppointmentState(Appointment app, AppointmentState state) {
+
+        if (app == null) {
+            return false;
+        }
+
+        app.setState(state);
+        appointmentRepository.save(app);
+
+        return true;
     }
 }
