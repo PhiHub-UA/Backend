@@ -19,12 +19,14 @@ public class TicketService {
     private TicketRepository ticketRepository;
     private QueueLineService queueLineService;
     private WaitingRoomService waitingRoomService;
+    private ReceptionDeskService receptionDeskService;
 
     public TicketService(TicketRepository ticketRepository, QueueLineService queueLineService,
-            WaitingRoomService waitingRoomService) {
+            WaitingRoomService waitingRoomService, ReceptionDeskService receptionDeskService) {
         this.ticketRepository = ticketRepository;
         this.queueLineService = queueLineService;
         this.waitingRoomService = waitingRoomService;
+        this.receptionDeskService = receptionDeskService;
     }
 
     public Ticket save(Ticket ticket) {
@@ -67,6 +69,7 @@ public class TicketService {
 
         ticket.setIssueTimestamp(System.currentTimeMillis());
         ticket.setPriority(ticketSchema.priority());
+        ticket.setTicketName(queueLine.getShowingLetter()+queueLine.getTicketCounter());
 
         save(ticket);
 
@@ -84,7 +87,7 @@ public class TicketService {
                 queueLine.getShowingLetter(),queueLine.getTicketCounter(), waitingRoom.getId());
     }
 
-    public Ticket getNextTicket() {
+    public Ticket getNextTicket( int deskNumber ) {
 
 
         Ticket nextTicket = chooseNextTicket();
@@ -103,6 +106,8 @@ public class TicketService {
 
         waitingRoom.setNumberOfFilledSeats(waitingRoom.getNumberOfFilledSeats() - 1);
         waitingRoomService.save(waitingRoom);
+
+        receptionDeskService.updateServingTicket(deskNumber, nextTicket);
 
         return nextTicket;
     }
