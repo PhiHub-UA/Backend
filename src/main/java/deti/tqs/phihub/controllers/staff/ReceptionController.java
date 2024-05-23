@@ -45,5 +45,4 @@ public class ReceptionController {
     public ResponseEntity<List<ReceptionDesk>> getDeskStatus() {
         return ResponseEntity.ok(receptionDeskService.getDeskStatus());
     }
-
 }

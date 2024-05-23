@@ -19,6 +19,7 @@ import deti.tqs.phihub.models.ReceptionDesk;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.repositories.TicketRepository;
+import deti.tqs.phihub.services.LastTicketsService;
 import deti.tqs.phihub.services.QueueLineService;
 import deti.tqs.phihub.services.ReceptionDeskService;
 import deti.tqs.phihub.services.TicketService;
@@ -46,6 +47,9 @@ class TicketServiceTests {
 
     @Mock(strictness = Strictness.LENIENT)
     private WaitingRoomService waitingRoomService;
+
+    @Mock(strictness = Strictness.LENIENT)
+    private LastTicketsService lastTicketService;
 
     @Mock(strictness = Strictness.LENIENT)
     private ReceptionDeskService receptionDeskService;
@@ -234,12 +238,12 @@ class TicketServiceTests {
 
         ticket0.setAppointment(app0);
 
-        Ticket nextTicket = ticketService.chooseNextTicket();
+        Ticket nextTicket = ticketService.chooseNextTicket(true);
 
         //  Get ticket 1 since it is in the queue "P"
         assertThat(nextTicket.getId()).isEqualTo(ticket1.getId());
 
-        nextTicket = ticketService.chooseNextTicket();
+        nextTicket = ticketService.chooseNextTicket(true);
 
         //  Get ticket 0 since it is in the queue "A"
         assertThat(nextTicket.getId()).isEqualTo(ticket0.getId());

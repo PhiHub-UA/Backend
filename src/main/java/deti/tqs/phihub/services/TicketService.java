@@ -20,13 +20,15 @@ public class TicketService {
     private QueueLineService queueLineService;
     private WaitingRoomService waitingRoomService;
     private ReceptionDeskService receptionDeskService;
+    private LastTicketsService lastTicketService;
 
     public TicketService(TicketRepository ticketRepository, QueueLineService queueLineService,
-            WaitingRoomService waitingRoomService, ReceptionDeskService receptionDeskService) {
+            WaitingRoomService waitingRoomService, ReceptionDeskService receptionDeskService, LastTicketsService lastTicketService) {
         this.ticketRepository = ticketRepository;
         this.queueLineService = queueLineService;
         this.waitingRoomService = waitingRoomService;
         this.receptionDeskService = receptionDeskService;
+        this.lastTicketService = lastTicketService;
     }
 
     public Ticket save(Ticket ticket) {
@@ -116,7 +118,7 @@ public class TicketService {
     public Ticket getNextTicket( int deskNumber ) {
 
 
-        Ticket nextTicket = chooseNextTicket();
+        Ticket nextTicket = chooseNextTicket(true);
 
         if (nextTicket == null) {
             return null;
@@ -139,7 +141,7 @@ public class TicketService {
     }
 
 
-    public Ticket chooseNextTicket() {
+    public Ticket chooseNextTicket(boolean toRemove) {
 
        // find all queuelines, check if queueline P has any tickets ( since its priority ) and get the first one 
 
@@ -152,9 +154,16 @@ public class TicketService {
 
         for (QueueLine q : queueLine) {
             if (q.getShowingLetter().equals("P") && q.getTickets().size() > 0) {
-                nextTicket = q.getTickets().remove(0);
-                queueLineService.save(q);
-                return nextTicket;
+                if (toRemove) {
+                    nextTicket = q.getTickets().remove(0);
+                    queueLineService.save(q);
+                    lastTicketService.addNewTicket(nextTicket);
+                    return nextTicket;
+                }
+                else {
+                    nextTicket = q.getTickets().get(0);
+                    return nextTicket;
+                }
             }
         }
 
@@ -174,12 +183,15 @@ public class TicketService {
             return null;
         }
 
-        nextTicket = maxQueueLine.getTickets().remove(0);
-        queueLineService.save(maxQueueLine);
+        if (toRemove) {
+            nextTicket = maxQueueLine.getTickets().remove(0);
+            lastTicketService.addNewTicket(nextTicket);
+            queueLineService.save(maxQueueLine);
+        }
+        else {
+            nextTicket = maxQueueLine.getTickets().get(0);
+        }
 
         return nextTicket;
-
     }
-
-
 }
