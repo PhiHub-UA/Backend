@@ -20,6 +20,9 @@ import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
 import deti.tqs.phihub.services.SpecialityService;
 import deti.tqs.phihub.services.UserService;
+import deti.tqs.phihub.services.TicketService;
+import deti.tqs.phihub.services.ReceptionDeskService;
+import deti.tqs.phihub.services.QueueLineService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,10 +51,14 @@ class AppointmentControllerTests {
     private UserService userService;
     @MockBean
     private SpecialityService specialityService;
-    
+    @MockBean
+    private TicketService ticketService;
+    @MockBean
+    private ReceptionDeskService receptionDeskService;
+    @MockBean
+    private QueueLineService queueLineService;
     @MockBean
     private MedicService medicService;
-
     @MockBean
     private TokenProvider tokenProvider;
     @MockBean
