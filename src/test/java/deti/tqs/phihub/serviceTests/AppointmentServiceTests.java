@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.Mock.Strictness;
 
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.AppointmentState;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -117,6 +118,22 @@ class AppointmentServiceTests {
         Mockito.verify(appointmentRepository, 
                 VerificationModeFactory.times(1))
                     .findAll();
+    }
+
+    @Test
+     void given1Appointments_whenUpdateState_thenStateShouldBeUpdated() {
+
+        boolean isUpdated = appointmentService.updateAppointmentState(app0, AppointmentState.FINISHED);
+
+        assertThat(isUpdated).isTrue();
+
+        isUpdated = appointmentService.updateAppointmentState(null, AppointmentState.FINISHED);
+
+        assertThat(isUpdated).isFalse();
+
+        Mockito.verify(appointmentRepository, 
+                VerificationModeFactory.times(1))
+                    .save(Mockito.any());
     }
 
     @Test
