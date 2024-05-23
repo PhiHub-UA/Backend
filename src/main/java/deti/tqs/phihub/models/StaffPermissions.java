@@ -1,8 +1,10 @@
 package deti.tqs.phihub.models;
 
 import java.util.List;
+import deti.tqs.phihub.configs.Generated;
 import java.util.ArrayList;
 
+@Generated
 public enum StaffPermissions {
 
     CREATE(0),

@@ -44,10 +44,7 @@ public class ReceptionDeskService {
 
         receptionDeskRepository.save(desk);
         
-        
         return true;
     }
-
-
-    
+   
 }
