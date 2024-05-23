@@ -60,6 +60,7 @@ class TicketServiceTests {
     public void setUp() {
         wroom0.setId(1L);
         wroom0.setNumberOfFilledSeats(8);
+        wroom0.setNumberOfSeats(12);
 
         //  Create two tickets
         ticket0.setId(1L);
@@ -141,15 +142,6 @@ class TicketServiceTests {
         Appointment app0 = new Appointment();
         app0.setId(1L);
         app0.setPrice(12.3);
-
-        QueueLine queue0 = new QueueLine();
-        queue0.setMaxSize(20);
-        queue0.setShowingLetter("A");
-        queue0.setTickets(List.of());
-
-        WaitingRoom wroom0 = new WaitingRoom();
-        wroom0.setNumberOfFilledSeats(2);
-        wroom0.setNumberOfSeats(12);
         
         TicketSchema ticketSchema = new TicketSchema(true, app0.getId());
 
@@ -167,15 +159,6 @@ class TicketServiceTests {
         Appointment app0 = new Appointment();
         app0.setId(1L);
         app0.setPrice(12.3);
-
-        QueueLine queue0 = new QueueLine();
-        queue0.setMaxSize(20);
-        queue0.setShowingLetter("A");
-        queue0.setTickets(List.of());
-
-        WaitingRoom wroom0 = new WaitingRoom();
-        wroom0.setNumberOfFilledSeats(2);
-        wroom0.setNumberOfSeats(12);
 
         TicketSchema ticketSchema = new TicketSchema(true, app0.getId());
         

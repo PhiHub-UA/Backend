@@ -11,16 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.controllers.staff.QueueLineController;
-import deti.tqs.phihub.dtos.MedicSchema;
 import deti.tqs.phihub.models.QueueLine;
-import deti.tqs.phihub.models.ReceptionDesk;
-import deti.tqs.phihub.models.Staff;
-import deti.tqs.phihub.models.StaffPermissions;
-import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.services.QueueLineService;
-import deti.tqs.phihub.services.ReceptionDeskService;
-import deti.tqs.phihub.services.StaffService;
-import deti.tqs.phihub.services.TicketService;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;

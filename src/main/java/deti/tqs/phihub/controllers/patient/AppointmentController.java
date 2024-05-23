@@ -91,7 +91,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAppointment(@PathVariable Long id) {
         var user = userService.getUserFromContext();
         Appointment appointment = appointmentService.getAppointmentById(id);
         if (appointment.getPatient().getId() != user.getId()) {

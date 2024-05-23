@@ -141,32 +141,4 @@ class AppointmentIntegrationTests {
                                 .as(HashMap.class);
 
         }
-
-/*         @Test
-        @DisplayName("When post a Appointment return a Appointment")
-        void whenPostValidAppointment_thenCreateAppointment() {
-
-                AppointmentSchema app0 = new AppointmentSchema(
-                                new Date().getTime(),
-                                50.0,
-                                Speciality.CARDIOLOGY,
-                                1L);
-
-                given().port(port)
-                                .contentType("application/json")
-                                .header(new Header("Authorization", "Bearer " + staffToken))
-                                .body("{"
-                                        + "\"date\":\"" + app0.date() + "\","
-                                        + "\"price\":" + app0.price() + ","
-                                        + "\"speciality\":\"" + app0.speciality() + "\","
-                                        + "\"medicID\":" + app0.medicID()
-                                + "}")
-                                .when()
-                                .post("/patient/appointments")
-                                .then()
-                                .statusCode(201)
-                                .assertThat()
-                                .body("patient.username", equalTo(user0.getUsername()))
-                                .body("medic.name", equalTo(medic0.getName()));
-        } */
 }
