@@ -9,6 +9,7 @@ import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.dtos.TicketSchema;
@@ -19,14 +20,17 @@ import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.repositories.TicketRepository;
 import deti.tqs.phihub.services.QueueLineService;
+import deti.tqs.phihub.services.ReceptionDeskService;
 import deti.tqs.phihub.services.TicketService;
 import deti.tqs.phihub.services.WaitingRoomService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
 class TicketServiceTests {
@@ -43,11 +47,20 @@ class TicketServiceTests {
     @Mock(strictness = Strictness.LENIENT)
     private WaitingRoomService waitingRoomService;
 
+    @Mock(strictness = Strictness.LENIENT)
+    private ReceptionDeskService receptionDeskService;
+
     private Ticket ticket0 = new Ticket();
     private Ticket ticket1 = new Ticket();
+    QueueLine queue0 = new QueueLine();
+    QueueLine queue1 = new QueueLine();
+    WaitingRoom wroom0 = new WaitingRoom();
 
     @BeforeEach
     public void setUp() {
+        wroom0.setId(1L);
+        wroom0.setNumberOfFilledSeats(8);
+
         //  Create two tickets
         ticket0.setId(1L);
         ticket0.setPriority(true);
@@ -56,6 +69,15 @@ class TicketServiceTests {
         ticket1.setId(2L);
         ticket1.setPriority(false);
         ticket1.setIssueTimestamp(2L);
+        ticket1.setWaitingRoom(wroom0);
+
+        queue0.setMaxSize(20);
+        queue0.setShowingLetter("A");
+        queue0.setTickets(new ArrayList<Ticket>(Arrays.asList(ticket0)));
+
+        queue1.setMaxSize(10);
+        queue1.setShowingLetter("P");
+        queue1.setTickets(new ArrayList<Ticket>(Arrays.asList(ticket1)));
 
         List<Ticket> allTickets = Arrays.asList(ticket0, ticket1);
 
@@ -65,6 +87,12 @@ class TicketServiceTests {
         Mockito.when(ticketRepository.findById(ticket0.getId())).thenReturn(Optional.of(ticket0));
         Mockito.when(ticketRepository.findById(ticket1.getId())).thenReturn(Optional.of(ticket1));
         Mockito.when(ticketRepository.findById(-99L)).thenReturn(Optional.empty());
+
+        Mockito.when(queueService.newTicket(Mockito.any(), Mockito.eq(queue0))).thenReturn(true);
+        Mockito.when(queueService.getEmptiestQueueLine()).thenReturn(queue0);
+        Mockito.when(queueService.findAll()).thenReturn(List.of(queue0, queue1));
+
+        Mockito.when(waitingRoomService.save(Mockito.any())).thenReturn(wroom0);
     }
 
     @Test
@@ -116,6 +144,7 @@ class TicketServiceTests {
 
         QueueLine queue0 = new QueueLine();
         queue0.setMaxSize(20);
+        queue0.setShowingLetter("A");
         queue0.setTickets(List.of());
 
         WaitingRoom wroom0 = new WaitingRoom();
@@ -125,14 +154,45 @@ class TicketServiceTests {
         TicketSchema ticketSchema = new TicketSchema(true, app0.getId());
 
         Mockito.when(ticketRepository.save(Mockito.any())).thenReturn(ticket0);
-        Mockito.when(queueService.newTicket(Mockito.any(), Mockito.eq(queue0))).thenReturn(true);
         Mockito.when(waitingRoomService.newTicket(wroom0)).thenReturn(true);
-        Mockito.when(queueService.getEmptiestQueueLine()).thenReturn(queue0);
         Mockito.when(waitingRoomService.getEmptiestWaitingRoom()).thenReturn(wroom0);
 
         TicketReturnSchema returned = ticketService.createTicket(ticketSchema, app0);
 
         assertThat(returned.appointmentId()).isEqualTo(ticket0.getId());
+    }
+
+    @Test
+     void whenCreateInvalidTicket_thenErrorShouldBeReturned() {
+        Appointment app0 = new Appointment();
+        app0.setId(1L);
+        app0.setPrice(12.3);
+
+        QueueLine queue0 = new QueueLine();
+        queue0.setMaxSize(20);
+        queue0.setShowingLetter("A");
+        queue0.setTickets(List.of());
+
+        WaitingRoom wroom0 = new WaitingRoom();
+        wroom0.setNumberOfFilledSeats(2);
+        wroom0.setNumberOfSeats(12);
+
+        TicketSchema ticketSchema = new TicketSchema(true, app0.getId());
+        
+        Mockito.when(ticketRepository.save(Mockito.any())).thenReturn(ticket0);
+
+
+        Mockito.when(waitingRoomService.newTicket(wroom0)).thenReturn(false);
+        assertThatThrownBy(() -> ticketService.createTicket(ticketSchema, app0)).isInstanceOf(ResponseStatusException.class);
+
+        Mockito.when(waitingRoomService.newTicket(wroom0)).thenReturn(false);
+        assertThatThrownBy(() -> ticketService.createTicket(ticketSchema, app0)).isInstanceOf(ResponseStatusException.class);
+        
+        Mockito.when(queueService.getEmptiestQueueLine()).thenReturn(null);
+        assertThatThrownBy(() -> ticketService.createTicket(ticketSchema, app0)).isInstanceOf(ResponseStatusException.class);
+
+        Mockito.when(waitingRoomService.getEmptiestWaitingRoom()).thenReturn(null);
+        assertThatThrownBy(() -> ticketService.createTicket(ticketSchema, app0)).isInstanceOf(ResponseStatusException.class);
     }
 
     @Test
@@ -162,7 +222,25 @@ class TicketServiceTests {
     }
 
     @Test
-     void givenGetNextTicket_thenGetNextTicket() {   
+     void givenChooseNextTicket_thenChooseNextTicket() {   
+        Appointment app0 = new Appointment();
+        app0.setId(1L);
+        app0.setPrice(12.3);
+
+        ReceptionDesk desk0 = new ReceptionDesk();
+        desk0.setId(1L);
+        desk0.setServingTicket(ticket1);
+
+        ticket0.setAppointment(app0);
+
+        Ticket nextTicket = ticketService.getNextTicket(1);
+
+        //  Get ticket 1 since it is in the queue "P"
+        assertThat(nextTicket.getId()).isEqualTo(ticket1.getId());
+    }
+    
+    @Test
+     void givenGetNextTicketPriority_thenGetNextTicket() {   
         Appointment app0 = new Appointment();
         app0.setId(1L);
         app0.setPrice(12.3);
@@ -173,8 +251,14 @@ class TicketServiceTests {
 
         ticket0.setAppointment(app0);
 
-        Ticket nextTicket = ticketService.getNextTicket(1);
+        Ticket nextTicket = ticketService.chooseNextTicket();
 
-        //assertThat(nextTicket.getId()).isEqualTo(ticket0.getId());
+        //  Get ticket 1 since it is in the queue "P"
+        assertThat(nextTicket.getId()).isEqualTo(ticket1.getId());
+
+        nextTicket = ticketService.chooseNextTicket();
+
+        //  Get ticket 0 since it is in the queue "A"
+        assertThat(nextTicket.getId()).isEqualTo(ticket0.getId());
     }
 }
