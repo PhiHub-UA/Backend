@@ -1,5 +1,7 @@
 package deti.tqs.phihub.services;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -25,11 +27,23 @@ public class LastTicketsService {
     }
 
     public LastTickets findTickets() {
-        return lastTicketsRepository.findAll().get(0);
+        List<LastTickets> lastTickets = lastTicketsRepository.findAll();
+
+        if (lastTickets.size() < 1) {
+            return null;
+        }
+        else {
+            return lastTickets.get(0);
+        }
     }
 
     public LastTickets addNewTicket(Ticket ticket) {
         LastTickets lastTicketsObj = findTickets();
+
+        if (lastTicketsObj == null) {
+            lastTicketsObj = new LastTickets();
+            lastTicketsObj.setLastTicketQueue(new ArrayList<>(Arrays.asList()));
+        }
 
         if (lastTicketsObj.getLastTicketQueue().size() > 4) {
             lastTicketsObj.getLastTicketQueue().remove(0);
@@ -45,19 +59,28 @@ public class LastTicketsService {
 
     public String getParsedTickets() {
         LastTickets lastTicketsObj = findTickets();
-        List<String> ticketList = lastTicketsObj.getLastTicketQueue();
-
+        
         String finalStr = "{";
-        Integer currNum = 1;
 
-        for (String ticket : ticketList) {
-            finalStr += "\"" + currNum + "\": \"" + ticket + "\",";
-            currNum += 1;
+        if (lastTicketsObj != null) {
+        
+            List<String> ticketList = lastTicketsObj.getLastTicketQueue();
+    
+            Integer currNum = 1;
+    
+            for (String ticket : ticketList) {
+                finalStr += "\"" + currNum + "\": \"" + ticket + "\",";
+                currNum += 1;
+            }
         }
 
         Ticket nextCall = chooseNextTicket();
 
-        finalStr += "\"nextCall\":\"" + nextCall.getTicketName() + "\"}";
+        if (nextCall != null) {
+            finalStr += "\"nextCall\":\"" + nextCall.getTicketName() + "\"";
+        }
+
+        finalStr += "}";
 
         return finalStr;
     }
