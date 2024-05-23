@@ -37,7 +37,7 @@ class WaitingRoomServiceTests {
         //  Create two waitingrooms
         waitingroom0.setId(1L);
         waitingroom0.setName("Room A");
-        waitingroom1.setNumberOfSeats(14);
+        waitingroom0.setNumberOfSeats(14);
         waitingroom0.setNumberOfFilledSeats(7);
 
         waitingroom1.setId(2L);
@@ -93,5 +93,23 @@ class WaitingRoomServiceTests {
         Mockito.verify(waitingroomRepository, 
                 VerificationModeFactory.times(1))
                     .findAll();
+    }
+
+    @Test
+     void whenSetNewTicket_thenNewTicketShouldBeSaved() {
+        boolean newTicket = waitingroomService.newTicket(waitingroom0);
+        assertThat(newTicket).isTrue();
+
+        waitingroom0.setNumberOfFilledSeats(10);
+        waitingroom0.setNumberOfSeats(9);
+
+        newTicket = waitingroomService.newTicket(waitingroom0);
+        assertThat(newTicket).isFalse();
+    }
+
+    @Test
+     void whenGetEmptiestWRoom_thenEmptiestShouldBeReturned() {
+        WaitingRoom wRoom = waitingroomService.getEmptiestWaitingRoom();
+        assertThat(wRoom.getNumberOfFilledSeats()).isEqualTo(waitingroom0.getNumberOfFilledSeats());
     }
 }
