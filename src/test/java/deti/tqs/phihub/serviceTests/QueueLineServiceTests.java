@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.QueueLine;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.QueueLineRepository;
@@ -37,19 +38,26 @@ class QueueLineServiceTests {
     private Ticket tick0 = new Ticket();
     private Ticket tick1 = new Ticket();
 
+    private Appointment app0 = new Appointment();
+
     @BeforeEach
     public void setUp() {
+        //  Create a appointment
+        app0.setId(1L);
+        app0.setPrice(12.3);
+
         tick0.setPriority(false);
+        tick0.setAppointment(app0);
         tick1.setPriority(true);
 
         //  Create two queuelines
         queueline0.setId(1L);
         queueline0.setMaxSize(17);
-        queueline0.setTickets(Arrays.asList(tick0));
+        queueline0.setTickets(new ArrayList<Ticket>(Arrays.asList(tick0, tick1)));
 
         queueline1.setId(2L);
         queueline1.setMaxSize(13);
-        queueline1.setTickets(Arrays.asList(tick0, tick1));
+        queueline1.setTickets(new ArrayList<Ticket>(Arrays.asList(tick0, tick1)));
 
         List<QueueLine> allQueueLines = Arrays.asList(queueline0, queueline1);
 
@@ -114,5 +122,27 @@ class QueueLineServiceTests {
         Mockito.verify(queuelineRepository, 
                 VerificationModeFactory.times(1))
                     .save(Mockito.any());
+    }
+
+    @Test
+     void whenDeleteTicketFromQueueLine_thenTicketShouldBeDeleted() {
+        boolean isDeleted = queuelineService.deleteTicketFromQueueByAppointmentID(app0.getId());
+        assertThat(isDeleted).isTrue();
+    }
+
+    @Test
+     void whenNewTicketFromQueueLine_thenTicketShouldBeReturned() {
+        boolean isAdded = queuelineService.newTicket(tick0, queueline0);
+        assertThat(isAdded).isTrue();
+
+        queueline0.setMaxSize(-1);
+        isAdded = queuelineService.newTicket(tick0, queueline0);
+        assertThat(isAdded).isFalse();
+    }
+
+    @Test
+     void whenGetEmptiestQueueLine_thenEmptiestShouldBeReturn() {
+        QueueLine qLine = queuelineService.getEmptiestQueueLine();
+        assertThat(qLine.getMaxSize()).isEqualTo(queueline0.getMaxSize());
     }
 }

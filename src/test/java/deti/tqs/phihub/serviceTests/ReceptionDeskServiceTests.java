@@ -37,7 +37,6 @@ class ReceptionDeskServiceTests {
 
     @BeforeEach
     public void setUp() {
-
         //  Create a appointment
         app0.setId(1L);
         app0.setPrice(12.3);
