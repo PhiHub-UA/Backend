@@ -69,6 +69,8 @@ class ReceptionDeskServiceTests {
      void whenGetValidDeskStatus_thenTrueShouldBeReturned() {
         List<ReceptionDesk> returned = deskService.getDeskStatus();
         assertThat(returned.get(0).getDeskNumber()).isEqualTo(desk0.getDeskNumber());
+        assertThat(returned.get(0).getId()).isEqualTo(desk0.getId());
+        assertThat(returned.get(0).isWorking()).isEqualTo(desk0.isWorking());
     }
 
     @Test
