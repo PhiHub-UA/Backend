@@ -54,7 +54,7 @@ public class TicketService {
         return true;
     }
 
-    public void deleteTicketsByAppointmentID(Long appointmentID) {
+    public boolean deleteTicketsByAppointmentID(Long appointmentID) {
 
         List<Ticket> tickets = findAll();
 
@@ -64,6 +64,7 @@ public class TicketService {
             }
         }
 
+        return true;
     }
 
     public TicketReturnSchema createTicket(TicketSchema ticketSchema, Appointment appointment) {

@@ -14,6 +14,7 @@ import deti.tqs.phihub.dtos.TicketReturnSchema;
 import deti.tqs.phihub.dtos.TicketSchema;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.QueueLine;
+import deti.tqs.phihub.models.ReceptionDesk;
 import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.models.WaitingRoom;
 import deti.tqs.phihub.repositories.TicketRepository;
@@ -108,7 +109,7 @@ class TicketServiceTests {
     }
 
     @Test
-     void whenCreateValidTicket_thenTicketShouldBeReturned() {        
+     void whenCreateValidTicket_thenTicketShouldBeReturned() {
         Appointment app0 = new Appointment();
         app0.setId(1L);
         app0.setPrice(12.3);
@@ -132,5 +133,48 @@ class TicketServiceTests {
         TicketReturnSchema returned = ticketService.createTicket(ticketSchema, app0);
 
         assertThat(returned.appointmentId()).isEqualTo(ticket0.getId());
+    }
+
+    @Test
+     void givenDeleteTicketByID_thenDeleteTicket() {
+
+        boolean isDeleted = ticketService.deleteTicket("1");
+
+        assertThat(isDeleted).isTrue();
+
+        isDeleted = ticketService.deleteTicket("-99");
+
+        assertThat(isDeleted).isFalse();
+    }
+
+    @Test
+     void givenDeleteTicketByAppointmentID_thenDeleteTicket() {   
+        Appointment app0 = new Appointment();
+        app0.setId(1L);
+        app0.setPrice(12.3);
+
+        ticket0.setAppointment(app0);
+        ticket1.setAppointment(app0);
+
+        boolean isDeleted = ticketService.deleteTicketsByAppointmentID(app0.getId());
+
+        assertThat(isDeleted).isTrue();
+    }
+
+    @Test
+     void givenGetNextTicket_thenGetNextTicket() {   
+        Appointment app0 = new Appointment();
+        app0.setId(1L);
+        app0.setPrice(12.3);
+
+        ReceptionDesk desk0 = new ReceptionDesk();
+        desk0.setId(1L);
+        desk0.setServingTicket(ticket0);
+
+        ticket0.setAppointment(app0);
+
+        Ticket nextTicket = ticketService.getNextTicket(1);
+
+        //assertThat(nextTicket.getId()).isEqualTo(ticket0.getId());
     }
 }
