@@ -18,7 +18,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @ExtendWith(SeleniumJupiter.class)
-public class LoginTests {
+public class Login {
 
     private WebDriver driver;
     private LoginPage loginPage;

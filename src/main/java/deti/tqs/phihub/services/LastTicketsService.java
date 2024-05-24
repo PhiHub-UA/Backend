@@ -29,7 +29,7 @@ public class LastTicketsService {
     public LastTickets findTickets() {
         List<LastTickets> lastTickets = lastTicketsRepository.findAll();
 
-        if (lastTickets.size() < 1) {
+        if (lastTickets.isEmpty()) {
             return null;
         }
         else {
@@ -49,7 +49,7 @@ public class LastTicketsService {
             lastTicketsObj.getLastTicketQueue().remove(0);
         }
 
-        lastTicketsObj.getLastTicketQueue().add("[" + ticket.getTicketName() + ", " + deskNumber + "]");
+        lastTicketsObj.getLastTicketQueue().add("[\"" + ticket.getTicketName() + "\", " + deskNumber + "]");
 
         save(lastTicketsObj);
 
@@ -69,7 +69,7 @@ public class LastTicketsService {
             Integer currNum = 1;
     
             for (String ticket : ticketList) {
-                finalStr += "\"" + currNum + "\": \"" + ticket + "\",";
+                finalStr += "\"" + currNum + "\": " + ticket + ", ";
                 currNum += 1;
             }
         }
@@ -77,7 +77,10 @@ public class LastTicketsService {
         Ticket nextCall = chooseNextTicket();
 
         if (nextCall != null) {
-            finalStr += "\"nextCall\":\"" + nextCall.getTicketName() + "\"";
+            finalStr += "\"nextnum\": \"" + nextCall.getTicketName() + "\"";
+        }
+        else {
+            finalStr += "\"nextnum\": \"---\"";
         }
 
         finalStr += "}";

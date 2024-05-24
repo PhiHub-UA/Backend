@@ -19,7 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @ExtendWith(SeleniumJupiter.class)
-public class RegisterTests {
+public class Register {
 
     private WebDriver driver;
     private HomePage homePage;
