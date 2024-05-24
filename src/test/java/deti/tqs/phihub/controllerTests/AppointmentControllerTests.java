@@ -29,7 +29,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -121,6 +123,16 @@ class AppointmentControllerTests {
     }
 
     @Test
+    void givenOneAppointments_thenDeleteIt() throws Exception {
+
+        mvc.perform(
+                delete("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(service, times(1)).deleteAppointmentById(Mockito.any());
+    }
+
+    @Test
     void givenManyAppointments_thenReturnInJsonArray() throws Exception {
         Appointment appointment0 = new Appointment();
         Appointment appointment1 = new Appointment();
@@ -166,6 +178,20 @@ class AppointmentControllerTests {
                 .andExpect(status().isUnauthorized());
 
         verify(service, times(0)).save(Mockito.any());
+    }
+
+    @Test
+    void givenBadUser_thenDoNotDeleteAppointment() throws Exception {
+        //  Check bad logged in user
+        User user1 = new User();
+        user1.setId(2L);
+        when(userService.getUserFromContext()).thenReturn(user1);
+
+        mvc.perform(
+                delete("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
+        verify(service, times(0)).deleteAppointmentById(Mockito.any());
     }
 
     @Test
