@@ -115,10 +115,10 @@ public class TicketService {
                 queueLine.getShowingLetter(),queueLine.getTicketCounter(), waitingRoom.getId());
     }
 
-    public Ticket getNextTicket( int deskNumber ) {
+    public Ticket getNextTicket(int deskNumber) {
 
 
-        Ticket nextTicket = chooseNextTicket(true);
+        Ticket nextTicket = chooseNextTicket(true, deskNumber);
 
         if (nextTicket == null) {
             return null;
@@ -141,7 +141,7 @@ public class TicketService {
     }
 
 
-    public Ticket chooseNextTicket(boolean toRemove) {
+    public Ticket chooseNextTicket(boolean toRemove, int deskNumber) {
 
        // find all queuelines, check if queueline P has any tickets ( since its priority ) and get the first one 
 
@@ -157,7 +157,7 @@ public class TicketService {
                 if (toRemove) {
                     nextTicket = q.getTickets().remove(0);
                     queueLineService.save(q);
-                    lastTicketService.addNewTicket(nextTicket);
+                    lastTicketService.addNewTicket(nextTicket, deskNumber);
                     return nextTicket;
                 }
                 else {
@@ -185,7 +185,7 @@ public class TicketService {
 
         if (toRemove) {
             nextTicket = maxQueueLine.getTickets().remove(0);
-            lastTicketService.addNewTicket(nextTicket);
+            lastTicketService.addNewTicket(nextTicket, deskNumber);
             queueLineService.save(maxQueueLine);
         }
         else {

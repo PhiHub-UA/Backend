@@ -235,15 +235,16 @@ class TicketServiceTests {
         ReceptionDesk desk0 = new ReceptionDesk();
         desk0.setId(1L);
         desk0.setServingTicket(ticket0);
+        desk0.setDeskNumber(1);
 
         ticket0.setAppointment(app0);
 
-        Ticket nextTicket = ticketService.chooseNextTicket(true);
+        Ticket nextTicket = ticketService.chooseNextTicket(true, desk0.getDeskNumber());
 
         //  Get ticket 1 since it is in the queue "P"
         assertThat(nextTicket.getId()).isEqualTo(ticket1.getId());
 
-        nextTicket = ticketService.chooseNextTicket(true);
+        nextTicket = ticketService.chooseNextTicket(true, desk0.getDeskNumber());
 
         //  Get ticket 0 since it is in the queue "A"
         assertThat(nextTicket.getId()).isEqualTo(ticket0.getId());

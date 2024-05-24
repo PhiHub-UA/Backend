@@ -37,7 +37,7 @@ public class LastTicketsService {
         }
     }
 
-    public LastTickets addNewTicket(Ticket ticket) {
+    public LastTickets addNewTicket(Ticket ticket, int deskNumber) {
         LastTickets lastTicketsObj = findTickets();
 
         if (lastTicketsObj == null) {
@@ -49,7 +49,7 @@ public class LastTicketsService {
             lastTicketsObj.getLastTicketQueue().remove(0);
         }
 
-        lastTicketsObj.getLastTicketQueue().add(ticket.getTicketName());
+        lastTicketsObj.getLastTicketQueue().add("[" + ticket.getTicketName() + ", " + deskNumber + "]");
 
         save(lastTicketsObj);
 
