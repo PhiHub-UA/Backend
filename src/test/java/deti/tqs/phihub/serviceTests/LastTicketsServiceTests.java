@@ -102,6 +102,17 @@ class LastTicketsServiceTests {
     }
 
     @Test
+     void whenAddNewTickets_WithNone_thenNewTicketsShouldBeReturned() {
+        Mockito.when(lastTicketsRepository.findAll()).thenReturn(List.of());
+        LastTickets firstLastTickets = lastTicketsService.addNewTicket(ticket0, 3);
+        assertThat(firstLastTickets.getLastTicketQueue().get(0)).isEqualTo("[\"" + ticket0.getTicketName() + "\", 3]");
+
+        Mockito.verify(lastTicketsRepository, 
+                VerificationModeFactory.times(1))
+                    .save(Mockito.any());
+    }
+
+    @Test
      void givenLastTickets_whengetParsedLastTicktets_thenReturnAll() {
         String parsedLastTickets = lastTicketsService.getParsedTickets();
 
