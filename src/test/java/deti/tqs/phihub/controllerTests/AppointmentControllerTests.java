@@ -189,7 +189,7 @@ class AppointmentControllerTests {
 
         mvc.perform(
                 delete("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         verify(service, times(0)).deleteAppointmentById(Mockito.any());
     }
@@ -203,6 +203,6 @@ class AppointmentControllerTests {
 
         mvc.perform(
                 get("/patient/appointments/" + app0.getId().toString()).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
