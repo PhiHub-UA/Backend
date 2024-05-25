@@ -15,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.http.HttpStatus;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/staff/medics")
 public class StaffMedicController {
@@ -24,8 +28,15 @@ public class StaffMedicController {
 
     public StaffMedicController(MedicService medicService) {
         this.medicService = medicService;
-    }
+    }   
 
+
+    @Operation(summary = "Create medic", description = "Create medic user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Medic created"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping
     public ResponseEntity<Medic> saveMedic(@RequestBody MedicSchema medicSchema) {
 
@@ -43,11 +54,21 @@ public class StaffMedicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMedic);
     }
 
+    @Operation(summary = "Get all medics", description = "Get all medics")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Medics retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping
     public ResponseEntity<Iterable<Medic>> getAllMedics() {
         return ResponseEntity.ok(medicService.findAll());
     }
-
+    
+    @Operation(summary = "Get logged in medic", description = "Get logged in medic")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Medic retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/me")
     public ResponseEntity<Medic> getLoggedInMedic() {
 

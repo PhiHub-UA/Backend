@@ -1,7 +1,5 @@
 package deti.tqs.phihub.controllers.patient;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +14,10 @@ import deti.tqs.phihub.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import deti.tqs.phihub.models.AppointmentState;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/patient/tickets")
 public class TicketController {
@@ -29,7 +31,15 @@ public class TicketController {
         this.ticketService = ticketService;
 
     }
+    
 
+
+    @Operation(summary = "Create a ticket", description = "Create a ticket")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket created"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Appointment referenced by ticket not found")
+    })
     @PostMapping
     public ResponseEntity<TicketReturnSchema> createTicket(@RequestBody TicketSchema ticketSchema) {
 
