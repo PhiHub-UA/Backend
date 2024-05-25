@@ -21,6 +21,11 @@ import deti.tqs.phihub.services.UserService;
 import deti.tqs.phihub.services.TicketService;
 import deti.tqs.phihub.dtos.AppointmentSchema;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.web.server.ResponseStatusException;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/patient/appointments")
 public class AppointmentController {
@@ -48,17 +53,23 @@ public class AppointmentController {
         this.queueLineService = queueLineService;
     }
 
+    @Operation(summary = "Create an appointment", description = "Create an appointment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Appointment created"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @PostMapping
     public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentSchema appointmentSchema) {
         var user = userService.getUserFromContext();
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         var medic = medicService.getMedicById(appointmentSchema.medicID());
         if (medic == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Medic not found");
         }
 
         Appointment app = new Appointment();
@@ -73,6 +84,12 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedApp);
     }
 
+
+    @Operation(summary = "Get appointments", description = "Get appointments of the logged in user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointments retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping
     public ResponseEntity<List<Appointment>> getAppointments() {
         var user = userService.getUserFromContext();
@@ -80,22 +97,32 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
+    @Operation(summary = "Get appointment", description = "Get appointment by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointment retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointment(@PathVariable Long id) {
         var user = userService.getUserFromContext();
         Appointment appointment = appointmentService.getAppointmentById(id);
         if (appointment.getPatient().getId() != user.getId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to access this appointment");
         }
         return ResponseEntity.ok(appointment);
     }
 
+    @Operation(summary = "Delete appointment", description = "Delete appointment by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointment deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAppointment(@PathVariable Long id) {
         var user = userService.getUserFromContext();
         Appointment appointment = appointmentService.getAppointmentById(id);
         if (appointment.getPatient().getId() != user.getId()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to delete this appointment");
         }
         
         queueLineService.deleteTicketFromQueueByAppointmentID(id);

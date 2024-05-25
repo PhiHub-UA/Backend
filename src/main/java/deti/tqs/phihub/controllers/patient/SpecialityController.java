@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import deti.tqs.phihub.services.SpecialityService;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/patient/speciality")
 public class SpecialityController {
@@ -17,6 +21,10 @@ public class SpecialityController {
         this.specialityService = specialityService;
     }
 
+    @Operation(summary = "Get specialities", description = "Get specialities")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Specialities retrieved"),
+    })
     @GetMapping
     public List<String> getSpecialities() {
         return specialityService.getSpecialities();

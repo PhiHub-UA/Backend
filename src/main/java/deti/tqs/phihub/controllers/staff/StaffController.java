@@ -17,6 +17,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 import deti.tqs.phihub.models.StaffPermissions;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.web.server.ResponseStatusException;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/staff")
 public class StaffController {
@@ -28,18 +33,29 @@ public class StaffController {
         this.staffService = staffService;
     }
 
+    @Operation(summary = "Get logged in staff", description = "Get logged in staff")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Staff retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/me")
     public ResponseEntity<Staff> getLoggedInStaff() {
 
         var staff = staffService.getStaffFromContext();
 
         if (staff == null) {
-            return ResponseEntity.status(401).build();
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         return ResponseEntity.ok(staff);
     }
 
+    @Operation(summary = "Create staff", description = "Create staff user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Staff created"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping
     public ResponseEntity<Staff> createStaff(@RequestBody StaffSchema staffSchema) {
         var requestUser = staffService.getStaffFromContext();
@@ -47,24 +63,32 @@ public class StaffController {
         Collection<? extends GrantedAuthority> authorities = requestUser.getAuthorities();
 
         if (!authorities.contains(new SimpleGrantedAuthority("staff"))) {
-            return ResponseEntity.status(401).build();
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         var staff = staffService.createStaff(staffSchema);
 
         if (staff == null) {
-            return ResponseEntity.status(400).build();
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Bad request");
         }
 
         return ResponseEntity.ok(staff);
 
     }
 
+    @Operation(summary = "Get staff permissions", description = "Get staff permissions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Permissions retrieved")
+    })
     @GetMapping("/permissions")
     public ResponseEntity<List<String>> getPermissions() {
         return ResponseEntity.ok(StaffPermissions.getPermissions());
     }
 
+    @Operation(summary = "Get all staff", description = "Get all staff")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Staff retrieved")
+    })
     @GetMapping
     public ResponseEntity<Iterable<Staff>> getAllStaff() {
         return ResponseEntity.ok(staffService.findAll());

@@ -14,6 +14,10 @@ import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.services.ReceptionDeskService;
 import deti.tqs.phihub.services.TicketService;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/staff/reception")
 public class ReceptionController {
@@ -26,6 +30,11 @@ public class ReceptionController {
         this.receptionDeskService = receptionDeskService;
     }
 
+    @Operation(summary = "Get next ticket", description = "Get next ticket for a reception desk")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ticket retrieved"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @GetMapping("/next/{counterNumber}")
     public ResponseEntity<Ticket> getNextTicket(@PathVariable int counterNumber)
      {
@@ -41,6 +50,11 @@ public class ReceptionController {
 
     }
 
+    @Operation(summary = "Get desks status", description = "Get all operating desk status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Desk status retrieved"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @GetMapping("/desk_status")
     public ResponseEntity<List<ReceptionDesk>> getDeskStatus() {
         return ResponseEntity.ok(receptionDeskService.getDeskStatus());

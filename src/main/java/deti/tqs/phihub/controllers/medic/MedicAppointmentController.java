@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.web.server.ResponseStatusException;
+import io.swagger.v3.oas.annotations.Operation;
+
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
 
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
 
 @RestController
 @RequestMapping("/medic/appointments")
@@ -28,24 +34,33 @@ public class MedicAppointmentController {
         this.appointmentService = appointmentService;
     }
 
-
+    @Operation(summary = "Add notes to an appointment", description = "Add notes to an appointment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notes added"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Appointment not found")
+    })
     @PostMapping("/{appointmentId}/notes")
-    public ResponseEntity<String> addNotesToAppointment(@RequestBody String notes, @PathVariable("appointmentId") Long appointmentId) {
+    public ResponseEntity<String> addNotesToAppointment(@RequestBody String notes,
+            @PathVariable("appointmentId") Long appointmentId) {
 
         var medic = medicService.getMedicFromContext();
 
         if (medic == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
         if (appointment == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
+
         }
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         appointment.setNotes(notes);
@@ -56,23 +71,31 @@ public class MedicAppointmentController {
 
     }
 
+    @Operation(summary = "Get notes from an appointment", description = "Get notes from an appointment")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Notes retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Appointment not found")
+    })
     @GetMapping("/{appointmentId}/notes")
     public ResponseEntity<String> getNotesFromAppointment(@PathVariable("appointmentId") Long appointmentId) {
 
         var medic = medicService.getMedicFromContext();
 
         if (medic == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
         if (appointment == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
         }
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+
         }
 
         return ResponseEntity.ok(appointment.getNotes());

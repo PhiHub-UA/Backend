@@ -6,11 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import deti.tqs.phihub.services.AppointmentService;
 import deti.tqs.phihub.services.MedicService;
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.Medic;
+
+
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.web.server.ResponseStatusException;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/medic")
@@ -25,13 +32,19 @@ public class MedicController {
         this.medicService = medicService;
     }
 
+
+    @Operation(summary = "Get medic appointments", description = "Get medic appointments")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointments retrieved"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     @GetMapping("/appointments")
     public ResponseEntity<List<Appointment>> getMedicAppointments() {
 
         Medic medic = medicService.getMedicFromContext();
 
         if (medic == null) {
-            return ResponseEntity.status(401).build();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
 
         }
         return ResponseEntity.ok(appointmentService.getAppointmentsByMedic(medic));
