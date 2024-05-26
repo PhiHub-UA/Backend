@@ -122,9 +122,9 @@ class MedicServiceTests {
 
     @Test
      void whenSearchBadMedic_thenMedicShouldBeFound() {
-        Medic medic1 = new Medic();
-        medic1.setId(99L);
-        List<String> found = medicService.getMedicAvailability(medic1.getId(), 1714402800L);
+        Medic medic2 = new Medic();
+        medic2.setId(99L);
+        List<String> found = medicService.getMedicAvailability(medic2.getId(), 1714402800L);
         assertThat(found).isEmpty();
     }
 }

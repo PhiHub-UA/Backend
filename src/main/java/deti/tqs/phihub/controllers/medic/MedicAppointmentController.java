@@ -28,6 +28,8 @@ public class MedicAppointmentController {
     private MedicService medicService;
     private AppointmentService appointmentService;
 
+    String unauthReason = "Unauthorized";
+
     @Autowired
     public MedicAppointmentController(MedicService medicService, AppointmentService appointmentService) {
         this.medicService = medicService;
@@ -47,7 +49,7 @@ public class MedicAppointmentController {
         var medic = medicService.getMedicFromContext();
 
         if (medic == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, unauthReason);
         }
 
         var appointment = appointmentService.getAppointmentById(appointmentId);
@@ -60,7 +62,7 @@ public class MedicAppointmentController {
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {
 
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, unauthReason);
         }
 
         appointment.setNotes(notes);
@@ -83,7 +85,7 @@ public class MedicAppointmentController {
         var medic = medicService.getMedicFromContext();
 
         if (medic == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, unauthReason);
         }
 
         var appointment = appointmentService.getAppointmentById(appointmentId);
@@ -94,7 +96,7 @@ public class MedicAppointmentController {
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {
 
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, unauthReason);
 
         }
 

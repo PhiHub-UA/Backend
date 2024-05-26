@@ -18,7 +18,6 @@ import deti.tqs.phihub.repositories.StaffRepository;
 import deti.tqs.phihub.services.StaffService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 

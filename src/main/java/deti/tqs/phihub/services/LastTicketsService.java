@@ -60,7 +60,8 @@ public class LastTicketsService {
     public String getParsedTickets() {
         LastTickets lastTicketsObj = findTickets();
         
-        String finalStr = "{";
+        StringBuilder finalStr = new StringBuilder();
+        finalStr.append("{");
 
         if (lastTicketsObj != null) {
         
@@ -69,7 +70,7 @@ public class LastTicketsService {
             Integer currNum = 1;
     
             for (String ticket : ticketList) {
-                finalStr += "\"" + currNum + "\": " + ticket + ", ";
+                finalStr.append("\"" + currNum + "\": " + ticket + ", ");
                 currNum += 1;
             }
         }
@@ -77,15 +78,15 @@ public class LastTicketsService {
         Ticket nextCall = chooseNextTicket();
 
         if (nextCall != null) {
-            finalStr += "\"nextnum\": \"" + nextCall.getTicketName() + "\"";
+            finalStr.append("\"nextnum\": \"" + nextCall.getTicketName() + "\"");
         }
         else {
-            finalStr += "\"nextnum\": \"---\"";
+            finalStr.append("\"nextnum\": \"---\"");
         }
 
-        finalStr += "}";
+        finalStr.append("}");
 
-        return finalStr;
+        return finalStr.toString();
     }
     
     public Ticket chooseNextTicket() {

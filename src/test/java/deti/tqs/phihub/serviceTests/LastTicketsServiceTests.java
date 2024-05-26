@@ -16,7 +16,6 @@ import deti.tqs.phihub.models.Ticket;
 import deti.tqs.phihub.repositories.LastTicketsRepository;
 import deti.tqs.phihub.services.LastTicketsService;
 import deti.tqs.phihub.services.QueueLineService;
-import deti.tqs.phihub.services.TicketService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
