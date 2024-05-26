@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
 import deti.tqs.phihub.configs.Generated;
 import org.openqa.selenium.By;
 
@@ -13,7 +12,7 @@ public class MarkAppointmentPage {
     private WebDriver driver;
 
     //  Page URL
-    private static String PAGE_URL="http://localhost:3001/appointments";
+    private static String PAGE_URL="http://localhost:3001/mark_appointment";
 
     //  Locators
     @FindBy(id = "selectSpeciality")

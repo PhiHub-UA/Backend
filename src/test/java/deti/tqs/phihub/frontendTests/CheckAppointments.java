@@ -1,9 +1,9 @@
 package deti.tqs.phihub.frontendTests;
 
 
+import deti.tqs.phihub.frontendTests.webpages.CheckAppointmentsPage;
 import deti.tqs.phihub.frontendTests.webpages.HomePage;
 import deti.tqs.phihub.frontendTests.webpages.LoginPage;
-import deti.tqs.phihub.frontendTests.webpages.MarkAppointmentPage;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,14 +20,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 @ExtendWith(SeleniumJupiter.class)
-public class MakeAppointment {
+public class CheckAppointments {
 
     private WebDriver driver;
     private HomePage homePage;
     private LoginPage loginPage;
-    private MarkAppointmentPage markAppointmentPage;
+    private CheckAppointmentsPage checkAppointmentsPage;
 
-    @Given("I am on Phihub Patient Website")
+    @Given("User is on the check appointments page")
     public void userEntersFrontend() {
 
         WebDriverManager.firefoxdriver().setup();
@@ -37,10 +37,11 @@ public class MakeAppointment {
 
         homePage = new HomePage(driver);
         loginPage = new LoginPage(driver);
-        markAppointmentPage = new MarkAppointmentPage(driver);
+        checkAppointmentsPage = new CheckAppointmentsPage(driver);
     }
 
-    @When("I am logged in as a patient with name {string} and password {string}")
+
+    @When("User is logged in as a patient with name {string} and password {string}")
     public void userInsertsHisName(String username, String password)  {
 
         homePage.clickOnLogin();
@@ -51,43 +52,19 @@ public class MakeAppointment {
         loginPage.clickOnLoginButton();
     }
 
-    @And("I click on the Make an appointment button")
+    @And("User clicks the Check Appointments button")
     public void userClicksOnLogin()  {
         driver.navigate().refresh();
-        homePage.clickMarkAppointment();
+        homePage.clickCheckAppointments();
     }
 
-    @And("I select which speciality I want to make an appointment in")
-    public void userInsertsHisUsername()  {
-        markAppointmentPage.chooseSpeciality();
-        markAppointmentPage.goToChooseMedicStep();
-    }
-
-    @And("I select which doctor I want to make an appointment with")
-    public void userInsertsHisPassword()  {
-        markAppointmentPage.chooseDoctor();
-        markAppointmentPage.goToChooseDateStep();
-    }
-
-    @And("I select the date and time I want to make an appointment")
-    public void userInsertsHisPhone()  {
-        markAppointmentPage.pickADate();
-        markAppointmentPage.chooseHour();
-    }
-
-    @And("I click on the confirm button")
-    public void userInsertsHisEmail()  {
-        markAppointmentPage.markAppointment();
-    }
-
-    @Then("I should see a confirmation message")
+    @Then("User should see his appointments")
     public void userGoesToTrips() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
-        String successText = markAppointmentPage.getConfirmationTextAppointment();
-        assertEquals("Appointment marked successfully", successText);
+        String successText = checkAppointmentsPage.getConfirmationTextAppointment();
+        assertEquals("jose_fino", successText);
 
         driver.close();
     }
-    
 }

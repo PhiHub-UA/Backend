@@ -26,6 +26,9 @@ public class HomePage {
     @FindBy(id = "markNavBtn")
     private WebElement markAppointmentButton;
 
+    @FindBy(id = "appointmentsNavBtn")
+    private WebElement checkAppointmentsButton;
+
     //Constructor
     public HomePage(WebDriver ndriver){
         driver=ndriver;
@@ -54,4 +57,12 @@ public class HomePage {
 
         markAppointmentButton.click();
     }
+
+    public void clickCheckAppointments() {
+        WebDriverWait w1 = new WebDriverWait(driver, Duration.ofSeconds(2));
+        w1.until(ExpectedConditions.visibilityOfElementLocated(By.id("appointmentsNavBtn")));
+
+        checkAppointmentsButton.click();
+    }
+    
 }
