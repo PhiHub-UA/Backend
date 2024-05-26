@@ -21,7 +21,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import java.util.HashMap;
-import org.junit.jupiter.api.BeforeAll;
 import deti.tqs.phihub.models.Speciality;
 import java.util.List;
 
