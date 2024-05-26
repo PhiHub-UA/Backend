@@ -33,12 +33,12 @@ public class UserService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     
-        if (authentication instanceof AnonymousAuthenticationToken) {
+        if (authentication instanceof AnonymousAuthenticationToken || authentication == null) {
             return null;
         }
     
         Object principal = authentication.getPrincipal();
-        if (principal instanceof User ) {
+        if (principal instanceof User) {
             return (User) principal;
         }
     
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     public boolean seeIfLoggedIn() {
-        return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+        return SecurityContextHolder.getContext().getAuthentication() != null;
     }
     
 }

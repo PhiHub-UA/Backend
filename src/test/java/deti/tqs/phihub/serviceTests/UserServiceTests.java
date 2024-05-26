@@ -9,6 +9,9 @@ import org.mockito.Mock.Strictness;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.UserRepository;
@@ -91,12 +94,52 @@ class UserServiceTests {
 
     @Test
      void whenUserContext_thenUserShouldBeLoggedIn() {
+        Authentication auth = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+
         Boolean loggedIn = userService.seeIfLoggedIn();
         assertThat(loggedIn).isTrue();
     }
 
     @Test
+     void whenNoUserContext_thenUserShouldNotBeLoggedIn() {
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(null);
+        SecurityContextHolder.setContext(securityContext);
+
+        assertThat(userService.seeIfLoggedIn()).isFalse();
+    }
+
+    @Test
+     void whenUserContext_thenUserShouldBeFound() {
+        Authentication auth = Mockito.mock(Authentication.class);
+        Mockito.when(auth.getPrincipal()).thenReturn(user0);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+
+        assertThat(userService.getUserFromContext().getUsername()).isEqualTo(user0.getUsername());
+    }
+
+    @Test
+     void whenUserContext_ButBadAuththenNoUserShouldNotBeFound() {
+        Authentication auth = Mockito.mock(Authentication.class);
+        Mockito.when(auth.getPrincipal()).thenReturn(null);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+
+        assertThat(userService.getUserFromContext()).isNull();
+    }
+
+    @Test
      void whenNoUserContext_thenUserShouldNotBeFound() {
-        assertThatThrownBy(() -> userService.getUserFromContext()).isInstanceOf(NullPointerException.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(null);
+        SecurityContextHolder.setContext(securityContext);
+
+        assertThat(userService.getUserFromContext()).isNull();
     }
 }

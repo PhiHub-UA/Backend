@@ -26,7 +26,7 @@ public class StaffService {
     public Staff getStaffFromContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     
-        if (authentication instanceof AnonymousAuthenticationToken) {
+        if (authentication instanceof AnonymousAuthenticationToken || authentication == null) {
             return null;
         }
     

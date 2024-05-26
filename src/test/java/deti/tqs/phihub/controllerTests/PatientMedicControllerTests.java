@@ -83,4 +83,14 @@ class PatientMedicControllerTests {
         verify(appointmentService, times(1)).getAppointmentsByMedic(Mockito.any());
     }
 
+    @Test
+    void givenNoMedics_thenReturnError() throws Exception {
+        when(service.getMedicFromContext()).thenReturn(null);
+        mvc.perform(
+                get("/medic/appointments").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+
+        verify(appointmentService, times(0)).getAppointmentsByMedic(Mockito.any());
+    }
+
 }
