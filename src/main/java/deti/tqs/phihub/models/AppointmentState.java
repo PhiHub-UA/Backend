@@ -4,6 +4,8 @@ public enum AppointmentState {
 
     PENDING,
     CHECKED_IN,
-    FINISHED
+    FINISHED,
+    BILL_ISSUED,
+    BILL_PAID,
     
 }

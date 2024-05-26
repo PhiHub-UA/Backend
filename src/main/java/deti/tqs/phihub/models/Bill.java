@@ -25,6 +25,8 @@ public class Bill {
 
     private Date date;
     private Double price;
+    private Long appointmentID;
+    private boolean paid = false;
 
 
 }
