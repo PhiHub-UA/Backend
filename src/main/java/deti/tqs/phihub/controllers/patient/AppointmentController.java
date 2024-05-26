@@ -132,4 +132,22 @@ public class AppointmentController {
         appointmentService.deleteAppointmentById(id);
         return ResponseEntity.ok().build();
     }
+
+
+    @PostMapping("/{appointmentId}/pay")
+    @Operation(summary = "Pay appointment", description = "Pay appointment by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Appointment paid"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    public ResponseEntity<String> payAppointment(@PathVariable Long appointmentId) {
+        var user = userService.getUserFromContext();
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+        if (appointment.getPatient().getId() != user.getId()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to pay this appointment");
+        }
+        appointmentService.payAppointment(appointment);
+        return ResponseEntity.ok().build();
+    }
+
 }
