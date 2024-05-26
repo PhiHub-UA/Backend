@@ -112,7 +112,7 @@ public class TicketService {
         }
 
         return new TicketReturnSchema(ticket.getId(), ticket.getAppointment().getId(),
-                queueLine.getShowingLetter(),queueLine.getTicketCounter(), waitingRoom.getId());
+                queueLine.getShowingLetter(),queueLine.getTicketCounter()-1, waitingRoom.getId());
     }
 
     public Ticket getNextTicket(int deskNumber) {
