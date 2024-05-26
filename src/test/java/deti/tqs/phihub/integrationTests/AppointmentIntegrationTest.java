@@ -1,5 +1,8 @@
 package deti.tqs.phihub.integrationTests;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeAll;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -127,18 +130,24 @@ class AppointmentIntegrationTests {
                                 .post("/auth/register")
                                 .then()
                                 .statusCode(201);
+        }
+
+        @Test
+        @DisplayName("Login as user then login")
+        void whenLogin_Then_ReturnCorrectUser() {
+    
+            //  Test with no given speciality
 
                 given().port(port)
-                                .contentType("application/json")
-                                .body("{\"username\":\"" + user0.getUsername() + "\"," +
-                                        "\"password\":\"" + user0.getPassword() + "\"," +
-                                        "\"role\":\"user\"}")
-                                .when()
-                                .post("/auth/login")
-                                .then()
-                                .statusCode(200)
-                                .extract()
-                                .as(HashMap.class);
-
+                        .contentType("application/json")
+                        .body("{\"username\":\"" + user0.getUsername() + "\"," +
+                                "\"password\":\"" + user0.getPassword() + "\"," +
+                                "\"role\":\"user\"}")
+                        .when()
+                        .post("/auth/login")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .as(HashMap.class);
         }
 }
