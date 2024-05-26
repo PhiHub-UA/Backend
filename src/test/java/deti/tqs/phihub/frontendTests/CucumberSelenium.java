@@ -30,6 +30,6 @@ import deti.tqs.phihub.configs.Generated;
 @SelectClasspathResource("deti/tqs/phihub")
 @SelectClasspathResource("src/test/resources")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "deti.tqs.phihub")
-public class CucumberSeleniumTests {
+public class CucumberSelenium {
 
 }

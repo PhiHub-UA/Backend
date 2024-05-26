@@ -23,6 +23,9 @@ public class HomePage {
     @FindBy(id = "loginBtnNav")
     private WebElement loginButton;
 
+    @FindBy(id = "markNavBtn")
+    private WebElement markAppointmentButton;
+
     //Constructor
     public HomePage(WebDriver ndriver){
         driver=ndriver;
@@ -36,5 +39,19 @@ public class HomePage {
         w1.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginBtnNav")));
 
         loginButton.click();
+    }
+
+    public boolean checkLogin() {
+        WebDriverWait w1 = new WebDriverWait(driver, Duration.ofSeconds(2));
+        w1.until(ExpectedConditions.visibilityOfElementLocated(By.id("markNavBtn")));
+
+        return loginButton.isDisplayed();
+    }
+
+    public void clickMarkAppointment() {
+        WebDriverWait w1 = new WebDriverWait(driver, Duration.ofSeconds(2));
+        w1.until(ExpectedConditions.visibilityOfElementLocated(By.id("markNavBtn")));
+
+        markAppointmentButton.click();
     }
 }
