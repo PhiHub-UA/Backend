@@ -16,6 +16,7 @@ import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
 import deti.tqs.phihub.repositories.AppointmentRepository;
+import deti.tqs.phihub.repositories.BillRepository;
 import deti.tqs.phihub.services.AppointmentService;
 
 import java.util.Arrays;
@@ -29,6 +30,9 @@ class AppointmentServiceTests {
 
     @Mock(strictness = Strictness.LENIENT)
     private AppointmentRepository appointmentRepository;
+
+    @Mock(strictness = Strictness.LENIENT)
+    private BillRepository billRepository;
 
     @InjectMocks
     private AppointmentService appointmentService;
@@ -68,6 +72,8 @@ class AppointmentServiceTests {
         Mockito.when(appointmentRepository.findById(-99L)).thenReturn(Optional.empty());
         Mockito.when(appointmentRepository.findByPatientUsername(user0.getUsername())).thenReturn(Arrays.asList(app0));
         Mockito.when(appointmentRepository.findByMedicUsername(Mockito.any())).thenReturn(Arrays.asList(app0));
+
+        Mockito.when(billRepository.save(Mockito.any())).thenReturn(null);
     }
 
     @Test
@@ -80,12 +86,31 @@ class AppointmentServiceTests {
     }
 
     @Test
+     void whenDeleteValidAppointment_thenAppointmentShouldBeDeleted() {
+        appointmentService.deleteAppointmentById(app0.getId());
+        
+        Mockito.when(appointmentRepository.findById(app0.getId())).thenReturn(Optional.empty());
+
+        Appointment returned = appointmentService.getAppointmentById(app0.getId());
+        assertThat(returned).isNull();
+    }
+
+    @Test
      void whenSearchValidID_thenAppointmentshouldBeFound() {
         Appointment found = appointmentService.getAppointmentById(app0.getId());
         assertThat(found.getPrice()).isEqualTo(app0.getPrice());
 
         found = appointmentService.getAppointmentById(app1.getId());
         assertThat(found.getPrice()).isEqualTo(app1.getPrice());
+    }
+
+    @Test
+     void whenIssueBill_thenBillShouldBeIssued() {
+        boolean bill = appointmentService.issueBill(app0);
+        assertThat(bill).isTrue();
+
+        bill = appointmentService.issueBill(null);
+        assertThat(bill).isFalse();
     }
 
     @Test
