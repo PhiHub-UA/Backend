@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/patient/tickets/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/appointments/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/patient/appointments/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/availability/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/docs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()

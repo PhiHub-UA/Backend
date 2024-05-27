@@ -75,8 +75,8 @@ public class AppointmentService {
         app.setBill(bill);
         app.setState(AppointmentState.BILL_ISSUED);
 
-        appointmentRepository.save(app);
         billRepository.save(bill);
+        appointmentRepository.save(app);
 
         return true;
     }
@@ -90,8 +90,9 @@ public class AppointmentService {
         app.setState(AppointmentState.BILL_PAID);
         app.getBill().setPaid(true);
 
-        appointmentRepository.save(app);
         billRepository.save(app.getBill());
+        appointmentRepository.save(app);
+
 
         return true;
     }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
@@ -134,14 +135,23 @@ public class AppointmentController {
     }
 
 
-    @PostMapping("/{appointmentId}/pay")
+    @PutMapping("/{appointmentId}/pay")
     @Operation(summary = "Pay appointment", description = "Pay appointment by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Appointment paid"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<String> payAppointment(@PathVariable Long appointmentId) {
+    public ResponseEntity<String> payAppointment(@PathVariable("appointmentId") Long appointmentId) {
+
         var user = userService.getUserFromContext();
+
+        System.out.println(user);
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        }
+
+
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
         if (appointment.getPatient().getId() != user.getId()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to pay this appointment");
