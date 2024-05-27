@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/signage/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/patient/tickets/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/medics/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/patient/appointments/**").permitAll()
