@@ -30,6 +30,7 @@ public class MedicAppointmentController {
     private AppointmentService appointmentService;
 
     String unauthReason = "Unauthorized";
+    String appointmentNotFound = "Appointment not found";
 
     @Autowired
     public MedicAppointmentController(MedicService medicService, AppointmentService appointmentService) {
@@ -57,7 +58,7 @@ public class MedicAppointmentController {
 
         if (appointment == null) {
 
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, appointmentNotFound);
 
         }
 
@@ -92,7 +93,7 @@ public class MedicAppointmentController {
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
         if (appointment == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, appointmentNotFound);
         }
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {
@@ -123,7 +124,11 @@ public class MedicAppointmentController {
         var appointment = appointmentService.getAppointmentById(appointmentId);
 
         if (appointment == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Appointment not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, appointmentNotFound);
+        }
+
+        if (appointment.getState() != AppointmentState.CHECKED_IN){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cant finish appointment yet. Patient not checked in.");
         }
 
         if (!appointment.getMedic().getUsername().equals(medic.getUsername())) {

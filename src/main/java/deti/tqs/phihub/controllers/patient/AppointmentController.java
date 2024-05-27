@@ -145,12 +145,9 @@ public class AppointmentController {
 
         var user = userService.getUserFromContext();
 
-        System.out.println(user);
-
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
-
 
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
         if (appointment.getPatient().getId() != user.getId()) {
