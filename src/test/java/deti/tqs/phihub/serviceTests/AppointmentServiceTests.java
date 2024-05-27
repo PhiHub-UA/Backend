@@ -12,6 +12,7 @@ import org.mockito.Mock.Strictness;
 
 import deti.tqs.phihub.models.Appointment;
 import deti.tqs.phihub.models.AppointmentState;
+import deti.tqs.phihub.models.Bill;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -39,8 +40,9 @@ class AppointmentServiceTests {
 
     private Appointment app0 = new Appointment();
     private Appointment app1 = new Appointment();
-    private User user0 = new User();
     private Medic med0 = new Medic();
+    private User user0 = new User();
+    private Bill bill0 = new Bill();
 
 
     @BeforeEach
@@ -53,12 +55,19 @@ class AppointmentServiceTests {
 
         med0.setUsername("joaquinoes");
 
+        //  Create Issue bill
+        bill0.setId(1L);
+        bill0.setAppointmentID(1L);
+        bill0.setPaid(false);
+
         //  Create two appointments
         app0.setId(1L);
         app0.setPrice(12.3);
         app0.setSpeciality(Speciality.NEUROLOGY);
         app0.setPatient(user0);
         app0.setMedic(med0);
+        app0.setBill(bill0);
+        
         app1.setId(2L);
         app1.setPrice(25.7);
 
@@ -171,5 +180,25 @@ class AppointmentServiceTests {
         Mockito.verify(appointmentRepository, 
                 VerificationModeFactory.times(1))
                     .findByPatientUsername(user0.getUsername());
+    }
+
+    @Test
+     void whenPayAppointment_thenAppointmentShouldBePayed() {
+        boolean result = appointmentService.payAppointment(app0);
+        assertThat(result).isTrue();
+
+        Mockito.verify(appointmentRepository, 
+                VerificationModeFactory.times(1))
+                    .save(Mockito.any());
+    }
+
+    @Test
+     void whenPayAppointmentWithBadID_thenAppointmentShouldNotBePayed() {
+        boolean result = appointmentService.payAppointment(null);
+        assertThat(result).isFalse();
+
+        Mockito.verify(appointmentRepository, 
+                VerificationModeFactory.times(0))
+                    .save(Mockito.any());
     }
 }
