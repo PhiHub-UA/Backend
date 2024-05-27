@@ -13,6 +13,7 @@ import deti.tqs.phihub.configs.SecurityFilter;
 import deti.tqs.phihub.configs.TokenProvider;
 import deti.tqs.phihub.controllers.medic.MedicAppointmentController;
 import deti.tqs.phihub.models.Appointment;
+import deti.tqs.phihub.models.AppointmentState;
 import deti.tqs.phihub.models.Medic;
 import deti.tqs.phihub.models.Speciality;
 import deti.tqs.phihub.models.User;
@@ -25,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,6 +78,7 @@ class MedicAppointmentControllerTests {
         app0.setMedic(medic0);
         app0.setPatient(user0);
         app0.setNotes("Standard appointment");
+        app0.setState(AppointmentState.CHECKED_IN);
 
         when(service.getMedicFromContext()).thenReturn(medic0);
         when(appointmentService.save(Mockito.any())).thenReturn(app0);
@@ -143,4 +146,33 @@ class MedicAppointmentControllerTests {
 
         verify(appointmentService, times(2)).getAppointmentById(Mockito.any());
     }
+
+    @Test
+    void givenValidAppointmentAndEnd_thenAppointmentEnded() throws Exception {
+
+        mvc.perform(
+                put("/medic/appointments/1/end").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // endpoint only returns "Appointment ended"
+                .andExpect(jsonPath("$", is("Appointment ended")));
+
+        verify(appointmentService, times(1)).getAppointmentById(Mockito.any());
+
+    }
+
+    @Test
+    void givenAppointmentWherePatientIsNotCheckedIn_thenCannotFinish() throws Exception {
+
+        app0.setState(AppointmentState.PENDING);
+        when(appointmentService.getAppointmentById(Mockito.any())).thenReturn(app0);
+
+        mvc.perform(
+                put("/medic/appointments/1/end").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(appointmentService, times(1)).getAppointmentById(Mockito.any());
+
+    }
+
+    
 }
