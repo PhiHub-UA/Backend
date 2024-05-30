@@ -27,9 +27,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/patient/appointments")
 public class AppointmentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
     private AppointmentService appointmentService;
 
@@ -82,6 +87,9 @@ public class AppointmentController {
         app.setBill(null);
 
         Appointment savedApp = appointmentService.save(app);
+
+        logger.info("Appointment created with id {}", savedApp.getId());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedApp);
     }
 
@@ -95,6 +103,7 @@ public class AppointmentController {
     public ResponseEntity<List<Appointment>> getAppointments() {
         var user = userService.getUserFromContext();
         List<Appointment> appointments = appointmentService.getAppointmentsByPatient(user);
+        logger.info("Appointments retrieved for user with id {}", user.getId());
         return ResponseEntity.ok(appointments);
     }
 
@@ -110,6 +119,7 @@ public class AppointmentController {
         if (appointment.getPatient().getId() != user.getId()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to access this appointment");
         }
+        logger.info("Appointment retrieved with id {}", id);
         return ResponseEntity.ok(appointment);
     }
 
@@ -131,6 +141,7 @@ public class AppointmentController {
         receptionDeskService.deleteTicketsByAppointmentID(id);
         ticketService.deleteTicketsByAppointmentID(id);
         appointmentService.deleteAppointmentById(id);
+        logger.info("Appointment deleted with id {}", id);
         return ResponseEntity.ok().build();
     }
 
@@ -154,6 +165,9 @@ public class AppointmentController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized to pay this appointment");
         }
         appointmentService.payAppointment(appointment);
+
+        logger.info("Patient {} paid appointment with id {}", user.getId(), appointmentId);
+
         return ResponseEntity.ok().build();
     }
 

@@ -19,9 +19,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/patient/users")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private UserService userService;
 
@@ -49,6 +54,8 @@ public class UserController {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
 
+        logger.info("User {} requested his/her information", user.getUsername());
+
         return ResponseEntity.ok(user);
     }
 
@@ -58,6 +65,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
+    
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id, HttpServletRequest request) {
 
@@ -87,6 +95,8 @@ public class UserController {
         if (!canCheck) {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
+
+        logger.info("User {} requested information of user {}", loggedInUser.getUsername(), user.getUsername());
 
         return ResponseEntity.ok(user);
     }

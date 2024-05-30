@@ -22,10 +22,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping("/medic/patients")
 public class MedicPatientsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MedicPatientsController.class);
 
     private MedicService medicService;
     private AppointmentService appointmentService;
@@ -57,6 +62,8 @@ public class MedicPatientsController {
         for (Appointment appointment : appointments) {
             patients.add(appointment.getPatient());
         }
+
+        logger.info("Medic {} requested his/her patients", medic.getName());
 
         return ResponseEntity.ok(patients);
 

@@ -18,9 +18,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/staff/reception")
 public class ReceptionController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReceptionController.class);
 
     private TicketService ticketService;
     private ReceptionDeskService receptionDeskService;
@@ -46,6 +51,8 @@ public class ReceptionController {
                     "No tickets available");
         }
 
+        logger.info("Staff requested next ticket for desk {}", counterNumber);
+
         return ResponseEntity.ok(nextTicket);
 
     }
@@ -57,6 +64,7 @@ public class ReceptionController {
     })
     @GetMapping("/desk_status")
     public ResponseEntity<List<ReceptionDesk>> getDeskStatus() {
+        logger.info("Staff requested desk status");
         return ResponseEntity.ok(receptionDeskService.getDeskStatus());
     }
 }

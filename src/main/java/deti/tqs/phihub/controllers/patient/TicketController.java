@@ -18,12 +18,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/patient/tickets")
 public class TicketController {
 
     private AppointmentService appointmentService;
     private TicketService ticketService;
+
+    private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
 
 
     public TicketController(AppointmentService appointmentService, TicketService ticketService) {
@@ -57,6 +62,9 @@ public class TicketController {
         if (ticket == null) {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Could not create ticket");
         }
+
+
+        logger.info("Ticket {} created for appointment {}", ticket.id() , appointment.getId());
 
         return ResponseEntity.ok(ticket);
 

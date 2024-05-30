@@ -22,9 +22,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/staff")
 public class StaffController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StaffController.class);
     
 
     private StaffService staffService;
@@ -46,6 +51,8 @@ public class StaffController {
         if (staff == null) {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
+
+        logger.info("Staff {} requested his/her information", staff.getUsername());
 
         return ResponseEntity.ok(staff);
     }
@@ -72,6 +79,8 @@ public class StaffController {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST, "Bad request");
         }
 
+        logger.info("Staff {} created a new staff user", requestUser.getUsername());
+
         return ResponseEntity.ok(staff);
 
     }
@@ -82,6 +91,7 @@ public class StaffController {
     })
     @GetMapping("/permissions")
     public ResponseEntity<List<String>> getPermissions() {
+        logger.info("Staff requested permissions");
         return ResponseEntity.ok(StaffPermissions.getPermissions());
     }
 
@@ -91,6 +101,7 @@ public class StaffController {
     })
     @GetMapping
     public ResponseEntity<Iterable<Staff>> getAllStaff() {
+        logger.info("Staff requested all staff");
         return ResponseEntity.ok(staffService.findAll());
     }
 
