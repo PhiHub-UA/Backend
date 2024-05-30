@@ -30,10 +30,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private AuthService authService;
 
@@ -63,6 +68,8 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
 
+        logger.info("Sucessfully registered user with username {}", newUser.getUsername());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
@@ -86,6 +93,9 @@ public class AuthController {
         } else if (user.role().equals("staff")) {
             token = tokenService.generateAccessToken((Staff) authUser.getPrincipal());
         }
+
+        logger.info("Sucessfully logged in user with username {}", user.username());
+        
         return ResponseEntity.ok(Map.of("token", token, "username", user.username(), "role", user.role()));
     }
 

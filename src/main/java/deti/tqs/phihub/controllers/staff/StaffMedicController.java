@@ -19,10 +19,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/staff/medics")
 public class StaffMedicController {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(StaffMedicController.class);
     private MedicService medicService;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -51,6 +56,8 @@ public class StaffMedicController {
 
         Medic savedMedic = medicService.save(medic);
 
+        logger.info("Medic {} created ", savedMedic.getUsername());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMedic);
     }
 
@@ -61,6 +68,7 @@ public class StaffMedicController {
     })
     @GetMapping
     public ResponseEntity<Iterable<Medic>> getAllMedics() {
+        logger.info("Staff requested all medics");
         return ResponseEntity.ok(medicService.findAll());
     }
     
@@ -77,6 +85,8 @@ public class StaffMedicController {
         if (medic == null) {
             return ResponseEntity.status(401).build();
         }
+
+        logger.info("Medic {} requested his/her information", medic.getUsername());
 
         return ResponseEntity.ok(medic);
 

@@ -21,9 +21,14 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/staff/appointments")
 public class StaffAppointmentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StaffAppointmentController.class);
 
     private StaffService staffService;
     private AppointmentService appointmentService;
@@ -55,6 +60,8 @@ public class StaffAppointmentController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not issue bill");
         }
 
+        logger.info("Bill issued for appointment {}", appointmentId);
+
         return ResponseEntity.ok("Bill issued");
     }
 
@@ -67,6 +74,8 @@ public class StaffAppointmentController {
         if (staff == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
+
+        logger.info("Staff {} requested all appointments", staff.getName());
 
         return ResponseEntity.ok(appointmentService.findAll());
     }

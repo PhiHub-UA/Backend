@@ -16,10 +16,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RequestMapping("/staff/queueline")
 @RestController
 public class QueueLineController {
 
+    private static final Logger logger = LoggerFactory.getLogger(QueueLineController.class);
 
     private QueueLineService queueLineService;
 
@@ -34,6 +38,7 @@ public class QueueLineController {
     })
     @GetMapping
     public ResponseEntity<List<QueueLine>> getAllQueueLines() {
+        logger.info("Staff requested all queue lines");
         return ResponseEntity.ok(queueLineService.findAll());
     }
 

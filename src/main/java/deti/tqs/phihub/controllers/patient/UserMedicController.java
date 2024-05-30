@@ -15,10 +15,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/patient/medics")
 public class UserMedicController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserMedicController.class);
 
     private MedicService medicService;
 
@@ -36,6 +40,9 @@ public class UserMedicController {
         if (Speciality.fromString(speciality) != null) {
             return medicService.getMedicsBySpeciality(Speciality.fromString(speciality));
         }
+
+        logger.info("Patient requested medics list");
+
         return medicService.getMedics();
     }
 
@@ -48,10 +55,9 @@ public class UserMedicController {
     public List<String> getMedicAvailability(@PathVariable(value = "id") Long id,
             @RequestParam(value = "day") Long dateTimestamp) {
 
+        logger.info("Patient requested medic availability for medic {}", id);
+
         return medicService.getMedicAvailability(id, dateTimestamp);
     }
 
-
-
 }
-

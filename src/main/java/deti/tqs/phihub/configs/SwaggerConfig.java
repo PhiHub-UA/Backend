@@ -15,7 +15,7 @@ public class SwaggerConfig {
     @Bean
     GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("public-apis")
+                .group("phihub-api")
                 .pathsToMatch("/**")
                 .build();
     }

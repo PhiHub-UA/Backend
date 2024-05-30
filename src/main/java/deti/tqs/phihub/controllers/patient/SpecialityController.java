@@ -10,10 +10,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/patient/speciality")
 public class SpecialityController {
 
+    private static final Logger logger = LoggerFactory.getLogger(SpecialityController.class);
 
     private SpecialityService specialityService;
 
@@ -27,6 +31,7 @@ public class SpecialityController {
     })
     @GetMapping
     public List<String> getSpecialities() {
+        logger.info("Patient requested specialities");
         return specialityService.getSpecialities();
     }
     

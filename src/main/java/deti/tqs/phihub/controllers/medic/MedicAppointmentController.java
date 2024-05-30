@@ -21,10 +21,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping("/medic/appointments")
 public class MedicAppointmentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MedicAppointmentController.class);
 
     private MedicService medicService;
     private AppointmentService appointmentService;
@@ -71,6 +76,8 @@ public class MedicAppointmentController {
 
         appointmentService.save(appointment);
 
+        logger.info("Added notes to appointment with id {}", appointmentId);
+
         return ResponseEntity.ok(notes);
 
     }
@@ -101,6 +108,8 @@ public class MedicAppointmentController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, unauthReason);
 
         }
+
+        logger.info("Retrieved notes from appointment with id {}", appointmentId);
 
         return ResponseEntity.ok(appointment.getNotes());
 
@@ -138,6 +147,8 @@ public class MedicAppointmentController {
         }
 
         appointmentService.updateAppointmentState(appointment, AppointmentState.FINISHED);
+
+        logger.info("Ended appointment with id {}", appointmentId);
 
         return ResponseEntity.ok("Appointment ended");
 

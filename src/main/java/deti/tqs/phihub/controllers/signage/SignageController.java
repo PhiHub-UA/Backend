@@ -11,9 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/signage")
 public class SignageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignageController.class);
 
     private LastTicketsService lastTicketsService;
 
@@ -28,6 +33,7 @@ public class SignageController {
     })
     @GetMapping
     public ResponseEntity<String> getLastAllTickets() {
+        logger.info("Signage requested last tickets");
         return ResponseEntity.ok(lastTicketsService.getParsedTickets());
     }
 }

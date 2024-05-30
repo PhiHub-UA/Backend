@@ -19,9 +19,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.server.ResponseStatusException;
 import io.swagger.v3.oas.annotations.Operation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/medic")
 public class MedicController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MedicController.class);
 
     private AppointmentService appointmentService;
     private MedicService medicService;
@@ -47,6 +52,9 @@ public class MedicController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
 
         }
+
+        logger.info("Medic {} requested his/her appointments", medic.getName());
+
         return ResponseEntity.ok(appointmentService.getAppointmentsByMedic(medic));
     
     }
