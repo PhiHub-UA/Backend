@@ -30,13 +30,13 @@ public class Medics implements ApplicationRunner {
             return;
         }
 
-        Medic medic1 = new Medic("Manuel Gameiro", "913284817", "manel@gmail.com", 35, "ManuelGameiro", "manel123");
+        Medic medic1 = new Medic("Manuel Gameiro", "918453817", "manel@gmail.com", 35, "ManuelGameiro", "manel123");
         medic1.setSpecialities(List.of(Speciality.CARDIOLOGY, Speciality.DERMATOLOGY, Speciality.GYNECOLOGY));
 
-        Medic medic2 = new Medic("João Silva", "913284817", "joao@gmail.com", 27, "JoaoSilva", "joao123");
+        Medic medic2 = new Medic("João Silva", "913287317", "joao@gmail.com", 27, "JoaoSilva", "joao123");
         medic2.setSpecialities(List.of(Speciality.ENDOCRINOLOGY, Speciality.HEMATOLOGY, Speciality.NEUROLOGY));
 
-        Medic medic3 = new Medic("Maria Alberta", "913284817", "maria@gmail.com", 45, "MariaAlberta", "maria123");
+        Medic medic3 = new Medic("Maria Alberta", "913145317", "maria@gmail.com", 45, "MariaAlberta", "maria123");
         medic3.setSpecialities(
                 List.of(Speciality.PEDIATRICS, Speciality.PSYCHIATRY, Speciality.PHTHALMOLOGY, Speciality.UROLOGY));
 
