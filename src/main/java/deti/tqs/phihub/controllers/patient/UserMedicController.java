@@ -41,7 +41,7 @@ public class UserMedicController {
             return medicService.getMedicsBySpeciality(Speciality.fromString(speciality));
         }
 
-        logger.info("Patient requested medics with speciality {}", speciality);
+        logger.info("Patient requested medics list");
 
         return medicService.getMedics();
     }
