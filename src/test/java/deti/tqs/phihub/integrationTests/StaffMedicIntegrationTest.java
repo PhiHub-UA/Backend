@@ -123,7 +123,7 @@ class StaffMedicIntegrationTests {
                 .get("/staff/medics")
                 .then()
                 .statusCode(200)
-                .assertThat().body("[0].username", equalTo(medic0.getUsername())).body("[0].phone", equalTo(medic0.getPhone()));
+                .assertThat().body("[4].username", equalTo(medic0.getUsername())).body("[4].phone", equalTo(medic0.getPhone()));
 
         response = given().port(port)
                 .contentType("application/json")
